@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-import { processPaymentSimulation, PACKAGES } from "@/lib/packages";
+import { processPayment, PACKAGES } from "@/lib/packages";
 
 export async function POST(
   request: Request,
@@ -16,10 +16,6 @@ export async function POST(
     const { id: eventId } = await params;
     const { packageCode } = await request.json();
 
-    if (!packageCode || !PACKAGES[packageCode]) {
-      return NextResponse.json({ error: "الباقة المختارة غير صالحة" }, { status: 400 });
-    }
-
     const event = await prisma.event.findUnique({ where: { id: eventId } });
     if (!event) {
       return NextResponse.json({ error: "المناسبة غير موجودة" }, { status: 404 });
@@ -29,23 +25,27 @@ export async function POST(
       return NextResponse.json({ error: "غير مصرح لك بترقية هذه المناسبة" }, { status: 403 });
     }
 
-    // Process payment simulation with server-side transaction logging
-    const payment = await processPaymentSimulation(eventId, packageCode);
+    if (!packageCode || !PACKAGES[packageCode]) {
+      return NextResponse.json({ error: "الباقة المختارة غير صالحة" }, { status: 400 });
+    }
+
+    // Process payment through gateway abstraction
+    const payment = await processPayment(eventId, packageCode);
 
     if (!payment.success) {
       return NextResponse.json({ error: "فشلت عملية الدفع" }, { status: 400 });
     }
 
-    const updatedEvent = await prisma.event.update({
-      where: { id: eventId },
-      data: { packageTier: packageCode },
-    });
+    const updatedEvent = await prisma.event.findUnique({ where: { id: eventId } });
 
     return NextResponse.json({
       success: true,
-      message: `تم ترقية المناسبة بنجاح إلى ${PACKAGES[packageCode].nameAr}!`,
+      message: payment.message || `تم ترقية المناسبة بنجاح إلى ${PACKAGES[packageCode].nameAr}!`,
       event: updatedEvent,
       transactionId: payment.transactionId,
+      status: payment.status,
+      checkoutUrl: payment.checkoutUrl,
+      isSimulated: payment.isSimulated,
     });
   } catch (error) {
     console.error("Upgrade package error:", error);

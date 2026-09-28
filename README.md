@@ -49,8 +49,24 @@ npm run dev
 
 ---
 
-## 📂 توثيق المشروع (Project Memory)
-- [`PROJECT_CONTEXT.md`](file:///c:/Users/Souq%20al%20computer/Desktop/lahzah/PROJECT_CONTEXT.md) - الحالة الشاملة للمشروع.
+## 🧪 تشغيل الاختبارات الآلية (Automated Tests)
+
+```bash
+# تشغيل جميع حزم الاختبارات (الأمان + المدفوعات + القبول الشامل)
+npm test
+
+# فحص كود المشروع والتحقق من الجودة
+npm run lint
+
+# فحص بناء الإنتاج
+npm run build
+```
+
+---
+
+## 📂 توثيق المشروع (Project Memory & Architecture)
+- [`PROJECT_CONTEXT.md`](file:///c:/Users/Souq%20al%20computer/Desktop/lahzah/PROJECT_CONTEXT.md) - الحالة الشاملة وتفاصيل الميزات المكتملة.
 - [`ARCHITECTURE.md`](file:///c:/Users/Souq%20al%20computer/Desktop/lahzah/ARCHITECTURE.md) - المعمارية، مسارات الويب، والمخططات.
-- [`DECISIONS.md`](file:///c:/Users/Souq%20al%20computer/Desktop/lahzah/DECISIONS.md) - القرارات الهندسية.
-- [`HANDOFF.md`](file:///c:/Users/Souq%20al%20computer/Desktop/lahzah/HANDOFF.md) - توجيهات التسليم للوكيل التالي.
+- [`DECISIONS.md`](file:///c:/Users/Souq%20al%20computer/Desktop/lahzah/DECISIONS.md) - سجل القرارات الهندسية (ADR).
+- [`HANDOFF.md`](file:///c:/Users/Souq%20al%20computer/Desktop/lahzah/HANDOFF.md) - توجيهات وحالة الجاهزية للوكيل التالي.
+- [`docs/DATABASE_MIGRATION.md`](file:///c:/Users/Souq%20al%20computer/Desktop/lahzah/docs/DATABASE_MIGRATION.md) - دليل الانتقال لقاعدة بيانات PostgreSQL الإنتاجية.

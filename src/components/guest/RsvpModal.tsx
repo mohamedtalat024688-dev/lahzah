@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Check, X, HelpCircle, Users, Send, HeartHandshake, Loader2 } from "lucide-react";
 import confetti from "canvas-confetti";
 
@@ -27,6 +27,15 @@ export default function RsvpModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -76,7 +85,12 @@ export default function RsvpModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="rsvp-modal-title"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn"
+    >
       <div className="relative w-full max-w-lg bg-[#14120f] border border-[#d4af37]/30 rounded-3xl p-6 sm:p-8 shadow-2xl text-right overflow-hidden">
         {/* Background glow decoration */}
         <div
@@ -86,6 +100,7 @@ export default function RsvpModal({
 
         <button
           onClick={onClose}
+          aria-label="إغلاق نافذة تأكيد الحضور"
           className="absolute top-5 left-5 p-2 text-neutral-400 hover:text-white rounded-full hover:bg-neutral-800/60 transition-colors"
         >
           <X className="w-5 h-5" />
@@ -96,7 +111,7 @@ export default function RsvpModal({
             <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center mx-auto mb-2 animate-bounce">
               <HeartHandshake className="w-8 h-8" />
             </div>
-            <h3 className="text-2xl font-bold text-white calligraphy-font">
+            <h3 id="rsvp-modal-title" className="text-2xl font-bold text-white calligraphy-font">
               {attendanceStatus === "ATTENDING" ? "يسعدنا ويشرفنا حضوركم!" : "شكراً لردكم الكريم"}
             </h3>
             <p className="text-neutral-300 text-sm max-w-xs mx-auto">
@@ -114,7 +129,7 @@ export default function RsvpModal({
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="border-b border-[#d4af37]/20 pb-4">
-              <h3 className="text-2xl font-bold text-white calligraphy-font">تأكيد الحضور (RSVP)</h3>
+              <h3 id="rsvp-modal-title" className="text-2xl font-bold text-white calligraphy-font">تأكيد الحضور (RSVP)</h3>
               <p className="text-xs text-[#d4af37]/80 mt-1">
                 يسعدنا إعلامنا بإمكانية حضوركم لمساعدتنا في الترتيبات
               </p>

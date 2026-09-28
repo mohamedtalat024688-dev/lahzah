@@ -143,7 +143,7 @@ async function runAcceptanceTest() {
   const rePublicRes = await fetch(`${BASE_URL}/api/events/by-slug/${event.slug}`);
   const rePublicData = await rePublicRes.json();
   const approvedList = rePublicData.event.approvedPhotos;
-  const isFound = approvedList.some((p: any) => p.id === photo.id);
+  const isFound = approvedList.some((p: { id: string }) => p.id === photo.id);
   if (!isFound) {
     throw new Error("Approved photo not found in public gallery!");
   }

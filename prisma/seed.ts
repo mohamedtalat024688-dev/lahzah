@@ -119,6 +119,7 @@ async function main() {
       description: "تبدأ مراسم الحفل في تمام الساعة الثامنة مساءً بحضور الأهل والأصدقاء.",
       templateId: "royal-gold",
       isPublished: true,
+      isPaid: true,
       packageTier: "PREMIUM",
       userId: ownerUser.id,
     },

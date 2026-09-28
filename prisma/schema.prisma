@@ -36,14 +36,16 @@ model Event {
   welcomeMessage  String?     @default("يسعدنا ويشرفنا حضوركم ومشاركتنا فرحتنا")
   coverImage      String?
   templateId      String      @default("royal-gold")
-  isPublished     Boolean     @default(true)
-  packageTier     String      @default("PREMIUM") // BASIC, PREMIUM, LUXURY
+  isPublished     Boolean     @default(false)
+  isPaid          Boolean     @default(false)
+  packageTier     String      @default("BASIC") // BASIC, PREMIUM, LUXURY
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
   userId          String
   user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   rsvps           Rsvp[]
   photos          Photo[]
+  payments        PaymentTransaction[]
 
   @@index([slug])
   @@index([userId])
@@ -61,6 +63,8 @@ model Rsvp {
   event            Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
   @@index([eventId])
+  @@index([eventId, attendanceStatus])
+  @@index([eventId, createdAt])
 }
 
 model Photo {
@@ -76,6 +80,8 @@ model Photo {
 
   @@index([eventId])
   @@index([status])
+  @@index([eventId, status])
+  @@index([eventId, createdAt])
 }
 
 model Package {
@@ -90,3 +96,23 @@ model Package {
   isPopular   Boolean  @default(false)
   createdAt   DateTime @default(now())
 }
+
+model PaymentTransaction {
+  id            String   @id @default(uuid())
+  eventId       String
+  packageCode   String   // BASIC, PREMIUM, LUXURY
+  amount        Float
+  currency      String   @default("EGP")
+  status        String   @default("PENDING") // PENDING, PAID, FAILED, REFUNDED
+  provider      String   @default("SIMULATION") // SIMULATION, PAYMOB, FAWRY, STRIPE
+  providerTxnId String?  @unique
+  metadata      String?  // JSON string
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  event         Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+  @@index([status])
+  @@index([providerTxnId])
+}
+

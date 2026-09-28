@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { generateQrDataUrl } from "@/lib/qr";
+import { deleteUploadedFile } from "@/lib/storage";
 
 export async function GET(
   request: Request,
@@ -76,6 +77,14 @@ export async function PUT(
       return NextResponse.json({ error: "غير مصرح لك بتعديل هذه المناسبة" }, { status: 403 });
     }
 
+    // SERVER/API Security: Prevent publishing an unpaid event
+    if (body.isPublished === true && !existing.isPaid) {
+      return NextResponse.json(
+        { error: "لا يمكن نشر الدعوة قبل سداد قيمة الباقة وتفعيل الاشتراك" },
+        { status: 402 }
+      );
+    }
+
     const updated = await prisma.event.update({
       where: { id },
       data: {
@@ -101,6 +110,8 @@ export async function PUT(
   }
 }
 
+export const PATCH = PUT;
+
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -121,8 +132,20 @@ export async function DELETE(
       return NextResponse.json({ error: "غير مصرح" }, { status: 403 });
     }
 
+    // Clean up physical photo assets from storage (S3/local)
+    const photos = await prisma.photo.findMany({
+      where: { eventId: id },
+      select: { url: true },
+    });
+
+    for (const p of photos) {
+      if (p.url) {
+        await deleteUploadedFile(p.url).catch(() => {});
+      }
+    }
+
     await prisma.event.delete({ where: { id } });
-    return NextResponse.json({ success: true, message: "تم حذف المناسبة بنجاح" });
+    return NextResponse.json({ success: true, message: "تم حذف المناسبة وجميع وسائطها بنجاح" });
   } catch (error) {
     console.error("Delete event error:", error);
     return NextResponse.json({ error: "فشل حذف المناسبة" }, { status: 500 });

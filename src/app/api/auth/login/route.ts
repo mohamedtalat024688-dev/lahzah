@@ -1,9 +1,19 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { comparePassword, setSessionCookie } from "@/lib/auth";
+import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 
 export async function POST(request: Request) {
   try {
+    const ip = getClientIp(request);
+    const rateLimit = checkRateLimit(`login:${ip}`, { windowMs: 60 * 1000, max: 15 });
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: "تجاوزت عدد محاولات الدخول المسموح بها. يرجى الانتظار دقيقة والمحاولة مجدداً." },
+        { status: 429 }
+      );
+    }
+
     const { email, password } = await request.json();
 
     if (!email || !password) {

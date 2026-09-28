@@ -124,8 +124,9 @@ export async function POST(request: Request) {
         templateId,
         slug,
         userId: user.id,
-        isPublished: true,
-        packageTier: "PREMIUM",
+        isPublished: false,
+        isPaid: false,
+        packageTier: body.packageTier && ["BASIC", "PREMIUM", "LUXURY"].includes(body.packageTier) ? body.packageTier : "BASIC",
       },
     });
 

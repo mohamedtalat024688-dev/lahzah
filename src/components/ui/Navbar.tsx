@@ -2,7 +2,16 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Heart, Sparkles, User, LogOut, LayoutDashboard, PlusCircle } from "lucide-react";
+import {
+  Heart,
+  Sparkles,
+  LogOut,
+  LayoutDashboard,
+  PlusCircle,
+  Menu,
+  X,
+  ShieldAlert,
+} from "lucide-react";
 
 interface UserProfile {
   id: string;
@@ -14,6 +23,7 @@ interface UserProfile {
 export default function Navbar() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     fetch("/api/auth/me")
@@ -32,7 +42,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-md bg-[#0a0908]/85 border-b border-[#d4af37]/20">
+    <header className="sticky top-0 z-50 backdrop-blur-md bg-[#0a0908]/90 border-b border-[#d4af37]/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
@@ -41,7 +51,7 @@ export default function Navbar() {
               <Sparkles className="w-5 h-5 text-[#d4af37]" />
             </div>
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col text-right">
             <span className="text-2xl font-bold tracking-tight text-white calligraphy-font">
               لـحـظـة
             </span>
@@ -51,8 +61,8 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* Center Links */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-[#dcd7cb]">
+        {/* Center Links (Desktop) */}
+        <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-[#dcd7cb]">
           <Link href="/#features" className="hover:text-[#d4af37] transition-colors">
             المميزات
           </Link>
@@ -67,29 +77,38 @@ export default function Navbar() {
           </Link>
           <Link
             href="/e/ahmed-and-sara"
-            className="flex items-center gap-1.5 text-[#f3e5ab] bg-[#d4af37]/10 px-3 py-1.5 rounded-full border border-[#d4af37]/30 hover:bg-[#d4af37]/20 transition-all text-xs"
+            className="flex items-center gap-1.5 text-[#f3e5ab] bg-[#d4af37]/10 px-3.5 py-1.5 rounded-full border border-[#d4af37]/30 hover:bg-[#d4af37]/20 transition-all text-xs font-semibold"
           >
             <Heart className="w-3.5 h-3.5 fill-[#d4af37] text-[#d4af37]" />
-            معاينة دعوة حية
+            <span>معاينة حية (زفاف أحمد وسارة)</span>
           </Link>
         </nav>
 
-        {/* Auth Actions */}
-        <div className="flex items-center gap-3">
+        {/* Auth Actions (Desktop) */}
+        <div className="hidden md:flex items-center gap-3">
           {loading ? (
             <div className="w-24 h-9 bg-neutral-800/60 rounded-full animate-pulse" />
           ) : user ? (
             <div className="flex items-center gap-3">
+              {user.role === "ADMIN" && (
+                <Link
+                  href="/admin"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs font-bold hover:bg-rose-900/60 transition-all"
+                >
+                  <ShieldAlert className="w-3.5 h-3.5" />
+                  <span>الإدارة</span>
+                </Link>
+              )}
               <Link
                 href="/dashboard"
                 className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#1c1915] text-[#f3e5ab] border border-[#d4af37]/40 hover:border-[#d4af37] transition-all text-sm font-medium"
               >
                 <LayoutDashboard className="w-4 h-4 text-[#d4af37]" />
-                <span className="hidden sm:inline">لوحة التحكم</span>
+                <span>لوحة التحكم</span>
               </Link>
               <Link
                 href="/dashboard/events/new"
-                className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-[#d4af37] to-[#aa7c11] text-[#0d0c0a] font-semibold text-xs hover:brightness-110 transition-all"
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-[#d4af37] to-[#aa7c11] text-[#0d0c0a] font-bold text-xs hover:brightness-110 transition-all shadow-md shadow-[#d4af37]/10"
               >
                 <PlusCircle className="w-4 h-4" />
                 <span>إنشاء دعوة</span>
@@ -112,14 +131,119 @@ export default function Navbar() {
               </Link>
               <Link
                 href="/auth/register"
-                className="px-5 py-2 rounded-full bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#aa7c11] text-[#0d0c0a] font-semibold text-sm shadow-md shadow-[#d4af37]/20 hover:brightness-110 transition-all"
+                className="px-5 py-2 rounded-full bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#aa7c11] text-[#0d0c0a] font-bold text-sm shadow-md shadow-[#d4af37]/20 hover:brightness-110 transition-all"
               >
                 ابدأ مجاناً
               </Link>
             </div>
           )}
         </div>
+
+        {/* Mobile Hamburger Button */}
+        <div className="flex md:hidden items-center gap-2">
+          {user && (
+            <Link
+              href="/dashboard"
+              className="p-2 rounded-xl bg-[#1c1915] border border-[#d4af37]/30 text-[#f3e5ab]"
+            >
+              <LayoutDashboard className="w-5 h-5 text-[#d4af37]" />
+            </Link>
+          )}
+
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 text-neutral-200 hover:text-white"
+            aria-label="قائمة الملاحة"
+          >
+            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Slide-down Drawer */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden border-b border-[#d4af37]/20 bg-[#0d0c0a] px-5 py-6 space-y-4 animate-fadeIn text-right">
+          <nav className="flex flex-col space-y-3 text-sm text-neutral-300 font-medium">
+            <Link
+              href="/#features"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="py-2 hover:text-[#d4af37] transition-colors border-b border-neutral-800/60"
+            >
+              المميزات
+            </Link>
+            <Link
+              href="/#templates"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="py-2 hover:text-[#d4af37] transition-colors border-b border-neutral-800/60"
+            >
+              قوالب الدعوات الملكية
+            </Link>
+            <Link
+              href="/#how-it-works"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="py-2 hover:text-[#d4af37] transition-colors border-b border-neutral-800/60"
+            >
+              كيف تعمل المنصة
+            </Link>
+            <Link
+              href="/#pricing"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="py-2 hover:text-[#d4af37] transition-colors border-b border-neutral-800/60"
+            >
+              الباقات والأسعار
+            </Link>
+            <Link
+              href="/e/ahmed-and-sara"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="py-2 text-[#f3e5ab] font-bold flex items-center gap-1.5"
+            >
+              <Heart className="w-4 h-4 text-[#d4af37] fill-[#d4af37]" />
+              <span>معاينة دعوة حية (زفاف أحمد وسارة)</span>
+            </Link>
+          </nav>
+
+          <div className="pt-4 border-t border-neutral-800 flex flex-col gap-2.5">
+            {user ? (
+              <>
+                <Link
+                  href="/dashboard/events/new"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full py-3 rounded-full bg-gradient-to-r from-[#d4af37] to-[#aa7c11] text-[#0d0c0a] font-bold text-center text-sm shadow-md"
+                >
+                  تصميم بطاقة جديدة
+                </Link>
+                <button
+                  onClick={() => {
+                    setIsMobileMenuOpen(false);
+                    handleLogout();
+                  }}
+                  className="w-full py-2.5 rounded-full bg-neutral-900 border border-neutral-800 text-red-400 font-semibold text-center text-xs flex items-center justify-center gap-1.5"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>تسجيل الخروج</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/auth/register"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full py-3 rounded-full bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#aa7c11] text-[#0d0c0a] font-bold text-center text-sm shadow-md"
+                >
+                  إنشاء حساب مجاناً
+                </Link>
+                <Link
+                  href="/auth/login"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full py-2.5 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 font-semibold text-center text-xs"
+                >
+                  تسجيل الدخول
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   );
 }

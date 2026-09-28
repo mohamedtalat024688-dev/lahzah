@@ -22,14 +22,37 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     };
   }
 
+  const hostUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+  const canonicalUrl = `${hostUrl}/e/${event.slug}`;
+  const ogImage = event.coverImage || `${hostUrl}/icon.png`;
+
   return {
     title: `${event.title} | لحظة`,
     description: `يتشرف ${event.groomName} و ${event.brideName} بدعوتكم لحضور حفل الزفاف في ${event.venueName}. تفاصيل الدعوة وتأكيد الحضور.`,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: event.title,
       description: `ندعوكم بكل الحب لمشاركتنا فرحة العمر في ${event.venueName}`,
+      url: canonicalUrl,
+      siteName: "لحظة - منصة دعوات الزفاف وتوثيق الذكريات",
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: event.title,
+        },
+      ],
       locale: "ar_EG",
       type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: event.title,
+      description: `ندعوكم بكل الحب لمشاركتنا فرحة العمر في ${event.venueName}`,
+      images: [ogImage],
     },
   };
 }

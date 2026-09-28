@@ -6,7 +6,6 @@ import Image from "next/image";
 import {
   ArrowRight,
   ExternalLink,
-  QrCode,
   Users,
   Camera,
   CheckCircle,
@@ -14,12 +13,13 @@ import {
   Trash2,
   Download,
   Share2,
-  Sparkles,
   Loader2,
   Check,
-  ShieldCheck,
-  Heart,
-  TrendingUp,
+  ShieldAlert,
+  CreditCard,
+  Sparkles,
+  PauseCircle,
+  AlertTriangle,
 } from "lucide-react";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
@@ -41,6 +41,7 @@ interface EventDetails {
   description?: string | null;
   templateId: string;
   isPublished: boolean;
+  isPaid: boolean;
   packageTier: string;
   rsvps: Array<{
     id: string;
@@ -69,8 +70,10 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
   const [activeTab, setActiveTab] = useState<"overview" | "photos" | "rsvps" | "qr" | "package">("overview");
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [publishLoading, setPublishLoading] = useState(false);
   const [copied, setCopied] = useState(false);
   const [upgradeSuccess, setUpgradeSuccess] = useState<string | null>(null);
+  const [publishMessage, setPublishMessage] = useState<string | null>(null);
 
   const fetchEventData = () => {
     fetch(`/api/events/${id}`)
@@ -87,7 +90,54 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
 
   useEffect(() => {
     fetchEventData();
+    if (typeof window !== "undefined") {
+      const sp = new URLSearchParams(window.location.search);
+      if (sp.get("payment") === "success") {
+        setUpgradeSuccess("تم تأكيد وسداد الباقة بنجاح! أصبحت مناسبتك جاهزة للنشر الآن.");
+      } else if (sp.get("payment") === "failed") {
+        alert("لم تكتمل عملية الدفع أو تم إلغاؤها. يمكنك المحاولة مجدداً في أي وقت.");
+      }
+    }
   }, [id]);
+
+  const handlePublish = async () => {
+    setPublishLoading(true);
+    try {
+      const res = await fetch(`/api/events/${id}/publish`, { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "فشل نشر المناسبة");
+        return;
+      }
+      setPublishMessage("تم نشر بطاقة الدعوة وتفعيل الـ QR بنجاح! 🚀");
+      fetchEventData();
+      setTimeout(() => setPublishMessage(null), 5000);
+    } catch {
+      alert("حدث خطأ أثناء محاولة النشر");
+    } finally {
+      setPublishLoading(false);
+    }
+  };
+
+  const handleUnpublish = async () => {
+    if (!confirm("هل أنت متأكد من رغبتك في إيقاف نشر الدعوة مؤقتاً؟ لن يتمكن الضيوف من فتحها.")) return;
+    setPublishLoading(true);
+    try {
+      const res = await fetch(`/api/events/${id}/unpublish`, { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "فشل إيقاف النشر");
+        return;
+      }
+      setPublishMessage("تم إيقاف النشر وتحويل المناسبة إلى مسودة خاصة.");
+      fetchEventData();
+      setTimeout(() => setPublishMessage(null), 5000);
+    } catch {
+      alert("حدث خطأ أثناء محاولة إيقاف النشر");
+    } finally {
+      setPublishLoading(false);
+    }
+  };
 
   const handleModeratePhoto = async (photoId: string, status: "APPROVED" | "REJECTED") => {
     setActionLoading(photoId);
@@ -140,6 +190,10 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
       });
       const data = await res.json();
       if (res.ok) {
+        if (data.checkoutUrl) {
+          window.location.href = data.checkoutUrl;
+          return;
+        }
         setUpgradeSuccess(`تم تفعيل ${PACKAGES[packageCode].nameAr} بنجاح!`);
         fetchEventData();
         setTimeout(() => setUpgradeSuccess(null), 4000);
@@ -366,7 +420,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                           <span className="text-xs font-bold text-white block">{photo.guestName}</span>
                           {photo.message && (
                             <p className="text-xs text-neutral-300 italic mt-1 bg-black/40 p-2 rounded-lg">
-                              "{photo.message}"
+                              «{photo.message}»
                             </p>
                           )}
                         </div>
@@ -426,7 +480,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                         </button>
                         <div>
                           <p className="text-xs font-bold text-white">{photo.guestName}</p>
-                          {photo.message && <p className="text-[10px] text-neutral-300 truncate">"{photo.message}"</p>}
+                          {photo.message && <p className="text-[10px] text-neutral-300 truncate">«{photo.message}»</p>}
                         </div>
                       </div>
                     </div>

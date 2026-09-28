@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { deleteUploadedFile } from "@/lib/storage";
 
 export async function PATCH(
   request: Request,
@@ -28,7 +29,7 @@ export async function PATCH(
       return NextResponse.json({ error: "الصورة غير موجودة" }, { status: 404 });
     }
 
-    // Authorization check
+    // Authorization check: Only event owner or platform ADMIN can moderate
     if (photo.event.userId !== user.id && user.role !== "ADMIN") {
       return NextResponse.json({ error: "غير مصرح لك بتعديل حالة هذه الصورة" }, { status: 403 });
     }
@@ -71,6 +72,11 @@ export async function DELETE(
 
     if (photo.event.userId !== user.id && user.role !== "ADMIN") {
       return NextResponse.json({ error: "غير مصرح" }, { status: 403 });
+    }
+
+    // Clean up physical file from storage (handles local and S3/R2)
+    if (photo.url) {
+      await deleteUploadedFile(photo.url);
     }
 
     await prisma.photo.delete({ where: { id: photoId } });

@@ -35,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ar" dir="rtl" className={`${cairo.variable} ${amiri.variable}`}>
+    <html lang="ar" dir="rtl" className={`${cairo.variable} ${amiri.variable}`} suppressHydrationWarning>
       <body className="min-h-screen bg-[#0a0908] text-[#f7f5f0] antialiased selection:bg-[#d4af37]/30 selection:text-[#f3e5ab] font-sans">
         {children}
       </body>

@@ -51,8 +51,25 @@ graph TD
 - **Rsvp:** ID, eventId, guestName, phone, attendanceStatus (ATTENDING, NOT_ATTENDING, MAYBE), guestCount, note, createdAt.
 - **Photo:** ID, eventId, url, guestName, message, status (PENDING, APPROVED, REJECTED), createdAt.
 - **Package:** ID, name, code, price, currency, photoLimit, features.
+- **PaymentTransaction:** ID, eventId, packageCode, amount, currency, status (PENDING, PAID, FAILED, REFUNDED), provider, providerTxnId, metadata, createdAt, updatedAt.
 
-## Storage Abstraction
-- Unified interface: `uploadFile(file: Buffer, filename: string, mimeType: string): Promise<string>`
-- Default implementation: Local disk in `public/uploads` for local dev without external cloud dependencies.
-- Extensible to AWS S3, Supabase Storage, or Cloudflare R2 without touching controller logic.
+## Route Middleware (Edge Protection)
+- `src/middleware.ts` intercepts `/dashboard/*`, `/admin/*`, `/auth/login`, and `/auth/register`.
+- Validates JWT tokens using `jose.jwtVerify`.
+- Protects `/dashboard` by redirecting unauthenticated users to `/auth/login?redirect=...`.
+- Protects `/admin` by strictly restricting access to users with `role: "ADMIN"`, redirecting unauthorized users to `/dashboard`.
+- Automatically redirects already authenticated users away from login/register to `/dashboard`.
+
+## Storage & Payment Abstractions
+- **Storage (`src/lib/storage.ts`):** `IStorageProvider` interface with `LocalStorageProvider` (dev) and `S3StorageProvider` (AWS S3, Cloudflare R2, Supabase). Binary magic byte validation (`detectMagicMime`) guarantees true file format authentication prior to persistence.
+- **Payments (`src/lib/packages.ts`):** `IPaymentGateway` interface with `SimulationPaymentGateway` (local QA demo) and `PaymobPaymentGateway` (production ready).
+
+## Security & Isolation Matrix
+- **User Isolation:** All event management APIs (`GET`, `PUT`, `DELETE`, `/upgrade`, `/qr`) enforce `event.userId === user.id || user.role === "ADMIN"`. User A cannot view, edit, or delete User B's events.
+- **Guest Restrictions:** Guests cannot approve, reject, or delete photos.
+- **Photo Privacy:** Public invitation `/e/[slug]` and photos API `/api/events/[id]/photos` filter strictly by `status === "APPROVED"` for all non-owners. PENDING and REJECTED photos never leak to the public.
+- **File Validation:** Magic bytes inspection prevents disguised executables; 12MB size limit strictly enforced on server.
+- **Rate Limiting (`src/lib/rateLimit.ts`):** In-memory sliding window rate limiter protects `/api/auth/login`, `/api/events/[id]/photos`, and `/api/events/[id]/rsvp` against brute-force attacks and spam.
+- **Physical Asset Cleanup:** Deleting an event or deleting/rejecting a photo cascades to physically delete the binary file from local storage or S3/R2 buckets.
+- **Production Database Architecture:** SQLite for local zero-friction development; 100% prepared and documented for PostgreSQL deployment in [`docs/DATABASE_MIGRATION.md`](file:///c:/Users/Souq%20al%20computer/Desktop/lahzah/docs/DATABASE_MIGRATION.md).
+

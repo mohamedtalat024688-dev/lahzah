@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import {
   Sparkles,
   Heart,
@@ -9,12 +8,7 @@ import {
   Camera,
   CheckCircle,
   ArrowLeft,
-  ChevronDown,
-  Users,
-  ShieldCheck,
   Calendar,
-  Layers,
-  Clock,
   ExternalLink,
 } from "lucide-react";
 import Navbar from "@/components/ui/Navbar";
@@ -89,8 +83,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* How it Works: The 3 Phases */}
-      <section id="how-it-works" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      {/* How it Works & Features */}
+      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
+        <div id="how-it-works" className="scroll-mt-20" />
         <div className="text-center space-y-3 mb-16">
           <span className="text-xs text-[#d4af37] font-bold uppercase tracking-wider">
             دورة حياة الحفل المتكاملة
@@ -152,7 +147,7 @@ export default function HomePage() {
       </section>
 
       {/* Templates Showcase */}
-      <section id="templates" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-900">
+      <section id="templates" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-900 scroll-mt-20">
         <div className="text-center space-y-3 mb-16">
           <span className="text-xs text-[#d4af37] font-bold uppercase tracking-wider">
             أناقة وفخامة تليق بك
@@ -201,7 +196,7 @@ export default function HomePage() {
       </section>
 
       {/* Pricing / Packages */}
-      <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-900">
+      <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-neutral-900 scroll-mt-20">
         <div className="text-center space-y-3 mb-16">
           <span className="text-xs text-[#d4af37] font-bold uppercase tracking-wider">
             باقات شفافة وبسيطة

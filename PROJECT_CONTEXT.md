@@ -43,9 +43,20 @@
 - [x] **Phase 12:** Owner Dashboard (`/dashboard` & `/dashboard/events/[id]`) with live metrics
 - [x] **Phase 13 & 14:** Package management & tier upgrades (`BASIC`, `PREMIUM`, `LUXURY`)
 - [x] **Phase 15:** Super Admin Panel (`/admin`) for system oversight
+- [x] **Phase 16:** Next.js Route Middleware (`src/middleware.ts`) protecting `/dashboard` and `/admin`
+- [x] **Phase 17:** Security Hardening & Storage provider abstraction with magic-byte file signature validation
 - [x] **Phase 18:** Automated E2E Acceptance Test Suite (`scripts/test-e2e.ts`) passing 100%
+- [x] **Phase 19:** Comprehensive Security & Authorization Test Suite (`scripts/test-security.ts`) passing 100%
+- [x] **Phase 20:** Database-backed Payment Transactions (`PaymentTransaction`), Paymob v1 API integration with HMAC-SHA512 webhook handler (`/api/payments/webhook`), and automated test suite (`scripts/test-payments.ts`) passing 100%
+- [x] **Phase 21:** Enterprise Object Storage abstraction with `S3StorageProvider` (zero-bloat native AWS SigV4 for AWS S3 & Cloudflare R2) and `LocalStorageProvider`
+- [x] **Phase 22:** Commercial UI/UX Polish (4-step Arabic event creation wizard, streamlined guest experience "شاركنا لحظتك ❤️" / "تم استلام صورتك ❤️", full-screen gallery lightbox, and responsive mobile navigation drawer)
 
-## 5. Security & Isolation
-- Strict owner data isolation (owners only modify their own events/photos).
-- Safe file upload validation (MIME-type check, size bounds 12MB, image extensions).
-- All guest uploads enter `PENDING` state and require owner approval before appearing publicly.
+## 5. Security & Isolation Matrix
+- Strict owner data isolation: User A cannot view, modify, delete, or upgrade User B's events (enforced at API and middleware levels).
+- Role-based authorization: Only users with `role: "ADMIN"` can access `/admin` and `/api/admin/metrics`.
+- Safe file upload validation: Binary magic bytes inspection (JPEG, PNG, WebP, HEIC) blocks spoofed malicious files; 12MB limit strictly enforced.
+- Physical file deletion: Deleting or rejecting a photo cleans up the stored file from disk/bucket.
+- Memory privacy: All guest uploads enter `PENDING` state and require owner approval before appearing in public galleries.
+- Rate limits & bounds: Event names, guest counts, and notes have bounds checking.
+- Webhook signature authentication: HMAC-SHA512 mandated alphabetical key ordering verification for payment confirmations.
+
