@@ -1,0 +1,92 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  role         String    @default("OWNER") // OWNER or ADMIN
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  events       Event[]
+}
+
+model Event {
+  id              String      @id @default(uuid())
+  slug            String      @unique
+  title           String
+  eventType       String      @default("WEDDING") // WEDDING, ENGAGEMENT, BIRTHDAY, etc.
+  groomName       String
+  brideName       String
+  eventDate       DateTime
+  venueName       String
+  address         String
+  mapUrl          String?
+  description     String?
+  welcomeMessage  String?     @default("يسعدنا ويشرفنا حضوركم ومشاركتنا فرحتنا")
+  coverImage      String?
+  templateId      String      @default("royal-gold")
+  isPublished     Boolean     @default(true)
+  packageTier     String      @default("PREMIUM") // BASIC, PREMIUM, LUXURY
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  userId          String
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rsvps           Rsvp[]
+  photos          Photo[]
+
+  @@index([slug])
+  @@index([userId])
+}
+
+model Rsvp {
+  id               String   @id @default(uuid())
+  eventId          String
+  guestName        String
+  phone            String?
+  attendanceStatus String   // ATTENDING, NOT_ATTENDING, MAYBE
+  guestCount       Int      @default(1)
+  note             String?
+  createdAt        DateTime @default(now())
+  event            Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+}
+
+model Photo {
+  id          String   @id @default(uuid())
+  eventId     String
+  url         String
+  guestName   String?  @default("ضيف عزيز")
+  message     String?
+  status      String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId])
+  @@index([status])
+}
+
+model Package {
+  id          String   @id @default(uuid())
+  code        String   @unique // BASIC, PREMIUM, LUXURY
+  nameAr      String
+  nameEn      String
+  price       Float
+  currency    String   @default("EGP")
+  photoLimit  Int      @default(100)
+  features    String   // JSON string of feature keys
+  isPopular   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
