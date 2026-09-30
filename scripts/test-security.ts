@@ -95,6 +95,21 @@ async function runSecurityTests() {
   assert.strictEqual(userBUpgradeRes.status, 403, "User B should be forbidden from upgrading User A's event");
   console.log("  ✔ PASS: User B upgrade blocked with 403 Forbidden.\n");
 
+  // User A pays and publishes Event A so guests can interact with it
+  console.log("Setup: User A pays for package and publishes Event A...");
+  const payRes = await fetch(`${BASE_URL}/api/events/${eventA.id}/checkout`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Cookie: userA.cookie },
+    body: JSON.stringify({ packageCode: "BASIC" }),
+  });
+  assert.strictEqual(payRes.status, 200);
+  const pubRes = await fetch(`${BASE_URL}/api/events/${eventA.id}/publish`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Cookie: userA.cookie },
+  });
+  assert.strictEqual(pubRes.status, 200);
+  console.log("  ✔ Event A paid and published successfully.\n");
+
   // 7. SETUP: Guest uploads a photo to Event A
   console.log("Setup: Guest uploads a photo without account to Event A...");
   const samplePixel = Buffer.from(

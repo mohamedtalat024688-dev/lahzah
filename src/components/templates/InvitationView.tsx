@@ -3,13 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  Calendar,
   Clock,
   MapPin,
   Heart,
   Share2,
   Camera,
-  CheckCircle,
   ExternalLink,
   Sparkles,
   Volume2,
@@ -80,11 +78,13 @@ export default function InvitationView({ event }: { event: EventData }) {
 
   const handleShare = () => {
     if (navigator.share) {
-      navigator.share({
-        title: event.title,
-        text: `ندعوكم بكل الحب لمشاركتنا فرحة ${event.groomName} و ${event.brideName} ❤️`,
-        url: window.location.href,
-      }).catch(() => {});
+      navigator
+        .share({
+          title: event.title,
+          text: `ندعوكم بكل الحب لمشاركتنا فرحة ${event.groomName} و ${event.brideName} ❤️`,
+          url: window.location.href,
+        })
+        .catch(() => {});
     } else {
       navigator.clipboard.writeText(window.location.href);
       setCopied(true);
@@ -111,132 +111,227 @@ export default function InvitationView({ event }: { event: EventData }) {
     minute: "2-digit",
   });
 
-  return (
-    <main className={`min-h-screen ${theme.background} text-[#fbfaf8] py-8 sm:py-16 px-4 relative overflow-hidden`}>
-      {/* Decorative Arabesque Corner Motifs */}
-      <div className="absolute top-0 right-0 w-48 h-48 bg-gradient-to-bl from-[#d4af37]/15 to-transparent rounded-bl-full pointer-events-none" />
-      <div className="absolute top-0 left-0 w-48 h-48 bg-gradient-to-br from-[#d4af37]/15 to-transparent rounded-br-full pointer-events-none" />
+  const isLightPaper = templateConfig.theme.isLight;
+  const textPrimary = isLightPaper ? "text-[#1c1917]" : "text-[#faf8f5]";
+  const textSecondary = isLightPaper ? "text-[#786c5e]" : "text-[#8e877c]";
+  const borderColor = isLightPaper ? "border-[#e0d6c3]" : "border-[#26221d]";
 
-      {/* Floating Action Controls */}
-      <div className="fixed top-5 left-5 z-40 flex items-center gap-2">
+  const groomInitial = (event.groomName || "أ").trim().charAt(0);
+  const brideInitial = (event.brideName || "س").trim().charAt(0);
+  const ornament = templateConfig.ornaments;
+  const typography = templateConfig.typography;
+
+  return (
+    <div
+      className={`min-h-screen ${theme.background} ${textPrimary} selection:bg-[#c5a880]/30 selection:text-[#f5f2eb] relative overflow-hidden font-body`}
+    >
+      {/* Subtle Ambient Glow */}
+      <div
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 blur-3xl opacity-15 pointer-events-none"
+        style={{
+          background: `radial-gradient(ellipse at center, ${theme.accentColor} 0%, transparent 70%)`,
+        }}
+      />
+
+      {/* Floating Audio Control (Refined & Minimal) */}
+      <div className="fixed top-5 left-5 z-40">
         <button
           onClick={() => setIsPlayingMusic(!isPlayingMusic)}
           title={isPlayingMusic ? "كتم الموسيقى" : "تشغيل الموسيقى"}
-          className="p-3 rounded-full bg-[#161412]/80 backdrop-blur-md border border-[#d4af37]/30 text-[#f3e5ab] hover:scale-105 transition-all shadow-lg"
+          className={`p-3 rounded-full backdrop-blur-md border shadow-md hover:scale-105 transition-all ${
+            isLightPaper
+              ? "bg-[#faf8f5]/90 border-[#e0d6c3] text-[#a8824f]"
+              : "bg-[#141210]/80 border-[#2e2924] text-[#c5a880]"
+          }`}
         >
-          {isPlayingMusic ? <Volume2 className="w-4 h-4 text-[#d4af37]" /> : <VolumeX className="w-4 h-4 text-neutral-400" />}
+          {isPlayingMusic ? (
+            <Volume2 className="w-4 h-4" />
+          ) : (
+            <VolumeX className="w-4 h-4 opacity-70" />
+          )}
         </button>
       </div>
 
-      <div className="max-w-3xl mx-auto space-y-10 sm:space-y-14 relative z-10">
-        {/* Main Invitation Card */}
-        <section className={`${theme.cardBackground} rounded-3xl p-6 sm:p-12 text-center relative overflow-hidden border ${theme.borderColor} shadow-2xl`}>
-          {/* Top Bismillah / Verse */}
-          <div className="space-y-2 mb-8">
-            <span className="text-xs sm:text-sm tracking-widest text-[#d4af37]/90 calligraphy-font">
-              بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
-            </span>
-            <p className="text-[11px] sm:text-xs text-neutral-400 italic font-serif">
-              «وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»
+      {/* MAIN EDITORIAL INVITATION BODY */}
+      <article className="max-w-2xl mx-auto px-6 py-16 sm:py-24 space-y-20 relative z-10 text-center">
+        {/* 1. Grand Opening Section */}
+        <section className="space-y-8 animate-fadeIn">
+          {/* Royal Monogram Medallion */}
+          <div className="flex flex-col items-center justify-center space-y-3">
+            <div
+              className="w-16 h-16 rounded-full border flex items-center justify-center shadow-lg transition-transform hover:scale-105"
+              style={{
+                borderColor: `${theme.accentColor}70`,
+                background: isLightPaper
+                  ? `radial-gradient(circle, ${theme.accentColor}20 0%, transparent 80%)`
+                  : `radial-gradient(circle, ${theme.accentColor}25 0%, transparent 80%)`,
+              }}
+            >
+              <span
+                className="text-lg font-bold font-display tracking-widest"
+                style={{ color: theme.accentColor }}
+              >
+                {groomInitial} • {brideInitial}
+              </span>
+            </div>
+
+            {/* Bismillah & Quranic Verse */}
+            <div className="space-y-2 pt-1">
+              <span
+                className="text-xs sm:text-sm font-display tracking-widest font-semibold block"
+                style={{ color: theme.accentColor }}
+              >
+                بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+              </span>
+              <p className={`text-xs sm:text-sm font-display italic max-w-md mx-auto leading-relaxed ${textSecondary}`}>
+                «وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا
+                وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً»
+              </p>
+            </div>
+          </div>
+
+          <div
+            className="w-16 h-px mx-auto my-6 opacity-40"
+            style={{ backgroundColor: theme.accentColor }}
+          />
+
+          {/* Invitation Badge */}
+          <div className="space-y-1">
+            <p className={`text-xs uppercase tracking-widest ${textSecondary}`}>
+              {event.eventType === "WEDDING"
+                ? "دعوة لحضور حفل زفاف مبارك"
+                : event.eventType === "ENGAGEMENT"
+                ? "دعوة لحضور حفل خطوبة مبارك"
+                : "دعوة لحضور عقد قران مبارك"}
             </p>
           </div>
 
-          {/* Invitation Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#d4af37]/10 border border-[#d4af37]/30 text-[#d4af37] text-xs font-semibold mb-6">
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>دعوة زفاف خاصة</span>
-            <Sparkles className="w-3.5 h-3.5" />
-          </div>
-
-          {/* Couple Names */}
-          <div className="space-y-4 my-6">
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6">
-              <h1 className="text-4xl sm:text-6xl font-extrabold calligraphy-font text-white tracking-wide">
+          {/* Couple Names (Majestic Display Typography) */}
+          <div className="space-y-4 py-4">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6">
+              <h1 className={`text-4xl sm:text-6xl md:text-7xl ${typography.coupleFont} tracking-wide ${textPrimary}`}>
                 {event.groomName}
               </h1>
-              <span className="text-2xl sm:text-3xl text-[#d4af37] calligraphy-font">&</span>
-              <h1 className="text-4xl sm:text-6xl font-extrabold calligraphy-font text-white tracking-wide">
+              <span
+                className="text-2xl sm:text-4xl font-serif font-normal my-1 sm:my-0"
+                style={{ color: theme.accentColor }}
+              >
+                &
+              </span>
+              <h1 className={`text-4xl sm:text-6xl md:text-7xl ${typography.coupleFont} tracking-wide ${textPrimary}`}>
                 {event.brideName}
               </h1>
             </div>
 
+            {/* Template-specific divider */}
+            <div className="flex items-center justify-center gap-3 py-1">
+              <span className="w-10 h-px opacity-30" style={{ backgroundColor: theme.accentColor }} />
+              <span className="text-sm font-display tracking-widest" style={{ color: theme.accentColor }}>
+                {ornament.divider}
+              </span>
+              <span className="w-10 h-px opacity-30" style={{ backgroundColor: theme.accentColor }} />
+            </div>
+
             {event.welcomeMessage && (
-              <p className="text-sm sm:text-base text-neutral-300 max-w-lg mx-auto leading-relaxed pt-2">
+              <p className={`text-sm sm:text-base max-w-md mx-auto leading-relaxed pt-2 ${isLightPaper ? "text-[#4a4036]" : "text-[#c4bdaf]"}`}>
                 {event.welcomeMessage}
               </p>
             )}
           </div>
 
-          {/* Date & Time Highlights */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-8 max-w-xl mx-auto">
-            <div className="p-4 rounded-2xl bg-black/30 border border-[#d4af37]/20 flex items-center justify-center gap-3">
-              <Calendar className="w-5 h-5 text-[#d4af37] shrink-0" />
-              <div className="text-right">
-                <span className="text-[10px] text-neutral-400 block">تاريخ المناسبة</span>
-                <span className="text-xs sm:text-sm font-bold text-white">{formattedDate}</span>
-              </div>
+          {/* Wedding Date Display */}
+          <div className="space-y-2 pt-2">
+            <div className={`text-lg sm:text-xl font-display font-semibold ${textPrimary}`}>
+              {formattedDate}
             </div>
-
-            <div className="p-4 rounded-2xl bg-black/30 border border-[#d4af37]/20 flex items-center justify-center gap-3">
-              <Clock className="w-5 h-5 text-[#d4af37] shrink-0" />
-              <div className="text-right">
-                <span className="text-[10px] text-neutral-400 block">موعد الحفل</span>
-                <span className="text-xs sm:text-sm font-bold text-white">{formattedTime} مساءً</span>
-              </div>
+            <div className={`text-xs flex items-center justify-center gap-2 ${textSecondary}`}>
+              <Clock className="w-3.5 h-3.5" style={{ color: theme.accentColor }} />
+              <span>الساعة {formattedTime} مساءً</span>
             </div>
           </div>
+        </section>
 
-          {/* Countdown Clock */}
-          <div className="my-8">
-            <p className="text-xs text-[#d4af37] font-semibold mb-3 tracking-wider">
-              العد التنازلي لليلة العمر
-            </p>
-            <div className="grid grid-cols-4 gap-2 sm:gap-4 max-w-md mx-auto">
-              {[
-                { label: "يوم", value: timeLeft.days },
-                { label: "ساعة", value: timeLeft.hours },
-                { label: "دقيقة", value: timeLeft.minutes },
-                { label: "ثانية", value: timeLeft.seconds },
-              ].map((unit, idx) => (
-                <div
-                  key={idx}
-                  className="p-3 sm:p-4 rounded-2xl bg-[#0f0e0c]/80 border border-[#d4af37]/30 shadow-md flex flex-col items-center justify-center"
-                >
-                  <span className="text-xl sm:text-3xl font-bold text-[#f3e5ab] font-mono">
-                    {String(unit.value).padStart(2, "0")}
-                  </span>
-                  <span className="text-[10px] sm:text-xs text-neutral-400 mt-1">{unit.label}</span>
-                </div>
-              ))}
-            </div>
+        {/* 2. Countdown Timer (Minimal Hairline Layout, No Heavy Boxes) */}
+        <section className={`space-y-4 py-6 border-y ${borderColor}`}>
+          <p className="text-xs font-display tracking-widest" style={{ color: theme.accentColor }}>
+            العد التنازلي لليلة العمر
+          </p>
+          <div className="grid grid-cols-4 gap-4 max-w-sm mx-auto">
+            {[
+              { label: "يوم", value: timeLeft.days },
+              { label: "ساعة", value: timeLeft.hours },
+              { label: "دقيقة", value: timeLeft.minutes },
+              { label: "ثانية", value: timeLeft.seconds },
+            ].map((unit, idx) => (
+              <div key={idx} className="space-y-1">
+                <span className={`text-2xl sm:text-3xl font-light font-mono block ${textPrimary}`}>
+                  {String(unit.value).padStart(2, "0")}
+                </span>
+                <span className={`text-[10px] tracking-wider block font-sans ${textSecondary}`}>
+                  {unit.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* 3. Venue & Location Section */}
+        <section className="space-y-4">
+          <div className="space-y-2">
+            <span className={`text-xs uppercase tracking-widest block ${textSecondary}`}>
+              مكان الاحتفال
+            </span>
+            <h3 className={`text-2xl sm:text-3xl font-bold font-display ${textPrimary}`}>
+              {event.venueName}
+            </h3>
+            <p className={`text-xs sm:text-sm max-w-sm mx-auto ${textSecondary}`}>{event.address}</p>
           </div>
 
-          {/* Venue & Map Card */}
-          <div className="p-5 rounded-2xl bg-black/40 border border-[#d4af37]/20 max-w-xl mx-auto my-6 space-y-3">
-            <div className="flex items-center justify-center gap-2 text-[#d4af37]">
-              <MapPin className="w-5 h-5" />
-              <span className="font-bold text-sm sm:text-base text-white">{event.venueName}</span>
-            </div>
-            <p className="text-xs text-neutral-400">{event.address}</p>
-
-            {event.mapUrl && (
+          {event.mapUrl && (
+            <div className="pt-2">
               <a
                 href={event.mapUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs text-[#f3e5ab] bg-[#d4af37]/20 hover:bg-[#d4af37]/30 px-4 py-2 rounded-full border border-[#d4af37]/40 transition-all font-semibold"
+                className={`inline-flex items-center gap-2 text-xs py-2 px-5 rounded-full border transition-all font-medium ${
+                  isLightPaper
+                    ? "bg-[#faf8f5] border-[#e0d6c3] text-[#7c5f34] hover:border-[#a8824f]"
+                    : "bg-[#171411] border-[#2e2924] text-[#c5a880] hover:text-[#d8be99] hover:border-[#3d3630]"
+                }`}
               >
-                <span>فتح الموقع على Google Maps</span>
-                <ExternalLink className="w-3.5 h-3.5" />
+                <MapPin className="w-3.5 h-3.5" />
+                <span>فتح الموقع عبر خرائط جوجل (Google Maps)</span>
+                <ExternalLink className="w-3 h-3 opacity-60" />
               </a>
-            )}
+            </div>
+          )}
+
+          {event.description && (
+            <p className={`text-xs italic max-w-md mx-auto pt-4 leading-relaxed ${textSecondary}`}>
+              {event.description}
+            </p>
+          )}
+        </section>
+
+        {/* 4. Emotional RSVP & Guest Interactions */}
+        <section className={`space-y-4 py-8 border-y ${borderColor}`}>
+          <div className="space-y-1">
+            <h4 className={`text-xl font-bold font-display ${textPrimary}`}>
+              يسعدنا حضوركم وتشريفكم
+            </h4>
+            <p className={`text-xs ${textSecondary}`}>
+              يرجى تأكيد حضوركم لمساعدتنا في ترتيب مقاعدكم الكريمة
+            </p>
           </div>
 
-          {/* Primary Action Buttons: RSVP & Upload Photo */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6 max-w-md mx-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2 max-w-md mx-auto">
             <button
               onClick={() => setIsRsvpOpen(true)}
-              className={`w-full py-3.5 px-6 rounded-full font-bold text-sm sm:text-base flex items-center justify-center gap-2 shadow-xl transition-all ${theme.buttonClass}`}
+              className="w-full sm:w-auto px-8 py-3.5 rounded-full font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-sm"
+              style={{
+                backgroundColor: theme.accentColor,
+                color: isLightPaper ? "#ffffff" : "#0c0b0a",
+              }}
             >
               <Heart className="w-4 h-4 fill-current" />
               <span>تأكيد الحضور (RSVP)</span>
@@ -244,52 +339,72 @@ export default function InvitationView({ event }: { event: EventData }) {
 
             <Link
               href={`/e/${event.slug}/upload`}
-              className="w-full py-3.5 px-6 rounded-full bg-[#1b1814] border border-[#d4af37]/40 text-[#f3e5ab] hover:bg-[#d4af37]/20 font-bold text-sm sm:text-base transition-all flex items-center justify-center gap-2"
+              className={`w-full sm:w-auto px-6 py-3.5 rounded-full border font-medium text-xs transition-colors flex items-center justify-center gap-2 ${
+                isLightPaper
+                  ? "bg-[#faf8f5] border-[#e0d6c3] text-[#1c1917] hover:border-[#a8824f]"
+                  : "bg-[#171411] border-[#2e2924] text-[#faf8f5] hover:border-[#3d3630]"
+              }`}
             >
-              <Camera className="w-4 h-4 text-[#d4af37]" />
-              <span>شاركنا صورتك بالـ QR</span>
+              <Camera className="w-4 h-4" style={{ color: theme.accentColor }} />
+              <span>شاركنا لحظة من يومنا</span>
             </Link>
           </div>
 
-          {/* Share Actions */}
-          <div className="flex items-center justify-center gap-3 pt-8 border-t border-[#d4af37]/15 mt-8">
+          {/* Social Share actions */}
+          <div className={`flex items-center justify-center gap-3 pt-6 text-xs ${textSecondary}`}>
             <button
               onClick={handleWhatsAppShare}
-              className="px-4 py-2 rounded-full bg-[#25D366]/20 border border-[#25D366]/40 text-[#25D366] hover:bg-[#25D366]/30 text-xs font-semibold flex items-center gap-1.5 transition-all"
+              className={`transition-colors flex items-center gap-1.5 hover:${textPrimary}`}
             >
-              <span>مشاركة عبر الواتساب</span>
+              <span>مشاركة عبر واتساب</span>
             </button>
+            <span className="opacity-40">•</span>
             <button
               onClick={handleShare}
-              className="px-4 py-2 rounded-full bg-neutral-800/80 border border-neutral-700 text-neutral-300 hover:text-white text-xs font-semibold flex items-center gap-1.5 transition-all"
+              className={`transition-colors flex items-center gap-1.5 hover:${textPrimary}`}
             >
-              {copied ? <CheckCircle className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
-              <span>{copied ? "تم نسخ الرابط!" : "نسخ الرابط"}</span>
+              {copied ? (
+                <span className="text-[#86efac]">تم نسخ رابط الدعوة!</span>
+              ) : (
+                <>
+                  <Share2 className="w-3 h-3" style={{ color: theme.accentColor }} />
+                  <span>نسخ الرابط</span>
+                </>
+              )}
             </button>
           </div>
         </section>
 
-        {/* Live Memories Gallery Section */}
-        <section className={`${theme.cardBackground} rounded-3xl p-6 sm:p-10 border ${theme.borderColor}`}>
+        {/* 5. Memory Gallery & Guest Wishes */}
+        <section className="space-y-6 pt-4">
+          <div className="space-y-1">
+            <h3 className={`text-2xl font-bold font-display flex items-center justify-center gap-2 ${textPrimary}`}>
+              <Sparkles className="w-4 h-4" style={{ color: theme.accentColor }} />
+              <span>ألبوم ذكريات الحفل</span>
+            </h3>
+            <p className={`text-xs ${textSecondary}`}>
+              لقطات وتهاني التقطها الأهل والأصدقاء ليخلدوا بها فرحة هذا اليوم
+            </p>
+          </div>
+
           <MemoryGallery
             photos={event.approvedPhotos}
             coupleNames={`${event.groomName} و ${event.brideName}`}
             accentColor={theme.accentColor}
-            cardClass={theme.cardBackground}
           />
         </section>
 
-        {/* Footer Brand Credit */}
-        <div className="text-center pt-4 pb-12 space-y-1">
-          <p className="text-xs text-neutral-500 font-sans">
+        {/* 6. Refined Minimal Brand Credit Footer */}
+        <footer className={`pt-12 pb-6 border-t space-y-1 ${borderColor}`}>
+          <p className={`text-xs ${isLightPaper ? "text-[#786c5e]" : "text-[#5c554b]"}`}>
             تم تصميم هذه الدعوة الفاخرة بواسطة منصة{" "}
-            <Link href="/" className="text-[#d4af37] font-bold hover:underline">
+            <Link href="/" className="hover:underline font-medium" style={{ color: theme.accentColor }}>
               لحظة
             </Link>
           </p>
-          <p className="text-[10px] text-neutral-600">من دعوة… إلى ذكرى لا تُنسى</p>
-        </div>
-      </div>
+          <p className={`text-[10px] font-display ${isLightPaper ? "text-[#a39788]" : "text-[#423d36]"}`}>من دعوة… إلى ذكرى لا تُنسى</p>
+        </footer>
+      </article>
 
       {/* RSVP Modal */}
       <RsvpModal
@@ -297,8 +412,7 @@ export default function InvitationView({ event }: { event: EventData }) {
         isOpen={isRsvpOpen}
         onClose={() => setIsRsvpOpen(false)}
         accentColor={theme.accentColor}
-        buttonClass={theme.buttonClass}
       />
-    </main>
+    </div>
   );
 }

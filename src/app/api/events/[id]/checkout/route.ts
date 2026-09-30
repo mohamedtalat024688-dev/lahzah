@@ -41,7 +41,16 @@ export async function GET(
     return NextResponse.json({
       event: {
         id: event.id,
+        slug: event.slug,
         title: event.title,
+        groomName: event.groomName,
+        brideName: event.brideName,
+        eventType: event.eventType,
+        eventDate: event.eventDate,
+        venueName: event.venueName,
+        address: event.address,
+        welcomeMessage: event.welcomeMessage,
+        templateId: event.templateId,
         isPaid: event.isPaid,
         isPublished: event.isPublished,
         packageTier: event.packageTier,

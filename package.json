@@ -9,7 +9,8 @@
     "test:security": "tsx scripts/test-security.ts",
     "test:e2e": "tsx scripts/test-e2e.ts",
     "test:payments": "tsx scripts/test-payments.ts",
-    "test": "tsx scripts/test-security.ts && tsx scripts/test-payments.ts && tsx scripts/test-e2e.ts"
+    "test:templates": "tsx scripts/test-templates-and-mobile.ts",
+    "test": "tsx scripts/test-security.ts && tsx scripts/test-payments.ts && tsx scripts/test-commercial-flow.ts && tsx scripts/test-e2e.ts && tsx scripts/test-templates-and-mobile.ts"
   },
   "dependencies": {
     "@prisma/client": "6.4.1",

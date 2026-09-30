@@ -61,6 +61,21 @@ async function runAcceptanceTest() {
   const event = eventData.event;
   console.log(`  ✔ Event created! ID: ${event.id}, Slug: ${event.slug}\n`);
 
+  // 2.5 PAY AND PUBLISH EVENT
+  console.log("Test 2.5: Owner checks out package and publishes event...");
+  const payRes = await fetch(`${BASE_URL}/api/events/${event.id}/checkout`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Cookie: ownerCookie },
+    body: JSON.stringify({ packageCode: "PREMIUM" }),
+  });
+  if (!payRes.ok) throw new Error("Payment checkout failed");
+  const pubRes = await fetch(`${BASE_URL}/api/events/${event.id}/publish`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Cookie: ownerCookie },
+  });
+  if (!pubRes.ok) throw new Error("Event publish failed");
+  console.log("  ✔ Event paid and published successfully!\n");
+
   // 3. FETCH PUBLIC INVITATION
   console.log("Test 3: Fetching public invitation (/e/[slug])...");
   const publicRes = await fetch(`${BASE_URL}/api/events/by-slug/${event.slug}`);

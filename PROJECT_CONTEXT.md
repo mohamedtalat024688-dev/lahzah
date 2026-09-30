@@ -50,6 +50,38 @@
 - [x] **Phase 20:** Database-backed Payment Transactions (`PaymentTransaction`), Paymob v1 API integration with HMAC-SHA512 webhook handler (`/api/payments/webhook`), and automated test suite (`scripts/test-payments.ts`) passing 100%
 - [x] **Phase 21:** Enterprise Object Storage abstraction with `S3StorageProvider` (zero-bloat native AWS SigV4 for AWS S3 & Cloudflare R2) and `LocalStorageProvider`
 - [x] **Phase 22:** Commercial UI/UX Polish (4-step Arabic event creation wizard, streamlined guest experience "شاركنا لحظتك ❤️" / "تم استلام صورتك ❤️", full-screen gallery lightbox, and responsive mobile navigation drawer)
+- [x] **Phase 23:** Complete Commercial Payment & Publishing Flow (`Create Event → Choose Package → Checkout → Verified Payment → Publish → Invitation URL + QR`)
+  - Server-side security gate: Events default to `isPaid: false` & `isPublished: false`. Unpaid events cannot publish via UI or direct API calls (`PUT` or `POST /publish` returns HTTP 402).
+  - Dedicated Customer Checkout page (`/dashboard/events/[id]/checkout`) with package comparison, price breakdown, and Paymob/Simulation gateway selection.
+  - Payment verification atomically updates `isPaid: true` and `packageTier`. Failed/pending payments strictly leave events unpublished.
+  - Publishing reveals live invitation link, QR Studio (PNG & SVG vector download), and direct WhatsApp share API.
+  - 10/10 automated commercial flow tests passing in `scripts/test-commercial-flow.ts`.
+- [x] **Phase 24:** Complete Premium UI/UX Redesign (Editorial Arabic Wedding Brand)
+  - Redesigned visual language: Warm charcoal (`#0c0b0a`, `#141210`), warm ivory (`#faf8f5`), restrained champagne gold accents (`#c5a880`), subtle hairline dividers (`#26221d`), and editorial Arabic typography (`Amiri` serif display + `Cairo` sans UI).
+- [x] **Phase 25:** Visual UX Transformation (Personal Wedding Studio & Physical Invitation Stationery)
+  - **Stationery Paper Composition:** Built `RealisticInvitationCard` with realistic invitation paper proportions, royal monogram medallion, Bismillah calligraphy, template-specific ornamental corners (Arabian geometric/floral, romantic curves, royal brackets, blind-debossed ivory linen), and realistic drop shadow.
+  - **7 Luxury Template Identities:** Royal Gold, Emerald Elegance, Rose Romance, Ivory Minimal (light paper with dark ink), Burgundy Grandeur, Modern Black, and Arabian Heritage.
+  - **Landing Page Hero & Gallery:** Asymmetric editorial composition with zero dead black space; template gallery where invitations float proudly as stationery pieces without heavy nested SaaS wrappers.
+  - **Personal Wedding Studio Dashboard:** The customer dashboard prominently features the real wedding invitation card alongside status badges, event details, and contextual "ادفع وانشر دعوتك" / "إدارة ومتابعة الحضور" actions.
+  - **Checkout Redesign:** 2-column split layout with realistic invitation preview on one side, package selector + EGP pricing + payment gateway badge + clear "ادفع وانشر دعوتك" primary button.
+  - **Quality Verification:** 100% passing tests (34/34), 0 ESLint errors/warnings, Next.js 16 build passing cleanly.
+- [x] **Phase 26:** Template Preview System & Comprehensive Mobile Interaction Audit
+  - **Bug #1 Fix (Template Previews & Studio Selection):**
+    - Single source of truth in `src/lib/templates.ts`.
+    - Dedicated `/preview?template=${tmpl.id}` page featuring live template switcher chips, dual viewing mode (Stationery Card vs Full Interactive Web Invitation), and "استخدم هذا التصميم" action button.
+    - Public `/e/[slug]?template=${tmpl.id}` support for dynamic preview overrides.
+    - Invitation Studio (`/dashboard/events/new`) reads `template` and `package` from URL query string on load, updates live preview immediately, and syncs choices via `window.history.replaceState`.
+    - `RealisticInvitationCard` accepts `template?: TemplateConfig` directly and renders template-specific ornaments for all 7 designs.
+  - **Bug #2 Fix (Mobile Interaction Audit across 360px, 390px, 430px):**
+    - Audited and updated all interactive buttons and triggers to meet the minimum 44px touch-target standard (`min-h-[44px]`).
+    - Fixed mobile hamburger menu drawer reset on logout (`setIsMobileMenuOpen(false)`).
+    - Fixed Invitation Studio mobile view toggle ("البيانات" / "المعاينة الحية") touch targets and responsiveness.
+    - Updated RSVP Modal and Memory Gallery lightbox controls for mobile touch safety.
+  - **Testing & Verification:**
+    - 53/53 tests passing across 5 suites (`npm test`).
+    - `npx eslint src/` passing with 0 errors and 0 warnings.
+    - `npm run build` compiling cleanly with 0 TypeScript errors across all 17 routes.
+    - `scripts/verify-pages.ts` and `scripts/test-templates-and-mobile.ts` passing 100%.
 
 ## 5. Security & Isolation Matrix
 - Strict owner data isolation: User A cannot view, modify, delete, or upgrade User B's events (enforced at API and middleware levels).

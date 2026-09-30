@@ -32,7 +32,6 @@ interface MemoryGalleryProps {
 export default function MemoryGallery({
   photos,
   coupleNames,
-  cardClass,
 }: MemoryGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [copiedPhotoId, setCopiedPhotoId] = useState<string | null>(null);
@@ -67,11 +66,13 @@ export default function MemoryGallery({
   const handleSharePhoto = (photo: GalleryPhoto) => {
     const shareUrl = `${window.location.origin}${photo.url}`;
     if (navigator.share) {
-      navigator.share({
-        title: `ذكرى من حفل ${coupleNames}`,
-        text: photo.message || `صورة من حفل ${coupleNames}`,
-        url: shareUrl,
-      }).catch(() => {});
+      navigator
+        .share({
+          title: `ذكرى من حفل ${coupleNames}`,
+          text: photo.message || `صورة من حفل ${coupleNames}`,
+          url: shareUrl,
+        })
+        .catch(() => {});
     } else {
       navigator.clipboard.writeText(shareUrl);
       setCopiedPhotoId(photo.id);
@@ -81,17 +82,14 @@ export default function MemoryGallery({
 
   if (photos.length === 0) {
     return (
-      <div
-        className={`text-center py-12 px-6 rounded-3xl border ${
-          cardClass || "border-[#d4af37]/20 bg-[#14120f]/60"
-        } max-w-lg mx-auto shadow-xl backdrop-blur-md`}
-      >
-        <div className="w-16 h-16 rounded-full bg-[#d4af37]/10 text-[#d4af37] border border-[#d4af37]/30 flex items-center justify-center mx-auto mb-4 shadow-inner">
-          <ImageIcon className="w-8 h-8" />
+      <div className="text-center py-12 px-6 rounded-3xl border border-[#26221d] bg-[#141210] max-w-md mx-auto">
+        <div className="w-14 h-14 rounded-full bg-[#1c1916] text-[#c5a880] border border-[#2e2924] flex items-center justify-center mx-auto mb-3">
+          <ImageIcon className="w-6 h-6" />
         </div>
-        <h4 className="text-xl font-bold text-white calligraphy-font">ألبوم ذكريات الحفل الحي</h4>
-        <p className="text-neutral-400 text-xs mt-2 leading-relaxed">
-          لم تُنشر صور بعد في ألبوم الذكريات. كن أول من يوثّق فرحة {coupleNames} من خلال مسح الـ QR ومشاركة لقطاتك المميزة!
+        <h4 className="text-lg font-bold font-display text-[#faf8f5]">ألبوم الذكريات الحي</h4>
+        <p className="text-[#8e877c] text-xs mt-2 leading-relaxed">
+          لم تُنشر صور بعد في ألبوم الذكريات. كن أول من يوثّق فرحة {coupleNames} من خلال مشاركة
+          لقطاتكم المميزة!
         </p>
       </div>
     );
@@ -99,24 +97,22 @@ export default function MemoryGallery({
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-[#d4af37]/20 pb-4">
+      {/* Header Info */}
+      <div className="flex items-center justify-between border-b border-[#26221d] pb-3 text-xs">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-[#d4af37]" />
-          <h3 className="text-2xl font-bold text-white calligraphy-font">ألبوم ذكرياتنا</h3>
+          <Sparkles className="w-4 h-4 text-[#c5a880]" />
+          <span className="font-display font-semibold text-[#faf8f5]">ألبوم اللحظات المشتركة</span>
         </div>
-        <span className="text-xs font-semibold px-3 py-1 rounded-full bg-[#d4af37]/15 text-[#f3e5ab] border border-[#d4af37]/30">
-          {photos.length} لقطة معتمدة
-        </span>
+        <span className="text-[11px] text-[#8e877c] font-mono">{photos.length} لقطة معتمدة</span>
       </div>
 
-      {/* Responsive Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5 sm:gap-4">
+      {/* Editorial Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
         {photos.map((photo, idx) => (
           <div
             key={photo.id}
             onClick={() => setSelectedIndex(idx)}
-            className="group relative aspect-square rounded-2xl overflow-hidden bg-neutral-900 border border-[#d4af37]/20 hover:border-[#d4af37] cursor-pointer transition-all duration-300 shadow-md hover:shadow-xl hover:shadow-[#d4af37]/15"
+            className="group relative aspect-square rounded-2xl overflow-hidden bg-[#141210] border border-[#26221d] hover:border-[#3d3630] cursor-pointer transition-all duration-300"
           >
             <Image
               src={photo.url}
@@ -125,16 +121,16 @@ export default function MemoryGallery({
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-3 flex flex-col justify-end text-right">
+            {/* Subtle Gradient Overlay on Hover */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-3 flex flex-col justify-end text-right">
               {photo.guestName && (
-                <p className="text-xs font-bold text-white truncate flex items-center gap-1">
-                  <User className="w-3 h-3 text-[#d4af37]" />
+                <p className="text-xs font-medium text-[#faf8f5] truncate flex items-center gap-1">
+                  <User className="w-3 h-3 text-[#c5a880]" />
                   <span>{photo.guestName}</span>
                 </p>
               )}
               {photo.message && (
-                <p className="text-[10px] text-neutral-300 line-clamp-1 italic">
+                <p className="text-[10px] text-[#8e877c] line-clamp-1 italic mt-0.5">
                   «{photo.message}»
                 </p>
               )}
@@ -149,16 +145,16 @@ export default function MemoryGallery({
           role="dialog"
           aria-modal="true"
           aria-label="عرض الصورة بالحجم الكامل"
-          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/95 backdrop-blur-md animate-fadeIn"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/90 backdrop-blur-md animate-fadeIn"
         >
           {/* Close Button */}
           <button
             onClick={() => setSelectedIndex(null)}
             aria-label="إغلاق العارض (Esc)"
-            className="absolute top-4 left-4 z-20 p-2.5 rounded-full bg-neutral-800/80 text-white hover:bg-neutral-700 transition-colors shadow-lg"
+            className="absolute top-4 left-4 z-20 min-w-[44px] min-h-[44px] p-2.5 rounded-full bg-[#1c1916] text-[#8e877c] hover:text-[#faf8f5] transition-colors flex items-center justify-center"
             title="إغلاق (Esc)"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5" />
           </button>
 
           {/* Previous & Next Controls */}
@@ -169,10 +165,10 @@ export default function MemoryGallery({
                   e.stopPropagation();
                   handlePrevPhoto();
                 }}
-                className="absolute right-3 sm:right-6 z-20 p-3 rounded-full bg-black/60 hover:bg-black/80 text-white border border-white/20 transition-all shadow-xl"
+                className="absolute right-2 sm:right-6 z-20 min-w-[44px] min-h-[44px] p-3 rounded-full bg-black/60 hover:bg-black/80 text-white border border-white/10 transition-all flex items-center justify-center"
                 title="الصورة السابقة"
               >
-                <ChevronRight className="w-6 h-6" />
+                <ChevronRight className="w-5 h-5" />
               </button>
 
               <button
@@ -180,18 +176,18 @@ export default function MemoryGallery({
                   e.stopPropagation();
                   handleNextPhoto();
                 }}
-                className="absolute left-3 sm:left-6 z-20 p-3 rounded-full bg-black/60 hover:bg-black/80 text-white border border-white/20 transition-all shadow-xl"
+                className="absolute left-2 sm:left-6 z-20 min-w-[44px] min-h-[44px] p-3 rounded-full bg-black/60 hover:bg-black/80 text-white border border-white/10 transition-all flex items-center justify-center"
                 title="الصورة التالية"
               >
-                <ChevronLeft className="w-6 h-6" />
+                <ChevronLeft className="w-5 h-5" />
               </button>
             </>
           )}
 
           {/* Modal Container */}
-          <div className="relative max-w-4xl w-full max-h-[92vh] flex flex-col md:flex-row bg-[#11100e] border border-[#d4af37]/30 rounded-3xl overflow-hidden shadow-2xl">
+          <div className="relative max-w-4xl w-full max-h-[90vh] flex flex-col md:flex-row bg-[#141210] border border-[#26221d] rounded-3xl overflow-hidden shadow-2xl">
             {/* Image Container */}
-            <div className="relative flex-1 min-h-[300px] sm:min-h-[450px] md:min-h-[550px] bg-black flex items-center justify-center">
+            <div className="relative flex-1 min-h-[300px] sm:min-h-[450px] md:min-h-[520px] bg-black flex items-center justify-center">
               <Image
                 src={selectedPhoto.url}
                 alt={selectedPhoto.guestName || "صورة من الحفل"}
@@ -202,17 +198,17 @@ export default function MemoryGallery({
             </div>
 
             {/* Sidebar Details */}
-            <div className="w-full md:w-80 p-5 sm:p-6 flex flex-col justify-between border-t md:border-t-0 md:border-r border-[#d4af37]/20 text-right bg-[#151310]">
+            <div className="w-full md:w-80 p-6 flex flex-col justify-between border-t md:border-t-0 md:border-r border-[#26221d] text-right bg-[#171412]">
               <div className="space-y-4">
-                <div className="flex items-center gap-2.5 border-b border-neutral-800 pb-3">
-                  <div className="w-10 h-10 rounded-full bg-[#d4af37]/15 border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] shrink-0">
-                    <User className="w-5 h-5" />
+                <div className="flex items-center gap-2.5 border-b border-[#26221d] pb-3">
+                  <div className="w-9 h-9 rounded-full bg-[#1c1916] border border-[#2e2924] flex items-center justify-center text-[#c5a880] shrink-0">
+                    <User className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-white text-sm">
+                    <h4 className="font-bold text-[#faf8f5] text-xs">
                       {selectedPhoto.guestName || "ضيف عزيز"}
                     </h4>
-                    <span className="text-[10px] text-neutral-400">
+                    <span className="text-[10px] text-[#8e877c]">
                       {new Date(selectedPhoto.createdAt).toLocaleDateString("ar-EG", {
                         year: "numeric",
                         month: "long",
@@ -223,12 +219,12 @@ export default function MemoryGallery({
                 </div>
 
                 {selectedPhoto.message ? (
-                  <div className="p-3.5 rounded-2xl bg-neutral-900/80 border border-neutral-800 text-xs text-neutral-200 leading-relaxed italic">
-                    <MessageCircle className="w-4 h-4 text-[#d4af37] mb-1 inline ml-1.5" />
+                  <div className="p-3.5 rounded-2xl bg-[#141210] border border-[#26221d] text-xs text-[#c4bdaf] leading-relaxed italic">
+                    <MessageCircle className="w-3.5 h-3.5 text-[#c5a880] mb-1 inline ml-1.5" />
                     «{selectedPhoto.message}»
                   </div>
                 ) : (
-                  <p className="text-xs text-neutral-500 italic">لحظة لا تُنسى من الحفل ❤️</p>
+                  <p className="text-xs text-[#8e877c] italic">ذكرى غالية من ليلة العمر</p>
                 )}
               </div>
 
@@ -239,18 +235,20 @@ export default function MemoryGallery({
                   download={`lahzah-${selectedPhoto.id}.jpg`}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-full py-2.5 rounded-full bg-[#201d17] border border-[#d4af37]/40 text-[#f3e5ab] hover:bg-[#d4af37]/20 text-xs font-bold transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3 min-h-[44px] rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs hover:bg-[#d8be99] transition-all flex items-center justify-center gap-2 shadow-sm"
                 >
-                  <Download className="w-4 h-4" />
-                  <span>تنزيل الصورة بدقة أصلية</span>
+                  <Download className="w-3.5 h-3.5" />
+                  <span>تنزيل الصورة بالدقة الأصلية</span>
                 </a>
 
                 <button
                   onClick={() => handleSharePhoto(selectedPhoto)}
-                  className="w-full py-2.5 rounded-full bg-neutral-900 hover:bg-neutral-800 border border-neutral-700 text-neutral-300 text-xs font-semibold transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3 min-h-[44px] rounded-full bg-[#1a1714] hover:bg-[#221e1a] border border-[#2e2924] text-[#8e877c] hover:text-[#faf8f5] text-xs font-medium transition-all flex items-center justify-center gap-2"
                 >
-                  <Share2 className="w-4 h-4 text-[#d4af37]" />
-                  <span>{copiedPhotoId === selectedPhoto.id ? "تم نسخ الرابط!" : "مشاركة الصورة"}</span>
+                  <Share2 className="w-3.5 h-3.5 text-[#c5a880]" />
+                  <span>
+                    {copiedPhotoId === selectedPhoto.id ? "تم نسخ الرابط!" : "مشاركة الصورة"}
+                  </span>
                 </button>
               </div>
             </div>

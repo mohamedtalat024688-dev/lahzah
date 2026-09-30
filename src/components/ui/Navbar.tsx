@@ -2,15 +2,14 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
-  Heart,
-  Sparkles,
-  LogOut,
-  LayoutDashboard,
-  PlusCircle,
   Menu,
   X,
-  ShieldAlert,
+  PlusCircle,
+  LayoutDashboard,
+  LogOut,
+  ShieldCheck,
 } from "lucide-react";
 
 interface UserProfile {
@@ -21,6 +20,7 @@ interface UserProfile {
 }
 
 export default function Navbar() {
+  const router = useRouter();
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -38,206 +38,190 @@ export default function Navbar() {
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
     setUser(null);
-    window.location.href = "/";
+    router.push("/");
   };
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-md bg-[#0a0908]/90 border-b border-[#d4af37]/20">
+    <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#0c0b0a]/85 border-b border-[#24211b] transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        {/* Logo */}
+        {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#aa7c11] via-[#d4af37] to-[#f3e5ab] flex items-center justify-center p-[1px] shadow-lg shadow-[#d4af37]/20 transition-transform group-hover:scale-105">
-            <div className="w-full h-full bg-[#0d0c0a] rounded-full flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-[#d4af37]" />
-            </div>
-          </div>
           <div className="flex flex-col text-right">
-            <span className="text-2xl font-bold tracking-tight text-white calligraphy-font">
+            <span className="text-2xl font-bold tracking-tight text-[#faf8f5] font-display">
               لـحـظـة
             </span>
-            <span className="text-[10px] tracking-wider text-[#d4af37]/80 font-sans -mt-1">
+            <span className="text-[11px] tracking-wider text-[#9c9488] font-body -mt-1 font-light">
               من دعوة… إلى ذكرى
             </span>
           </div>
         </Link>
 
-        {/* Center Links (Desktop) */}
-        <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-[#dcd7cb]">
-          <Link href="/#features" className="hover:text-[#d4af37] transition-colors">
+        {/* Public Visitor Navigation Links (Desktop) */}
+        <nav className="hidden md:flex items-center gap-8 text-[13px] font-medium text-[#c4bdb2]">
+          <Link href="/#features" className="hover:text-[#faf8f5] transition-colors">
             المميزات
           </Link>
-          <Link href="/#templates" className="hover:text-[#d4af37] transition-colors">
-            قوالب الدعوات
+          <Link href="/#templates" className="hover:text-[#faf8f5] transition-colors">
+            القوالب
           </Link>
-          <Link href="/#how-it-works" className="hover:text-[#d4af37] transition-colors">
-            كيف تعمل لحظة
+          <Link href="/#how-it-works" className="hover:text-[#faf8f5] transition-colors">
+            كيف تعمل
           </Link>
-          <Link href="/#pricing" className="hover:text-[#d4af37] transition-colors">
-            الباقات والأسعار
-          </Link>
-          <Link
-            href="/e/ahmed-and-sara"
-            className="flex items-center gap-1.5 text-[#f3e5ab] bg-[#d4af37]/10 px-3.5 py-1.5 rounded-full border border-[#d4af37]/30 hover:bg-[#d4af37]/20 transition-all text-xs font-semibold"
-          >
-            <Heart className="w-3.5 h-3.5 fill-[#d4af37] text-[#d4af37]" />
-            <span>معاينة حية (زفاف أحمد وسارة)</span>
+          <Link href="/#pricing" className="hover:text-[#faf8f5] transition-colors">
+            الأسعار
           </Link>
         </nav>
 
-        {/* Auth Actions (Desktop) */}
-        <div className="hidden md:flex items-center gap-3">
+        {/* Action Controls (Desktop) */}
+        <div className="hidden md:flex items-center gap-4">
           {loading ? (
-            <div className="w-24 h-9 bg-neutral-800/60 rounded-full animate-pulse" />
+            <div className="w-24 h-9 bg-neutral-800/40 rounded-full animate-pulse" />
           ) : user ? (
             <div className="flex items-center gap-3">
               {user.role === "ADMIN" && (
                 <Link
                   href="/admin"
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs font-bold hover:bg-rose-900/60 transition-all"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs font-medium hover:bg-rose-900/40 transition-all"
                 >
-                  <ShieldAlert className="w-3.5 h-3.5" />
+                  <ShieldCheck className="w-3.5 h-3.5" />
                   <span>الإدارة</span>
                 </Link>
               )}
+
               <Link
                 href="/dashboard"
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#1c1915] text-[#f3e5ab] border border-[#d4af37]/40 hover:border-[#d4af37] transition-all text-sm font-medium"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#181613] border border-[#2c2821] text-[#e8e4dc] hover:text-white hover:border-[#c5a880]/40 text-xs font-semibold transition-all"
               >
-                <LayoutDashboard className="w-4 h-4 text-[#d4af37]" />
+                <LayoutDashboard className="w-3.5 h-3.5 text-[#c5a880]" />
                 <span>لوحة التحكم</span>
               </Link>
+
               <Link
                 href="/dashboard/events/new"
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-[#d4af37] to-[#aa7c11] text-[#0d0c0a] font-bold text-xs hover:brightness-110 transition-all shadow-md shadow-[#d4af37]/10"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs hover:bg-[#d8bd96] shadow-sm transition-all"
               >
-                <PlusCircle className="w-4 h-4" />
-                <span>إنشاء دعوة</span>
+                <PlusCircle className="w-3.5 h-3.5" />
+                <span>مناسبة جديدة</span>
               </Link>
+
               <button
                 onClick={handleLogout}
+                className="p-2 rounded-full text-neutral-400 hover:text-rose-300 hover:bg-neutral-900 transition-colors"
                 title="تسجيل الخروج"
-                className="p-2 text-neutral-400 hover:text-red-400 transition-colors rounded-full hover:bg-neutral-800/50"
               >
                 <LogOut className="w-4 h-4" />
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <Link
                 href="/auth/login"
-                className="px-4 py-2 text-sm text-neutral-300 hover:text-white transition-colors"
+                className="text-xs font-medium text-[#c4bdb2] hover:text-white transition-colors px-2 py-1.5"
               >
-                تسجيل الدخول
+                دخول
               </Link>
+
               <Link
-                href="/auth/register"
-                className="px-5 py-2 rounded-full bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#aa7c11] text-[#0d0c0a] font-bold text-sm shadow-md shadow-[#d4af37]/20 hover:brightness-110 transition-all"
+                href="/dashboard/events/new"
+                className="px-5 py-2.5 rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs hover:bg-[#d8bd96] shadow-sm transition-all"
               >
-                ابدأ مجاناً
+                صمّم دعوتك
               </Link>
             </div>
           )}
         </div>
 
-        {/* Mobile Hamburger Button */}
-        <div className="flex md:hidden items-center gap-2">
-          {user && (
-            <Link
-              href="/dashboard"
-              className="p-2 rounded-xl bg-[#1c1915] border border-[#d4af37]/30 text-[#f3e5ab]"
-            >
-              <LayoutDashboard className="w-5 h-5 text-[#d4af37]" />
-            </Link>
-          )}
-
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2.5 rounded-xl bg-neutral-900 border border-neutral-800 text-neutral-200 hover:text-white"
-            aria-label="قائمة الملاحة"
-          >
-            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
+        {/* Mobile Hamburger Button with 44px min touch target */}
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="md:hidden min-w-[44px] min-h-[44px] p-2 rounded-xl text-neutral-300 hover:text-white hover:bg-neutral-900 transition-colors flex items-center justify-center"
+          aria-label="القائمة"
+        >
+          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </div>
 
-      {/* Mobile Slide-down Drawer */}
+      {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-b border-[#d4af37]/20 bg-[#0d0c0a] px-5 py-6 space-y-4 animate-fadeIn text-right">
-          <nav className="flex flex-col space-y-3 text-sm text-neutral-300 font-medium">
+        <div className="md:hidden border-t border-[#24211b] bg-[#0c0b0a] px-5 py-6 space-y-4 animate-fadeIn">
+          <nav className="flex flex-col gap-1 text-sm font-medium text-[#c4bdb2]">
             <Link
               href="/#features"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="py-2 hover:text-[#d4af37] transition-colors border-b border-neutral-800/60"
+              className="py-3 px-2 min-h-[44px] flex items-center hover:text-[#faf8f5] border-b border-[#1c1a16] transition-colors"
             >
               المميزات
             </Link>
             <Link
               href="/#templates"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="py-2 hover:text-[#d4af37] transition-colors border-b border-neutral-800/60"
+              className="py-3 px-2 min-h-[44px] flex items-center hover:text-[#faf8f5] border-b border-[#1c1a16] transition-colors"
             >
-              قوالب الدعوات الملكية
+              القوالب
             </Link>
             <Link
               href="/#how-it-works"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="py-2 hover:text-[#d4af37] transition-colors border-b border-neutral-800/60"
+              className="py-3 px-2 min-h-[44px] flex items-center hover:text-[#faf8f5] border-b border-[#1c1a16] transition-colors"
             >
-              كيف تعمل المنصة
+              كيف تعمل
             </Link>
             <Link
               href="/#pricing"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="py-2 hover:text-[#d4af37] transition-colors border-b border-neutral-800/60"
+              className="py-3 px-2 min-h-[44px] flex items-center hover:text-[#faf8f5] transition-colors"
             >
-              الباقات والأسعار
-            </Link>
-            <Link
-              href="/e/ahmed-and-sara"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="py-2 text-[#f3e5ab] font-bold flex items-center gap-1.5"
-            >
-              <Heart className="w-4 h-4 text-[#d4af37] fill-[#d4af37]" />
-              <span>معاينة دعوة حية (زفاف أحمد وسارة)</span>
+              الأسعار
             </Link>
           </nav>
 
-          <div className="pt-4 border-t border-neutral-800 flex flex-col gap-2.5">
+          <div className="pt-3 border-t border-[#24211b] flex flex-col gap-2.5">
             {user ? (
               <>
                 <Link
+                  href="/dashboard"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full py-3 min-h-[44px] rounded-full bg-[#181613] border border-[#2c2821] text-[#e8e4dc] font-semibold text-xs text-center flex items-center justify-center gap-2"
+                >
+                  <LayoutDashboard className="w-4 h-4 text-[#c5a880]" />
+                  <span>لوحة التحكم</span>
+                </Link>
+
+                <Link
                   href="/dashboard/events/new"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full py-3 rounded-full bg-gradient-to-r from-[#d4af37] to-[#aa7c11] text-[#0d0c0a] font-bold text-center text-sm shadow-md"
+                  className="w-full py-3 min-h-[44px] rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs text-center flex items-center justify-center gap-2"
                 >
-                  تصميم بطاقة جديدة
+                  <PlusCircle className="w-4 h-4" />
+                  <span>صمّم مناسبة جديدة</span>
                 </Link>
+
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     handleLogout();
                   }}
-                  className="w-full py-2.5 rounded-full bg-neutral-900 border border-neutral-800 text-red-400 font-semibold text-center text-xs flex items-center justify-center gap-1.5"
+                  className="w-full py-3 min-h-[44px] text-center text-xs text-rose-400 hover:text-rose-300 flex items-center justify-center"
                 >
-                  <LogOut className="w-3.5 h-3.5" />
-                  <span>تسجيل الخروج</span>
+                  تسجيل الخروج
                 </button>
               </>
             ) : (
               <>
                 <Link
-                  href="/auth/register"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full py-3 rounded-full bg-gradient-to-r from-[#d4af37] via-[#f3e5ab] to-[#aa7c11] text-[#0d0c0a] font-bold text-center text-sm shadow-md"
-                >
-                  إنشاء حساب مجاناً
-                </Link>
-                <Link
                   href="/auth/login"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full py-2.5 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-300 font-semibold text-center text-xs"
+                  className="w-full py-3 min-h-[44px] rounded-full border border-[#2c2821] text-[#e8e4dc] text-xs font-semibold text-center hover:bg-neutral-900 flex items-center justify-center"
                 >
-                  تسجيل الدخول
+                  دخول
+                </Link>
+
+                <Link
+                  href="/dashboard/events/new"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full py-3 min-h-[44px] rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs text-center shadow-md flex items-center justify-center"
+                >
+                  صمّم دعوتك
                 </Link>
               </>
             )}

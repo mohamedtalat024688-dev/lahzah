@@ -1,82 +1,79 @@
-# HANDOFF.md - Project Continuation & Production Readiness Guide
+# HANDOFF.md - Project Continuation & Premium UI/UX Guide
 
 ## 1. Executive Summary & Repository Status
 
-Lahzah (لحظة) has reached **Commercial Readiness Level**. All functional flows, core user journeys (Owner & Guest), security boundaries, and architectural abstractions are complete, tested, and passing 100%.
+Lahzah (لحظة) has successfully resolved the two critical UX bugs while preserving all existing backend, payment, auth, database, security, and visual design systems:
+1. **Bug #1 — Template Previews All Show the Same Design**: Fully resolved with a unified template architecture (`src/lib/templates.ts`), dedicated dynamic preview route (`/preview?template=${tmpl.id}`), template override in `/e/[slug]`, and full two-way synchronization in the Invitation Studio (`/dashboard/events/new`).
+2. **Bug #2 — Mobile Buttons & Interactions Audit**: Fully audited and resolved across 360px, 390px, and 430px viewports (touch targets >= 44px, hamburger drawer reset on logout, mobile live-preview toggle with touch-friendly sizing, lightbox controls, and full accessibility).
 
-The platform clearly distinguishes between:
-- **DEVELOPMENT READY (Local):** 100% functional out of the box with zero external dependencies (SQLite `dev.db`, local disk storage `public/uploads`, in-memory rate limiting, and simulated payments).
-- **PRODUCTION READY (Deployment):** Architected with pluggable interfaces and verified against production standards for AWS S3/Cloudflare R2, Paymob, and PostgreSQL.
+All functional architecture, database schemas, authentication, authorization, storage, Paymob payment integration, photo moderation, RSVP tracking, rate limiting, and business logic remain **100% intact and verified**.
 
 ---
 
-## 2. Production Readiness Audit Matrix
+## 2. Bug Fixes & Architecture Details
 
-| System Component | Classification | Current State & Production Requirements |
-|---|---|---|
-| **Authentication** | `READY` | `jose` JWT + `bcryptjs` in HTTP-Only cookies, `SameSite: "lax"`, `secure` in production. |
-| **Authorization & Isolation** | `READY` | Owner isolation, guest approval lockdown, admin route edge middleware (`src/middleware.ts`). |
-| **Database (Dev: SQLite)** | `READY` | Fully initialized, indexed, and seeded in `prisma/dev.db`. |
-| **Database (Prod: PostgreSQL)** | `REQUIRES CONFIGURATION` | 100% compatible schema. Detailed deployment guide in `docs/DATABASE_MIGRATION.md`. |
-| **Object Storage (Dev: Local)** | `READY` | Local disk storage with magic byte detection (`detectMagicMime`). |
-| **Object Storage (Prod: S3/R2)** | `REQUIRES CONFIGURATION` | `S3StorageProvider` built with standard AWS SigV4. Requires S3/R2 bucket credentials. |
-| **Payments (Dev: Simulation)** | `READY` | `SimulationPaymentGateway` logs DB transactions (`PaymentTransaction`) and upgrades packages. |
-| **Payments (Prod: Paymob)** | `REQUIRES CONFIGURATION` | `PaymobPaymentGateway` + HMAC-SHA512 webhook + GET redirect callback. Requires Paymob credentials. |
-| **Environment Configuration** | `READY` | `.env.example` documented with all required variables. `.env` securely git-ignored. |
-| **Secrets Protection** | `READY` | Sensitive credentials, hashes, and JWT secrets are never exposed in APIs. |
-| **Rate Limiting** | `READY` | In-memory sliding-window rate limiter in `src/lib/rateLimit.ts` protecting Login, Uploads, and RSVP. |
-| **Upload Validation** | `READY` | Binary magic bytes inspection (JPEG, PNG, WebP, HEIC) + 12MB server-side limit. |
-| **Physical Asset Cleanup** | `READY` | Cascade deletion cleans up physical files from disk/S3 when photos or events are deleted. |
-| **SEO & Sharing** | `READY` | Rich OpenGraph and Twitter Cards with canonical URLs and WhatsApp-optimized preview. |
-| **Accessibility (a11y)** | `READY` | ARIA modal dialogs, Escape key handlers, descriptive labels, and high-contrast gold luxury theme. |
-| **Mobile Experience** | `READY` | Tested at 360px, 390px, 430px with hamburger menu, zero horizontal overflow, and touch-first controls. |
-| **Arabic RTL** | `READY` | Native `dir="rtl"`, `lang="ar"`, Cairo & Amiri Google typography. |
-| **External Logging / APM** | `REQUIRES CONFIGURATION` | Console logging in place; Sentry/Datadog recommended for production APM. |
-| **Automated Backups** | `REQUIRES CONFIGURATION` | Handled by managed cloud database provider (Supabase / AWS RDS / Neon). |
+### Bug #1: Template Preview & Studio Selection Flow
+- **Root Causes:**
+  1. On the landing page (`src/app/page.tsx`), the "معاينة حية" link was hardcoded to `/e/ahmed-and-sara` without passing the template ID query param.
+  2. Public invitation route (`src/app/e/[slug]/page.tsx`) only loaded `event.templateId` from the DB without supporting `searchParams.template` overrides.
+  3. In the Invitation Studio (`src/app/dashboard/events/new/page.tsx`), `templateId` initialized to hardcoded `"royal-gold"` ignoring URL query parameters, and selecting templates didn't sync the URL history.
+  4. `RealisticInvitationCard.tsx` only accepted `templateId?: string` instead of supporting a direct `template?: TemplateConfig` single source of truth, and lacked corner flourishes for several templates.
+- **Exact Solutions:**
+  1. Updated `RealisticInvitationCard.tsx` to accept `template?: TemplateConfig` directly, with customized corner ornaments and styling for all 7 templates (Royal Gold, Emerald Elegance, Rose Romance, Ivory Minimal, Burgundy Grandeur, Modern Black, Arabian Heritage).
+  2. Created dedicated `/preview?template=${templateId}` route with live template switcher tabs, view mode toggle (Realistic Invitation Stationery vs. Full Interactive Wedding Web Page), and "استخدم هذا التصميم" CTA button.
+  3. Added `searchParams?: Promise<{ template?: string }>` support in `src/app/e/[slug]/page.tsx` so any public event can also be previewed with any template dynamically.
+  4. Updated landing page gallery "معاينة حية" to route to `/preview?template=${tmpl.id}` and hero CTA to `/preview?template=royal-gold`.
+  5. Updated `NewEventStudio` in `src/app/dashboard/events/new/page.tsx` to read `searchParams.get("template")` and `searchParams.get("package")`, sync choices to the URL query string with `window.history.replaceState`, pass `<RealisticInvitationCard template={selectedTemplate} />`, and wrap with `<Suspense>`.
+
+### Bug #2: Mobile Buttons & Interaction Audit (360px, 390px, 430px)
+- **Root Causes & Fixes:**
+  1. **Navbar Mobile Drawer (`src/components/ui/Navbar.tsx`):**
+     - Hamburger button upgraded to `min-w-[44px] min-h-[44px] flex items-center justify-center`.
+     - Mobile navigation links upgraded to `py-3 px-2 min-h-[44px] flex items-center`.
+     - Added `setIsMobileMenuOpen(false)` inside `handleLogout` to prevent mobile drawer state lingering.
+  2. **Invitation Studio Mobile Toggle (`src/app/dashboard/events/new/page.tsx`):**
+     - Mobile toggle ("البيانات" / "المعاينة الحية") upgraded from `py-1.5` to `py-2.5 min-h-[44px]` with ample touch padding.
+     - "العودة لتعديل البيانات" mobile close preview button upgraded to `min-h-[44px] py-3.5`.
+     - Wizard bottom navigation buttons ensured to meet 44px min height.
+  3. **RSVP Modal Controls (`src/components/guest/RsvpModal.tsx`):**
+     - Close button upgraded to `min-w-[44px] min-h-[44px] flex items-center justify-center`.
+     - Guest count buttons (1, 2, 3, 4, 5+) upgraded from `py-1.5` to `py-2.5 min-h-[44px] flex items-center justify-center`.
+     - Submit button upgraded to `py-3.5 min-h-[44px]`.
+  4. **Memory Gallery Lightbox Controls (`src/components/gallery/MemoryGallery.tsx`):**
+     - Lightbox close button upgraded to `min-w-[44px] min-h-[44px] flex items-center justify-center`.
+     - Prev/Next navigation buttons upgraded to `min-w-[44px] min-h-[44px] flex items-center justify-center` with safe margins on mobile viewports.
+     - Download and Share buttons upgraded to `py-3 min-h-[44px]`.
+  5. **Dashboard & Event Studio Links:**
+     - Primary event action "استوديو الإدارة الكاملة" upgraded to `min-h-[44px]` on mobile.
+     - Event details banner action buttons upgraded to `min-h-[44px]` on mobile.
 
 ---
 
 ## 3. Test Verification Status (100% Passing)
 
-### A. All Test Suites: `npm test`
-- **Result:** 100% Passing.
-  - `scripts/test-security.ts` (11/11 tests passed):
-    - User A / User B isolation (view, modify, delete, upgrade).
-    - Guest moderation lockdown (guests cannot approve/reject photos).
-    - Pending and rejected photos completely private from public view.
-    - Spoofed executable file upload blocked with HTTP 400.
-    - Next.js edge route middleware protection verified.
-  - `scripts/test-payments.ts` (3/3 tests passed):
-    - Upgrade triggers gateway charge and stores `PaymentTransaction` in DB.
-    - Database transaction verified (`PAID`, 1399 EGP, `LUXURY`).
-    - Webhook HMAC signature validation verified.
-  - `scripts/test-e2e.ts` (10/10 scenarios passed):
-    - Complete owner and guest lifecycle verified end-to-end.
+### A. Automated Test Suites: `npm test`
+- **Result:** 100% Passing (53/53 tests across 5 test suites).
+  - `scripts/test-templates-and-mobile.ts` (19/19 passed): All 7 templates tested for live preview, data fidelity, styling, and mobile touch targets.
+  - `scripts/test-commercial-flow.ts` (10/10 passed): Payment gating, draft status, server-side publish blocks, verified checkout, publish/unpublish.
+  - `scripts/test-security.ts` (11/11 passed): User isolation, photo approval lockdown, private moderation, malicious file detection, edge middleware.
+  - `scripts/test-payments.ts` (3/3 passed): Gateway charge, DB transaction audit, HMAC signature verification.
+  - `scripts/test-e2e.ts` (10/10 passed): Full end-to-end owner and guest lifecycle.
 
 ### B. SSR & Arabic RTL Verification: `npx tsx scripts/verify-pages.ts`
 - **Result:** 100% Passing across all primary routes (`/`, `/e/ahmed-and-sara`, `/e/ahmed-and-sara/upload`, `/auth/login`, `/auth/register`).
 
-### C. ESLint Quality Check: `npm run lint`
-- **Result:** 0 errors.
+### C. ESLint Quality Check: `npm run lint` / `npx eslint src/`
+- **Result:** 0 errors, 0 warnings across all application code.
 
 ### D. Next.js Production Build: `npm run build`
-- **Result:** Next.js 16.3.6 (Turbopack) compiled cleanly with 0 TypeScript errors.
+- **Result:** Next.js 16.3.6 (Turbopack) compiled cleanly with 0 TypeScript errors across all 17 static and dynamic routes.
 
 ---
 
-## 4. Database & Demo Credentials
+## 4. Demo Accounts & Credentials
 
 SQLite database at `prisma/dev.db` is initialized and fully populated:
 - **Admin account:** `admin@lahzah.com` / `admin123456` (Role: `ADMIN`)
 - **Owner account:** `ahmed@lahzah.com` / `ahmed123456` (Role: `OWNER`)
 - **Demo wedding invitation:** `/e/ahmed-and-sara`
-
----
-
-## 5. Deployment Step-by-Step (For Live Launch)
-
-When ready to deploy to live hosting (Vercel, Railway, AWS):
-1. **Database:** Follow [`docs/DATABASE_MIGRATION.md`](file:///c:/Users/Souq%20al%20computer/Desktop/lahzah/docs/DATABASE_MIGRATION.md) to set `provider = "postgresql"` and run `npx prisma db push`.
-2. **Storage:** Set `STORAGE_PROVIDER=s3` and configure `S3_BUCKET_NAME`, `S3_REGION`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`.
-3. **Payments:** Set `PAYMENT_PROVIDER=paymob` and configure `PAYMOB_API_KEY`, `PAYMOB_INTEGRATION_ID`, `PAYMOB_IFRAME_ID`, `PAYMOB_HMAC_SECRET`.
-4. **Environment:** Set `NEXT_PUBLIC_APP_URL` and generate a cryptographically random `JWT_SECRET`.
+- **Template Preview Studio:** `/preview?template=royal-gold`

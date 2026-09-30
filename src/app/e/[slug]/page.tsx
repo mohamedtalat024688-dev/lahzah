@@ -6,6 +6,7 @@ import InvitationView from "@/components/templates/InvitationView";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+  searchParams?: Promise<{ template?: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -57,8 +58,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function InvitationPage({ params }: PageProps) {
+export default async function InvitationPage({ params, searchParams }: PageProps) {
   const { slug } = await params;
+  const resolvedSearchParams = searchParams ? await searchParams : {};
+  const templateOverride = resolvedSearchParams.template;
   const decodedSlug = decodeURIComponent(slug);
 
   const event = await prisma.event.findUnique({
@@ -83,7 +86,7 @@ export default async function InvitationPage({ params }: PageProps) {
     notFound();
   }
 
-  const templateConfig = getTemplate(event.templateId);
+  const templateConfig = getTemplate(templateOverride || event.templateId);
 
   const eventData = {
     id: event.id,

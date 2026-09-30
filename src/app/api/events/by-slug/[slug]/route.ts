@@ -54,6 +54,7 @@ export async function GET(
         description: event.description,
         coverImage: event.coverImage,
         templateId: event.templateId,
+        isPublished: event.isPublished,
         templateConfig,
         approvedPhotos: event.photos,
         stats: {
