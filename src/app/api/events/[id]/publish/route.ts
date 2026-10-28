@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { generateQrDataUrl } from "@/lib/qr";
+import { TEMPLATES, isTemplateAllowedForPackage } from "@/lib/templates";
 
 export async function POST(
   request: Request,
@@ -36,6 +37,20 @@ export async function POST(
           isPaid: false,
         },
         { status: 402 }
+      );
+    }
+
+    // SERVER/API Security Gate: Verify template entitlement against trusted package tier
+    if (!isTemplateAllowedForPackage(event.templateId, event.packageTier)) {
+      const tmpl = TEMPLATES[event.templateId];
+      return NextResponse.json(
+        {
+          error: `لا يمكن نشر المناسبة لأن القالب المختار (${tmpl?.nameAr || event.templateId}) يتطلب باقة أعلى من باقة المناسبة الحالية (${event.packageTier}).`,
+          code: "TEMPLATE_ENTITLEMENT_REQUIRED",
+          requiredTier: tmpl?.tier,
+          currentTier: event.packageTier,
+        },
+        { status: 403 }
       );
     }
 

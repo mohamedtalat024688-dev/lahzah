@@ -3,9 +3,58 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { prisma } from "./prisma";
 
-const SECRET_KEY = new TextEncoder().encode(
-  process.env.JWT_SECRET || "lahzah-super-secret-jwt-key-2026-very-secure"
-);
+const DEV_FALLBACK_SECRET = "lahzah-dev-test-only-secret-do-not-use-in-prod";
+
+/**
+ * Validates JWT secret strength for production environments.
+ * Requirements:
+ * - Must not be null or undefined.
+ * - Must not be whitespace-only.
+ * - Must be at least 32 characters (evaluated after whitespace normalization).
+ *
+ * NOTE: Length alone does not guarantee entropy. A cryptographically random secret
+ * (e.g., generated with `openssl rand -base64 32`) is required in production.
+ * Whitespace is normalized solely for validation; the secret value itself is never mutated
+ * or trimmed during key derivation, preserving exact user-configured secrets.
+ * Secret values are NEVER logged or printed.
+ */
+export function validateProductionJwtSecret(secret?: string | null): { valid: boolean; reason?: string } {
+  if (!secret) {
+    return { valid: false, reason: "JWT_SECRET is missing." };
+  }
+  const trimmed = secret.trim();
+  if (trimmed.length === 0) {
+    return { valid: false, reason: "JWT_SECRET is empty or whitespace-only." };
+  }
+  if (trimmed.length < 32) {
+    return {
+      valid: false,
+      reason: `JWT_SECRET is too short (${trimmed.length} characters). Minimum 32 characters required.`,
+    };
+  }
+  return { valid: true };
+}
+
+export function getJwtSecretKey(): Uint8Array {
+  const secret = process.env.JWT_SECRET;
+  const isProd = process.env.NODE_ENV === "production";
+
+  if (isProd) {
+    const validation = validateProductionJwtSecret(secret);
+    if (!validation.valid) {
+      throw new Error(
+        `[CRITICAL SECURITY] JWT_SECRET is invalid in production environment (${validation.reason}). Refusing to operate with fallback key.`
+      );
+    }
+    return new TextEncoder().encode(secret!);
+  }
+
+  if (!secret || secret.trim().length === 0) {
+    return new TextEncoder().encode(DEV_FALLBACK_SECRET);
+  }
+
+  return new TextEncoder().encode(secret);
+}
 
 const SESSION_COOKIE = "lahzah_session";
 
@@ -25,16 +74,18 @@ export async function comparePassword(password: string, hash: string): Promise<b
 }
 
 export async function createSessionToken(payload: SessionPayload): Promise<string> {
+  const secretKey = getJwtSecretKey();
   return new SignJWT({ ...payload })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("30d")
-    .sign(SECRET_KEY);
+    .sign(secretKey);
 }
 
 export async function verifySessionToken(token: string): Promise<SessionPayload | null> {
   try {
-    const { payload } = await jwtVerify(token, SECRET_KEY);
+    const secretKey = getJwtSecretKey();
+    const { payload } = await jwtVerify(token, secretKey);
     return payload as unknown as SessionPayload;
   } catch {
     return null;

@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-import { processPayment, PACKAGES } from "@/lib/packages";
+import { processPayment, PACKAGES, isPaymobReady } from "@/lib/packages";
+import { isTemplateAllowedForPackage, TEMPLATES } from "@/lib/templates";
 
 export async function GET(
   request: Request,
@@ -36,7 +37,23 @@ export async function GET(
     }
 
     const selectedPkg = PACKAGES[packageCode] || PACKAGES.PREMIUM;
-    const isPaymobLive = process.env.PAYMENT_PROVIDER === "paymob" && !!process.env.PAYMOB_API_KEY;
+    const isPaymob = process.env.PAYMENT_PROVIDER === "paymob";
+    const paymobLive = isPaymob && isPaymobReady();
+    const isProd = process.env.NODE_ENV === "production";
+
+    let gatewayProvider = "SIMULATION";
+    let isLive = false;
+    let modeNotice = "بيئة تجريبية للاختبار والتطوير (Simulation Gateway)";
+
+    if (paymobLive) {
+      gatewayProvider = "PAYMOB";
+      isLive = true;
+      modeNotice = "بوابة الدفع الإلكتروني المباشرة والآمنة (Paymob)";
+    } else if (isProd) {
+      gatewayProvider = "UNCONFIGURED";
+      isLive = false;
+      modeNotice = "بوابة الدفع الإلكتروني غير مهيأة للإنتاج أو ناقصة المتغيرات. يرجى إكمال إعدادات Paymob.";
+    }
 
     return NextResponse.json({
       event: {
@@ -64,11 +81,9 @@ export async function GET(
         currency: selectedPkg.currency,
       },
       paymentGateway: {
-        provider: isPaymobLive ? "PAYMOB" : "SIMULATION",
-        isLive: isPaymobLive,
-        modeNotice: isPaymobLive
-          ? "بوابة الدفع الإلكتروني المباشرة والآمنة (Paymob)"
-          : "بيئة تجريبية للاختبار والتطوير (Simulation Gateway)",
+        provider: gatewayProvider,
+        isLive,
+        modeNotice,
       },
       recentTransactions: event.payments,
     });
@@ -101,8 +116,24 @@ export async function POST(
       return NextResponse.json({ error: "غير مصرح لك بالدفع لهذه المناسبة" }, { status: 403 });
     }
 
-    if (!packageCode || !PACKAGES[packageCode]) {
-      return NextResponse.json({ error: "يرجى اختيار باقة صالحة" }, { status: 400 });
+    const selectedPkg = PACKAGES[packageCode];
+    if (!selectedPkg) {
+      return NextResponse.json({ error: "يرجى اختيار باقة صالحة", code: "INVALID_PACKAGE" }, { status: 400 });
+    }
+
+    // Server-Side Entitlement Gate: Validate package compatibility with event's saved template BEFORE payment
+    if (!isTemplateAllowedForPackage(event.templateId, packageCode)) {
+      const tmpl = TEMPLATES[event.templateId];
+      return NextResponse.json(
+        {
+          error: `الباقة المختارة (${selectedPkg.nameAr}) لا تكفي لمتطلبات قالب المناسبة (${tmpl?.nameAr || event.templateId}) والذي يتطلب باقة ${tmpl?.tier || "أعلى"}. يرجى اختيار باقة متوافقة أو تعديل القالب أولاً.`,
+          code: "PACKAGE_INCOMPATIBLE_WITH_TEMPLATE",
+          eventTemplateId: event.templateId,
+          requiredTier: tmpl?.tier,
+          selectedPackage: packageCode,
+        },
+        { status: 400 }
+      );
     }
 
     // Process payment through gateway abstraction (Paymob or Simulation)

@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { generateQrDataUrl } from "@/lib/qr";
 import { deleteUploadedFile } from "@/lib/storage";
+import { TEMPLATES, isTemplateAllowedForPackage } from "@/lib/templates";
 
 export async function GET(
   request: Request,
@@ -83,6 +84,26 @@ export async function PUT(
         { error: "لا يمكن نشر الدعوة قبل سداد قيمة الباقة وتفعيل الاشتراك" },
         { status: 402 }
       );
+    }
+
+    // SERVER/API Security: Validate template entitlement derived strictly from trusted DB packageTier
+    if (body.templateId !== undefined && body.templateId !== existing.templateId) {
+      const tmpl = TEMPLATES[body.templateId];
+      if (!tmpl) {
+        return NextResponse.json({ error: "القالب المختار غير موجود" }, { status: 400 });
+      }
+
+      if (!isTemplateAllowedForPackage(body.templateId, existing.packageTier)) {
+        return NextResponse.json(
+          {
+            error: `القالب المختار (${tmpl.nameAr}) يتطلب باقة ${tmpl.tier}، بينما باقة المناسبة الحالية هي ${existing.packageTier}. يرجى ترقية الباقة لاستخدام هذا القالب.`,
+            code: "TEMPLATE_ENTITLEMENT_REQUIRED",
+            requiredTier: tmpl.tier,
+            currentTier: existing.packageTier,
+          },
+          { status: 403 }
+        );
+      }
     }
 
     const updated = await prisma.event.update({

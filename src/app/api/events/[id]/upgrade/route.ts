@@ -29,6 +29,17 @@ export async function POST(
       return NextResponse.json({ error: "الباقة المختارة غير صالحة" }, { status: 400 });
     }
 
+    // Prevent package downgrade
+    const TIER_RANKS: Record<string, number> = { BASIC: 1, PREMIUM: 2, LUXURY: 3 };
+    const currentRank = TIER_RANKS[event.packageTier] || 1;
+    const targetRank = TIER_RANKS[packageCode] || 1;
+    if (targetRank < currentRank) {
+      return NextResponse.json(
+        { error: "لا يمكن تخفيض باقة المناسبة إلى باقة أدنى", code: "DOWNGRADE_NOT_ALLOWED" },
+        { status: 400 }
+      );
+    }
+
     // Process payment through gateway abstraction
     const payment = await processPayment(eventId, packageCode);
 

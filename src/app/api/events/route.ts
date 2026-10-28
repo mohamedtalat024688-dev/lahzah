@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { TEMPLATES, isTemplateAllowedForPackage } from "@/lib/templates";
 
 export async function GET() {
   try {
@@ -79,7 +80,6 @@ export async function POST(request: Request) {
       mapUrl,
       welcomeMessage,
       description,
-      templateId = "royal-gold",
       slug: customSlug,
     } = body;
 
@@ -109,6 +109,44 @@ export async function POST(request: Request) {
       counter++;
     }
 
+    // Validate template selection & resolve matching tier
+    let selectedTemplateId = body.templateId;
+    let selectedPackageTier = body.packageTier && ["BASIC", "PREMIUM", "LUXURY"].includes(body.packageTier)
+      ? body.packageTier
+      : undefined;
+
+    if (selectedTemplateId) {
+      const tmpl = TEMPLATES[selectedTemplateId];
+      if (!tmpl) {
+        return NextResponse.json({ error: "القالب المختار غير موجود" }, { status: 400 });
+      }
+
+      if (selectedPackageTier) {
+        if (!isTemplateAllowedForPackage(selectedTemplateId, selectedPackageTier)) {
+          return NextResponse.json(
+            {
+              error: `القالب المختار (${tmpl.nameAr}) يتطلب باقة ${tmpl.tier}، بينما الباقة المحددة هي ${selectedPackageTier}. يرجى اختيار باقة متوافقة أو تغيير القالب.`,
+              code: "TEMPLATE_ENTITLEMENT_MISMATCH",
+              requiredTier: tmpl.tier,
+              packageTier: selectedPackageTier,
+            },
+            { status: 400 }
+          );
+        }
+      } else {
+        // Derive package tier from template tier if not explicitly specified
+        selectedPackageTier = tmpl.tier;
+      }
+    } else {
+      // Template omitted: pick default compatible template
+      if (selectedPackageTier === "BASIC") {
+        selectedTemplateId = "ivory-minimal";
+      } else {
+        selectedTemplateId = "royal-gold";
+        selectedPackageTier = selectedPackageTier || "PREMIUM";
+      }
+    }
+
     const newEvent = await prisma.event.create({
       data: {
         title: title || `حفل زفاف ${groomName} و ${brideName}`,
@@ -121,12 +159,12 @@ export async function POST(request: Request) {
         mapUrl: mapUrl || null,
         welcomeMessage: welcomeMessage || "يسعدنا ويشرفنا حضوركم ومشاركتنا فرحتنا",
         description: description || null,
-        templateId,
+        templateId: selectedTemplateId,
         slug,
         userId: user.id,
         isPublished: false,
         isPaid: false,
-        packageTier: body.packageTier && ["BASIC", "PREMIUM", "LUXURY"].includes(body.packageTier) ? body.packageTier : "BASIC",
+        packageTier: selectedPackageTier,
       },
     });
 

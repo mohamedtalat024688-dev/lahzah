@@ -564,6 +564,13 @@ export const TEMPLATES: Record<string, TemplateConfig> = {
   },
 };
 
+// Backward compatibility alias for legacy seeded events & tests
+TEMPLATES["emerald-luxury"] = {
+  ...TEMPLATES["emerald-elegance"],
+  id: "emerald-luxury",
+  tier: "BASIC",
+};
+
 export const DEFAULT_TEMPLATE_ID = "royal-gold";
 
 export function getTemplate(id?: string): TemplateConfig {
@@ -579,14 +586,22 @@ export function getTemplatesByTier(tier: TemplateTier): TemplateConfig[] {
 }
 
 // Package tier to allowed template tiers mapping
-export function getAllowedTemplateTiers(packageCode: string): TemplateTier[] {
-  switch (packageCode) {
+export function getAllowedTemplateTiers(packageCode?: string | null): TemplateTier[] {
+  switch (packageCode?.toUpperCase()) {
     case "LUXURY":
       return ["BASIC", "PREMIUM", "LUXURY"];
     case "PREMIUM":
       return ["BASIC", "PREMIUM"];
     case "BASIC":
     default:
-      return ["BASIC", "PREMIUM"]; // Keep basic/premium accessible gracefully or with upgrade prompt
+      return ["BASIC"];
   }
+}
+
+// Check whether a specific template is allowed for a package tier
+export function isTemplateAllowedForPackage(templateId: string, packageCode?: string | null): boolean {
+  const tmpl = TEMPLATES[templateId];
+  if (!tmpl) return false;
+  const allowedTiers = getAllowedTemplateTiers(packageCode);
+  return allowedTiers.includes(tmpl.tier);
 }

@@ -2,9 +2,27 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
-const SECRET_KEY = new TextEncoder().encode(
-  process.env.JWT_SECRET || "lahzah-super-secret-jwt-key-2026-very-secure"
-);
+const DEV_FALLBACK_SECRET = "lahzah-dev-test-only-secret-do-not-use-in-prod";
+
+function getMiddlewareSecretKey(): Uint8Array | null {
+  const secret = process.env.JWT_SECRET;
+  const isProd = process.env.NODE_ENV === "production";
+
+  if (isProd) {
+    // In production, reject missing, whitespace-only, or insufficiently long secrets (< 32 chars)
+    // Never print or leak secret contents.
+    if (!secret || secret.trim().length < 32) {
+      return null;
+    }
+    return new TextEncoder().encode(secret);
+  }
+
+  if (!secret || secret.trim().length === 0) {
+    return new TextEncoder().encode(DEV_FALLBACK_SECRET);
+  }
+
+  return new TextEncoder().encode(secret);
+}
 
 const SESSION_COOKIE = "lahzah_session";
 
@@ -16,7 +34,9 @@ interface SessionPayload {
 
 async function verifyToken(token: string): Promise<SessionPayload | null> {
   try {
-    const { payload } = await jwtVerify(token, SECRET_KEY);
+    const secretKey = getMiddlewareSecretKey();
+    if (!secretKey) return null;
+    const { payload } = await jwtVerify(token, secretKey);
     return payload as unknown as SessionPayload;
   } catch {
     return null;

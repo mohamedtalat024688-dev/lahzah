@@ -142,20 +142,64 @@ class SimulationPaymentGateway implements IPaymentGateway {
 }
 
 /**
+ * Paymob Configuration Validation & Environment Status
+ * Checks all 4 required Paymob parameters without exposing sensitive values.
+ */
+export interface PaymobConfigStatus {
+  isConfigured: boolean;
+  isReady: boolean;
+  hasApiKey: boolean;
+  hasIntegrationId: boolean;
+  hasIframeId: boolean;
+  hasHmacSecret: boolean;
+  missingVariables: string[];
+}
+
+export function getPaymobConfigStatus(): PaymobConfigStatus {
+  const apiKey = (process.env.PAYMOB_API_KEY || "").trim();
+  const integrationId = (process.env.PAYMOB_INTEGRATION_ID || "").trim();
+  const iframeId = (process.env.PAYMOB_IFRAME_ID || "").trim();
+  const hmacSecret = (process.env.PAYMOB_HMAC_SECRET || "").trim();
+
+  const missingVariables: string[] = [];
+  if (!apiKey) missingVariables.push("PAYMOB_API_KEY");
+  if (!integrationId) missingVariables.push("PAYMOB_INTEGRATION_ID");
+  if (!iframeId) missingVariables.push("PAYMOB_IFRAME_ID");
+  if (!hmacSecret) missingVariables.push("PAYMOB_HMAC_SECRET");
+
+  const isConfigured = missingVariables.length === 0;
+
+  return {
+    isConfigured,
+    isReady: isConfigured,
+    hasApiKey: !!apiKey,
+    hasIntegrationId: !!integrationId,
+    hasIframeId: !!iframeId,
+    hasHmacSecret: !!hmacSecret,
+    missingVariables,
+  };
+}
+
+export function isPaymobReady(): boolean {
+  return getPaymobConfigStatus().isConfigured;
+}
+
+/**
  * Paymob Payment Gateway Adapter (Production-ready).
  * Full architecture implementing Paymob API v1:
  * 1. Authentication Token -> 2. Order Registration -> 3. Payment Key Generation -> 4. Checkout Iframe -> 5. Webhook HMAC Validation.
  */
 class PaymobPaymentGateway implements IPaymentGateway {
-  private apiKey = process.env.PAYMOB_API_KEY || "";
-  private integrationId = process.env.PAYMOB_INTEGRATION_ID || "";
-  private iframeId = process.env.PAYMOB_IFRAME_ID || "";
-  private hmacSecret = process.env.PAYMOB_HMAC_SECRET || "";
+  private get apiKey() { return (process.env.PAYMOB_API_KEY || "").trim(); }
+  private get integrationId() { return (process.env.PAYMOB_INTEGRATION_ID || "").trim(); }
+  private get iframeId() { return (process.env.PAYMOB_IFRAME_ID || "").trim(); }
+  private get hmacSecret() { return (process.env.PAYMOB_HMAC_SECRET || "").trim(); }
 
   async charge(eventId: string, packageCode: string): Promise<PaymentResult> {
-    if (!this.apiKey || !this.integrationId) {
+    const config = getPaymobConfigStatus();
+    if (!config.isConfigured) {
       throw new Error(
-        "Paymob live integration requires PAYMOB_API_KEY and PAYMOB_INTEGRATION_ID configured in production environment variables."
+        `إعدادات بوابة الدفع Paymob غير مكتملة في الخادم. المتغيرات المفقودة: ${config.missingVariables.join(", ")}`
       );
     }
 
@@ -391,22 +435,52 @@ class PaymobPaymentGateway implements IPaymentGateway {
   }
 }
 
-function getPaymentGateway(): IPaymentGateway {
-  if (process.env.PAYMENT_PROVIDER === "paymob") {
+/**
+ * Fail-closed gateway for production environments when legitimate payment gateway is unconfigured.
+ * Prevents unauthorized simulated payments in production under all conditions.
+ */
+export class UnconfiguredProductionPaymentGateway implements IPaymentGateway {
+  async charge(_eventId?: string, _packageCode?: string): Promise<PaymentResult> {
+    void _eventId;
+    void _packageCode;
+    throw new Error(
+      "بوابة الدفع غير مهيأة للإنتاج أو ناقصة الإعدادات. محاكاة الدفع معطلة تماماً في بيئة الإنتاج."
+    );
+  }
+
+  async handleWebhook(): Promise<{ verified: boolean }> {
+    return { verified: false };
+  }
+}
+
+export function getPaymentGateway(): IPaymentGateway {
+  const isProd = process.env.NODE_ENV === "production";
+  const isPaymob = process.env.PAYMENT_PROVIDER === "paymob";
+
+  if (isProd) {
+    // In production, simulation is strictly forbidden under any circumstances.
+    // Must use real, fully configured Paymob or fail closed.
+    if (isPaymob && isPaymobReady()) {
+      return new PaymobPaymentGateway();
+    }
+    return new UnconfiguredProductionPaymentGateway();
+  }
+
+  // Non-production environments (development / test)
+  if (isPaymob && isPaymobReady()) {
     return new PaymobPaymentGateway();
   }
+
   return new SimulationPaymentGateway();
 }
 
-const paymentGateway = getPaymentGateway();
-
 export async function processPayment(eventId: string, packageCode: string): Promise<PaymentResult> {
-  return paymentGateway.charge(eventId, packageCode);
+  return getPaymentGateway().charge(eventId, packageCode);
 }
 
 export async function verifyAndProcessWebhook(
   payload: Record<string, unknown>,
   signature: string
 ) {
-  return paymentGateway.handleWebhook(payload, signature);
+  return getPaymentGateway().handleWebhook(payload, signature);
 }
