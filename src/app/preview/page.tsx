@@ -79,30 +79,30 @@ function TemplatePreviewContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0a0908] text-[#faf8f5] selection:bg-[#c5a880]/30 selection:text-[#f5f2eb] flex flex-col font-body">
+    <div className="min-h-screen bg-[#FFF9F0] text-[#493B38] selection:bg-[#F27D72]/20 selection:text-[#51354F] flex flex-col font-body">
       {/* ========================================================================= */}
       {/* 1. TOP STICKY PREVIEW BAR (UX CONTROLS)                                   */}
       {/* ========================================================================= */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#0e0c0a]/90 border-b border-[#24211b] shadow-xl">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#FFF9F0]/90 border-b border-[#EADBCE] shadow-warm-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
             {/* Right: Breadcrumb & Title */}
             <div className="flex items-center justify-between md:justify-start gap-4">
               <Link
                 href="/#templates"
-                className="inline-flex items-center gap-1.5 text-xs text-[#8e877c] hover:text-[#c5a880] transition-colors py-2"
+                className="inline-flex items-center gap-1.5 text-xs text-[#6E5D59] hover:text-[#F27D72] transition-colors py-2"
               >
                 <ArrowRight className="w-4 h-4" />
                 <span>العودة للقوالب</span>
               </Link>
 
-              <div className="h-4 w-px bg-[#26221d] hidden sm:block" />
+              <div className="h-4 w-px bg-[#EADBCE] hidden sm:block" />
 
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold font-display text-[#faf8f5]">
+                <span className="text-xs font-bold font-display text-[#51354F]">
                   معاينة حية:
                 </span>
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-[#1c1814] text-[#c5a880] border border-[#2e2924] flex items-center gap-1.5">
+                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-[#FFFDF9] text-[#51354F] border border-[#EADBCE] flex items-center gap-1.5 shadow-warm-xs">
                   <span
                     className="w-2.5 h-2.5 rounded-full"
                     style={{ backgroundColor: activeTemplate.theme.accentColor }}
@@ -122,10 +122,10 @@ function TemplatePreviewContent() {
                     key={tmpl.id}
                     type="button"
                     onClick={() => handleTemplateChange(tmpl.id)}
-                    className={`px-3 py-1.5 rounded-full whitespace-nowrap transition-all flex items-center gap-1.5 font-medium shrink-0 min-h-[38px] ${
+                    className={`px-3.5 py-1.5 rounded-full whitespace-nowrap transition-all flex items-center gap-1.5 font-medium shrink-0 min-h-[38px] ${
                       isActive
-                        ? "bg-[#c5a880] text-[#0c0b0a] font-bold shadow-md"
-                        : "bg-[#141210] border border-[#26221d] text-[#8e877c] hover:text-[#faf8f5] hover:border-[#3d3630]"
+                        ? "bg-[#F27D72] text-white font-bold shadow-coral-glow"
+                        : "bg-[#FFFDF9] border border-[#EADBCE] text-[#6E5D59] hover:text-[#51354F] hover:border-[#D6AD65]"
                     }`}
                   >
                     <span
@@ -134,7 +134,7 @@ function TemplatePreviewContent() {
                     />
                     <span>{tmpl.nameAr}</span>
                     {isLuxury && (
-                      <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-[#d4af37]/20 text-[#f5d77f] border border-[#d4af37]/40 font-mono">
+                      <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-[#FAF3E5] text-[#D6AD65] border border-[#D6AD65]/40 font-mono">
                         VIP
                       </span>
                     )}
@@ -144,16 +144,16 @@ function TemplatePreviewContent() {
             </div>
 
             {/* Left: View Mode Toggle & Primary CTA Button */}
-            <div className="flex items-center justify-between md:justify-end gap-3 pt-1 md:pt-0 border-t md:border-t-0 border-[#24211b]">
+            <div className="flex items-center justify-between md:justify-end gap-3 pt-1 md:pt-0 border-t md:border-t-0 border-[#EADBCE]">
               {/* View Mode Toggle */}
-              <div className="flex items-center p-1 bg-[#141210] rounded-full border border-[#26221d]">
+              <div className="flex items-center p-1 bg-[#FFFDF9] rounded-full border border-[#EADBCE] shadow-warm-xs">
                 <button
                   type="button"
                   onClick={() => setViewMode("card")}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all min-h-[36px] ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all min-h-[36px] ${
                     viewMode === "card"
-                      ? "bg-[#c5a880] text-[#0c0b0a] font-bold shadow-sm"
-                      : "text-[#8e877c] hover:text-[#faf8f5]"
+                      ? "bg-[#F27D72] text-white shadow-sm"
+                      : "text-[#6E5D59] hover:text-[#493B38]"
                   }`}
                 >
                   <Eye className="w-3.5 h-3.5" />
@@ -163,10 +163,10 @@ function TemplatePreviewContent() {
                 <button
                   type="button"
                   onClick={() => setViewMode("full")}
-                  className={`px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 transition-all min-h-[36px] ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all min-h-[36px] ${
                     viewMode === "full"
-                      ? "bg-[#c5a880] text-[#0c0b0a] font-bold shadow-sm"
-                      : "text-[#8e877c] hover:text-[#faf8f5]"
+                      ? "bg-[#F27D72] text-white shadow-sm"
+                      : "text-[#6E5D59] hover:text-[#493B38]"
                   }`}
                 >
                   <Smartphone className="w-3.5 h-3.5" />
@@ -178,7 +178,7 @@ function TemplatePreviewContent() {
               {/* Use This Template Button */}
               <Link
                 href={`/dashboard/events/new?template=${activeTemplate.id}`}
-                className="px-5 py-2.5 rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs hover:bg-[#d8be99] shadow-md transition-all flex items-center gap-1.5 min-h-[44px] shrink-0"
+                className="px-5 py-2.5 rounded-full bg-[#F27D72] text-white font-bold text-xs hover:bg-[#DE685D] shadow-coral-glow transition-all flex items-center gap-1.5 min-h-[44px] shrink-0 hover:scale-105 active:scale-95"
               >
                 <span>استخدم هذا التصميم</span>
                 <Sparkles className="w-3.5 h-3.5 fill-current" />
@@ -197,13 +197,13 @@ function TemplatePreviewContent() {
           <div className="py-12 sm:py-16 px-4 max-w-4xl mx-auto flex flex-col items-center justify-center space-y-8 animate-fadeIn">
             {/* Template Description Header */}
             <div className="text-center max-w-lg space-y-2">
-              <span className="text-xs font-display tracking-widest uppercase block text-[#c5a880]">
+              <span className="text-xs font-bold tracking-widest uppercase block text-[#F27D72]">
                 {activeTemplate.styleTag}
               </span>
-              <h1 className="text-2xl sm:text-4xl font-bold font-display text-[#faf8f5]">
+              <h1 className="text-2xl sm:text-4xl font-bold font-display text-[#51354F]">
                 قالب {activeTemplate.nameAr}
               </h1>
-              <p className="text-xs sm:text-sm text-[#8e877c] leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#6E5D59] leading-relaxed">
                 {activeTemplate.descriptionAr}
               </p>
             </div>
@@ -211,7 +211,7 @@ function TemplatePreviewContent() {
             {/* The Realistic Stationery Paper Invitation Card */}
             <div className="w-full max-w-md relative transition-transform duration-500 hover:scale-[1.01]">
               <div
-                className="absolute -inset-4 rounded-[3rem] blur-2xl opacity-40 pointer-events-none transition-all duration-500"
+                className="absolute -inset-4 rounded-[3rem] blur-2xl opacity-35 pointer-events-none transition-all duration-500"
                 style={{
                   background: `radial-gradient(ellipse at center, ${activeTemplate.theme.accentColor} 0%, transparent 70%)`,
                 }}
@@ -229,29 +229,31 @@ function TemplatePreviewContent() {
               />
             </div>
 
-            {/* Bottom Actions Bar */}
-            <div className="flex flex-col sm:flex-row items-center gap-3 pt-4 w-full max-w-md">
+            {/* Bottom Actions Floating Bar */}
+            <div className="flex items-center gap-3 pt-4">
               <Link
                 href={`/dashboard/events/new?template=${activeTemplate.id}`}
-                className="w-full sm:flex-1 py-3.5 px-6 rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs text-center hover:bg-[#d8be99] shadow-lg transition-all min-h-[44px] flex items-center justify-center gap-2"
+                className="px-8 py-3.5 rounded-full bg-[#F27D72] text-white font-bold text-xs hover:bg-[#DE685D] shadow-coral-glow transition-all flex items-center gap-2 min-h-[44px]"
               >
-                <span>ابدأ تصميم دعوتك بهذا القالب</span>
-                <Sparkles className="w-4 h-4 fill-current" />
+                <span>صمم دعوتك بهذا القالب</span>
+                <Sparkles className="w-3.5 h-3.5 fill-current" />
               </Link>
-              <button
-                type="button"
-                onClick={() => setViewMode("full")}
-                className="w-full sm:w-auto py-3.5 px-6 rounded-full bg-[#141210] border border-[#26221d] text-[#faf8f5] hover:border-[#c5a880] text-xs font-medium transition-colors min-h-[44px] flex items-center justify-center gap-2"
-              >
-                <Smartphone className="w-4 h-4 text-[#c5a880]" />
-                <span>معاينة موقع الحفل الكامل</span>
-              </button>
             </div>
           </div>
         ) : (
-          /* Full Interactive Digital Invitation Experience */
-          <div className="animate-fadeIn">
-            <InvitationView event={previewEventData} />
+          /* Full Interactive Event Page Simulation (Mobile Mockup Frame) */
+          <div className="py-8 px-4 flex flex-col items-center justify-center animate-fadeIn">
+            <div className="w-full max-w-md mx-auto border-[10px] border-[#493B38] rounded-[3rem] shadow-2xl overflow-hidden bg-black relative">
+              {/* Phone Speaker Notch */}
+              <div className="w-32 h-4 bg-[#493B38] mx-auto rounded-b-xl relative z-30" />
+
+              {/* Real Event Page Container */}
+              <div className="max-h-[750px] overflow-y-auto no-scrollbar">
+                <InvitationView
+                  event={previewEventData}
+                />
+              </div>
+            </div>
           </div>
         )}
       </main>
@@ -259,14 +261,14 @@ function TemplatePreviewContent() {
   );
 }
 
-export default function TemplatePreviewPage() {
+export default function TemplatePreviewStudio() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#0c0b0a] text-[#faf8f5] flex items-center justify-center">
-          <div className="text-center space-y-3">
-            <div className="w-10 h-10 border-2 border-[#c5a880] border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-xs text-[#8e877c]">جاري تحميل معاينة القالب الملكي...</p>
+        <div className="min-h-screen bg-[#FFF9F0] flex items-center justify-center text-[#51354F]">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-5 h-5 animate-spin text-[#F27D72]" />
+            <span className="text-sm font-semibold">جاري تجهيز استوديو المعاينة...</span>
           </div>
         </div>
       }

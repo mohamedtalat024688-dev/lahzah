@@ -10,6 +10,7 @@ import {
   LayoutDashboard,
   LogOut,
   ShieldCheck,
+  ArrowLeft,
 } from "lucide-react";
 
 interface UserProfile {
@@ -42,166 +43,190 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#0c0b0a]/85 border-b border-[#24211b] transition-all">
+    <header className="sticky top-0 z-50 backdrop-blur-md bg-[#FFF9F0]/95 border-b border-[#EADBCE]/70 transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
+        {/* Brand Logo & Wordmark - Luxury Atelier Mark */}
+        <Link href="/" className="flex items-center gap-3.5 group">
+          {/* Architectural Carmine Monogram Seal */}
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#8C2419] to-[#63140C] p-[1.5px] shadow-[0_2px_8px_rgba(140,36,25,0.25)] flex items-center justify-center group-hover:scale-105 transition-transform">
+            <div className="w-full h-full rounded-full border border-[#D9776E]/40 flex items-center justify-center text-white font-serif shadow-inner">
+              <span className="text-lg font-bold">ل</span>
+            </div>
+          </div>
+
           <div className="flex flex-col text-right">
-            <span className="text-2xl font-bold tracking-tight text-[#faf8f5] font-display">
-              لـحـظـة
-            </span>
-            <span className="text-[11px] tracking-wider text-[#9c9488] font-body -mt-1 font-light">
-              من دعوة… إلى ذكرى
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-2xl font-bold tracking-tight text-[#51354F] font-serif leading-none">
+                لـحـظـة
+              </span>
+              <span className="text-[10px] uppercase font-serif tracking-widest text-[#D6AD65] font-semibold">
+                ATELIER
+              </span>
+            </div>
+            <span className="text-[11px] text-[#786C68] font-normal mt-0.5">
+              دعوات زفاف إلكترونية وتوثيق الذكريات
             </span>
           </div>
         </Link>
 
         {/* Public Visitor Navigation Links (Desktop) */}
-        <nav className="hidden md:flex items-center gap-8 text-[13px] font-medium text-[#c4bdb2]">
-          <Link href="/#features" className="hover:text-[#faf8f5] transition-colors">
-            المميزات
+        <nav className="hidden md:flex items-center gap-8 text-[13px] font-semibold text-[#51354F]">
+          <Link
+            href="/#experience"
+            className="hover:text-[#F27D72] transition-colors py-1"
+          >
+            التجربة
           </Link>
-          <Link href="/#templates" className="hover:text-[#faf8f5] transition-colors">
-            القوالب
+          <Link
+            href="/#designs"
+            className="hover:text-[#F27D72] transition-colors py-1"
+          >
+            التصاميم
           </Link>
-          <Link href="/#how-it-works" className="hover:text-[#faf8f5] transition-colors">
-            كيف تعمل
+          <Link
+            href="/#how-it-works"
+            className="hover:text-[#F27D72] transition-colors py-1"
+          >
+            كيف نعمل
           </Link>
-          <Link href="/#pricing" className="hover:text-[#faf8f5] transition-colors">
-            الأسعار
+          <Link
+            href="/#pricing"
+            className="hover:text-[#F27D72] transition-colors py-1"
+          >
+            الباقات
           </Link>
         </nav>
 
         {/* Action Controls (Desktop) */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-3.5">
           {loading ? (
-            <div className="w-24 h-9 bg-neutral-800/40 rounded-full animate-pulse" />
+            <div className="w-24 h-9 bg-[#EADBCE]/40 rounded-full animate-pulse" />
           ) : user ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               {user.role === "ADMIN" && (
                 <Link
                   href="/admin"
-                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs font-medium hover:bg-rose-900/40 transition-all"
+                  className="px-3.5 py-2 rounded-full text-xs font-semibold text-[#51354F] bg-white border border-[#EADBCE] hover:border-[#51354F] transition-colors flex items-center gap-1.5 shadow-sm"
                 >
-                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <ShieldCheck className="w-3.5 h-3.5 text-[#D6AD65]" />
                   <span>الإدارة</span>
                 </Link>
               )}
 
               <Link
                 href="/dashboard"
-                className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#181613] border border-[#2c2821] text-[#e8e4dc] hover:text-white hover:border-[#c5a880]/40 text-xs font-semibold transition-all"
+                className="px-4 py-2 rounded-full text-xs font-semibold text-[#51354F] bg-white border border-[#EADBCE] hover:border-[#51354F] transition-colors flex items-center gap-1.5 shadow-sm"
               >
-                <LayoutDashboard className="w-3.5 h-3.5 text-[#c5a880]" />
+                <LayoutDashboard className="w-3.5 h-3.5 text-[#51354F]" />
                 <span>لوحة التحكم</span>
               </Link>
 
               <Link
                 href="/dashboard/events/new"
-                className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs hover:bg-[#d8bd96] shadow-sm transition-all"
+                className="px-5 py-2.5 rounded-full text-xs font-bold text-white bg-[#F27D72] hover:bg-[#DE685D] shadow-sm hover:shadow transition-all flex items-center gap-1.5"
               >
                 <PlusCircle className="w-3.5 h-3.5" />
-                <span>مناسبة جديدة</span>
+                <span>دعوة جديدة</span>
               </Link>
 
               <button
                 onClick={handleLogout}
-                className="p-2 rounded-full text-neutral-400 hover:text-rose-300 hover:bg-neutral-900 transition-colors"
+                aria-label="تسجيل الخروج"
+                className="p-2 rounded-full text-[#786C68] hover:text-[#C24134] hover:bg-[#FFF0EE] transition-colors"
                 title="تسجيل الخروج"
               >
                 <LogOut className="w-4 h-4" />
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <Link
                 href="/auth/login"
-                className="text-xs font-medium text-[#c4bdb2] hover:text-white transition-colors px-2 py-1.5"
+                className="px-4 py-2 rounded-full text-xs font-semibold text-[#51354F] hover:text-[#F27D72] transition-colors"
               >
                 دخول
               </Link>
 
               <Link
                 href="/dashboard/events/new"
-                className="px-5 py-2.5 rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs hover:bg-[#d8bd96] shadow-sm transition-all"
+                className="px-5 py-2.5 rounded-full text-xs font-bold text-white bg-[#51354F] hover:bg-[#3D283C] shadow-sm hover:shadow transition-all flex items-center gap-1.5"
               >
-                صمّم دعوتك
+                <span>اصنع دعوتك</span>
+                <ArrowLeft className="w-3.5 h-3.5" />
               </Link>
             </div>
           )}
         </div>
 
-        {/* Mobile Hamburger Button with 44px min touch target */}
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="md:hidden min-w-[44px] min-h-[44px] p-2 rounded-xl text-neutral-300 hover:text-white hover:bg-neutral-900 transition-colors flex items-center justify-center"
-          aria-label="القائمة"
-        >
-          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
+        {/* Mobile Hamburger Button */}
+        <div className="flex md:hidden items-center gap-2">
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? "إغلاق القائمة" : "فتح القائمة"}
+            className="p-2.5 rounded-full text-[#51354F] hover:bg-white border border-[#EADBCE] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+          >
+            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="md:hidden border-t border-[#24211b] bg-[#0c0b0a] px-5 py-6 space-y-4 animate-fadeIn">
-          <nav className="flex flex-col gap-1 text-sm font-medium text-[#c4bdb2]">
+        <div className="md:hidden border-t border-[#EADBCE] bg-[#FFF9F0] px-4 pt-3 pb-6 space-y-3 animate-fadeIn shadow-lg">
+          <nav className="flex flex-col space-y-1 text-right text-xs font-semibold text-[#51354F]">
             <Link
-              href="/#features"
+              href="/#experience"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="py-3 px-2 min-h-[44px] flex items-center hover:text-[#faf8f5] border-b border-[#1c1a16] transition-colors"
+              className="py-2.5 px-3 rounded-xl hover:bg-white transition-colors"
             >
-              المميزات
+              التجربة
             </Link>
             <Link
-              href="/#templates"
+              href="/#designs"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="py-3 px-2 min-h-[44px] flex items-center hover:text-[#faf8f5] border-b border-[#1c1a16] transition-colors"
+              className="py-2.5 px-3 rounded-xl hover:bg-white transition-colors"
             >
-              القوالب
+              التصاميم
             </Link>
             <Link
               href="/#how-it-works"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="py-3 px-2 min-h-[44px] flex items-center hover:text-[#faf8f5] border-b border-[#1c1a16] transition-colors"
+              className="py-2.5 px-3 rounded-xl hover:bg-white transition-colors"
             >
-              كيف تعمل
+              كيف نعمل
             </Link>
             <Link
               href="/#pricing"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="py-3 px-2 min-h-[44px] flex items-center hover:text-[#faf8f5] transition-colors"
+              className="py-2.5 px-3 rounded-xl hover:bg-white transition-colors"
             >
-              الأسعار
+              الباقات
             </Link>
           </nav>
 
-          <div className="pt-3 border-t border-[#24211b] flex flex-col gap-2.5">
+          <div className="pt-3 border-t border-[#EADBCE] flex flex-col gap-2">
             {user ? (
               <>
                 <Link
                   href="/dashboard"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full py-3 min-h-[44px] rounded-full bg-[#181613] border border-[#2c2821] text-[#e8e4dc] font-semibold text-xs text-center flex items-center justify-center gap-2"
+                  className="w-full py-3 rounded-full text-center text-xs font-semibold bg-white border border-[#EADBCE] text-[#51354F]"
                 >
-                  <LayoutDashboard className="w-4 h-4 text-[#c5a880]" />
-                  <span>لوحة التحكم</span>
+                  لوحة التحكم
                 </Link>
-
                 <Link
                   href="/dashboard/events/new"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full py-3 min-h-[44px] rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs text-center flex items-center justify-center gap-2"
+                  className="w-full py-3 rounded-full text-center text-xs font-bold bg-[#F27D72] text-white shadow-sm"
                 >
-                  <PlusCircle className="w-4 h-4" />
-                  <span>صمّم مناسبة جديدة</span>
+                  اصنع دعوة جديدة
                 </Link>
-
                 <button
                   onClick={() => {
                     setIsMobileMenuOpen(false);
                     handleLogout();
                   }}
-                  className="w-full py-3 min-h-[44px] text-center text-xs text-rose-400 hover:text-rose-300 flex items-center justify-center"
+                  className="w-full py-2.5 text-center text-xs text-[#C24134] font-medium"
                 >
                   تسجيل الخروج
                 </button>
@@ -209,19 +234,18 @@ export default function Navbar() {
             ) : (
               <>
                 <Link
-                  href="/auth/login"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full py-3 min-h-[44px] rounded-full border border-[#2c2821] text-[#e8e4dc] text-xs font-semibold text-center hover:bg-neutral-900 flex items-center justify-center"
-                >
-                  دخول
-                </Link>
-
-                <Link
                   href="/dashboard/events/new"
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="w-full py-3 min-h-[44px] rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs text-center shadow-md flex items-center justify-center"
+                  className="w-full py-3 rounded-full text-center text-xs font-bold bg-[#51354F] text-white shadow-sm"
                 >
-                  صمّم دعوتك
+                  اصنع دعوتك الآن
+                </Link>
+                <Link
+                  href="/auth/login"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="w-full py-2.5 rounded-full text-center text-xs font-semibold bg-white border border-[#EADBCE] text-[#51354F]"
+                >
+                  تسجيل الدخول
                 </Link>
               </>
             )}

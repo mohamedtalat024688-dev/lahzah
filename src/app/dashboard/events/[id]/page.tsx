@@ -21,6 +21,7 @@ import {
   PauseCircle,
   AlertTriangle,
   Clock,
+  Heart,
 } from "lucide-react";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
@@ -202,21 +203,21 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0c0b0a] flex items-center justify-center text-[#faf8f5]">
-        <Loader2 className="w-8 h-8 animate-spin text-[#c5a880]" />
+      <div className="min-h-screen bg-[#FFF9F0] flex items-center justify-center text-[#51354F]">
+        <Loader2 className="w-8 h-8 animate-spin text-[#F27D72]" />
       </div>
     );
   }
 
   if (!event) {
     return (
-      <div className="min-h-screen bg-[#0c0b0a] text-[#faf8f5] flex flex-col justify-between">
+      <div className="min-h-screen bg-[#FFF9F0] text-[#493B38] flex flex-col justify-between">
         <Navbar />
         <div className="text-center py-24 space-y-3">
-          <p className="text-base text-[#8e877c]">المناسبة غير موجودة أو تم حذفها</p>
+          <p className="text-base text-[#786C68]">المناسبة غير موجودة أو تم حذفها</p>
           <Link
             href="/dashboard"
-            className="text-[#c5a880] hover:underline text-xs inline-block font-medium"
+            className="text-[#F27D72] hover:underline text-xs inline-block font-semibold"
           >
             العودة للوحة التحكم
           </Link>
@@ -233,44 +234,44 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
     .reduce((sum, r) => sum + r.guestCount, 0);
 
   return (
-    <div className="min-h-screen bg-[#0c0b0a] text-[#faf8f5] flex flex-col justify-between selection:bg-[#c5a880]/30 selection:text-[#f5f2eb]">
+    <div className="min-h-screen bg-[#FFF9F0] text-[#493B38] flex flex-col justify-between selection:bg-[#F27D72]/20 selection:text-[#51354F]">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1">
         {/* Top Header Breadcrumb & Status */}
-        <div className="mb-8 pb-6 border-b border-[#26221d] flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+        <div className="mb-8 pb-6 border-b border-[#EADBCE] flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <div className="space-y-1.5">
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-1.5 text-xs text-[#8e877c] hover:text-[#c5a880] transition-colors mb-1"
+              className="inline-flex items-center gap-1.5 text-xs text-[#786C68] hover:text-[#F27D72] transition-colors mb-1"
             >
               <ArrowRight className="w-3.5 h-3.5" />
               <span>العودة لجميع المناسبات</span>
             </Link>
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-3xl sm:text-4xl font-bold font-display text-[#faf8f5] tracking-wide">
-                {event.groomName} <span className="text-[#c5a880] font-normal font-serif">&</span>{" "}
+              <h1 className="text-3xl sm:text-4xl font-bold font-serif text-[#51354F] tracking-tight">
+                {event.groomName} <span className="text-[#F27D72] font-normal font-serif">&</span>{" "}
                 {event.brideName}
               </h1>
               {!event.isPaid ? (
-                <span className="px-3 py-1 rounded-full bg-[#291717] border border-[#522525] text-[#fca5a5] text-xs font-medium flex items-center gap-1.5">
-                  <AlertTriangle className="w-3.5 h-3.5 text-[#f87171]" />
+                <span className="px-3 py-1 rounded-full bg-[#FFF0EE] border border-[#F5B5C8] text-[#C24134] text-xs font-semibold flex items-center gap-1.5">
+                  <AlertTriangle className="w-3.5 h-3.5 text-[#F27D72]" />
                   <span>مسودة غير مدفوعة</span>
                 </span>
               ) : !event.isPublished ? (
-                <span className="px-3 py-1 rounded-full bg-[#2a241a] border border-[#4d3d22] text-[#fcd34d] text-xs font-medium flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5 text-[#fcd34d]" />
+                <span className="px-3 py-1 rounded-full bg-[#FEF8EC] border border-[#F3DEB2] text-[#9A6B1A] text-xs font-semibold flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-[#D6AD65]" />
                   <span>مدفوعة • بانتظار النشر</span>
                 </span>
               ) : (
-                <span className="px-3 py-1 rounded-full bg-[#16271c] border border-[#23482d] text-[#86efac] text-xs font-medium flex items-center gap-1.5">
-                  <CheckCircle className="w-3.5 h-3.5 text-[#86efac]" />
+                <span className="px-3 py-1 rounded-full bg-[#F0F7EE] border border-[#C5DEC0] text-[#2E6827] text-xs font-semibold flex items-center gap-1.5">
+                  <CheckCircle className="w-3.5 h-3.5 text-[#5B9C51]" />
                   <span>منشورة ومتاحة للضيوف</span>
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-3 text-xs text-[#8e877c] pt-1">
-              <span>{event.venueName}</span>
+            <div className="flex items-center gap-3 text-xs text-[#786C68] pt-1">
+              <span className="font-medium text-[#51354F]">{event.venueName}</span>
               <span>•</span>
               <span>
                 {new Date(event.eventDate).toLocaleDateString("ar-EG", {
@@ -288,7 +289,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
             {!event.isPaid ? (
               <Link
                 href={`/dashboard/events/${event.id}/checkout?package=${event.packageTier}`}
-                className="px-5 py-2.5 rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs hover:bg-[#d8be99] transition-all flex items-center gap-1.5 shadow-sm"
+                className="px-5 py-2.5 min-h-[44px] rounded-full bg-gradient-to-r from-[#F27D72] to-[#E2695E] text-white font-bold text-xs hover:shadow-md hover:scale-[1.01] transition-all flex items-center gap-1.5 shadow-sm"
               >
                 <CreditCard className="w-4 h-4" />
                 <span>سداد الباقة وتفعيل الدعوة</span>
@@ -297,7 +298,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
               <button
                 onClick={handlePublish}
                 disabled={publishLoading}
-                className="px-5 py-2.5 rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs hover:bg-[#d8be99] transition-all flex items-center gap-1.5 shadow-sm"
+                className="px-5 py-2.5 min-h-[44px] rounded-full bg-gradient-to-r from-[#F27D72] to-[#E2695E] text-white font-bold text-xs hover:shadow-md hover:scale-[1.01] transition-all flex items-center gap-1.5 shadow-sm"
               >
                 {publishLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
@@ -310,7 +311,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
               <button
                 onClick={handleUnpublish}
                 disabled={publishLoading}
-                className="px-4 py-2 rounded-full bg-[#171412] border border-[#2e2924] text-[#8e877c] hover:text-[#f87171] hover:border-[#522525] text-xs font-medium transition-colors flex items-center gap-1.5"
+                className="px-4 py-2 min-h-[44px] rounded-full bg-white border border-[#EADBCE] text-[#786C68] hover:text-[#C24134] hover:border-[#F5B5C8] text-xs font-medium transition-colors flex items-center gap-1.5 shadow-sm"
               >
                 <PauseCircle className="w-3.5 h-3.5" />
                 <span>إيقاف النشر مؤقتاً</span>
@@ -320,12 +321,12 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
             {event.isPublished && (
               <button
                 onClick={copyInvitationLink}
-                className="px-4 py-2 rounded-full bg-[#171412] border border-[#2e2924] text-[#c5a880] hover:border-[#c5a880] text-xs font-medium transition-colors flex items-center gap-1.5"
+                className="px-4 py-2 min-h-[44px] rounded-full bg-white border border-[#EADBCE] text-[#51354F] hover:border-[#F27D72] hover:text-[#F27D72] text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-sm"
               >
                 {copied ? (
-                  <Check className="w-3.5 h-3.5 text-[#86efac]" />
+                  <Check className="w-3.5 h-3.5 text-[#5B9C51]" />
                 ) : (
-                  <Share2 className="w-3.5 h-3.5" />
+                  <Share2 className="w-3.5 h-3.5 text-[#F27D72]" />
                 )}
                 <span>{copied ? "تم النسخ!" : "نسخ الرابط"}</span>
               </button>
@@ -334,19 +335,19 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
             <Link
               href={`/e/${event.slug}`}
               target="_blank"
-              className="px-4 py-2 rounded-full bg-[#171412] border border-[#2e2924] hover:border-[#3d3630] text-[#faf8f5] text-xs font-medium transition-colors flex items-center gap-1.5"
+              className="px-4 py-2 min-h-[44px] rounded-full bg-white border border-[#EADBCE] hover:border-[#51354F] text-[#51354F] text-xs font-semibold transition-colors flex items-center gap-1.5 shadow-sm"
             >
               <span>معاينة كرت الدعوة</span>
-              <ExternalLink className="w-3.5 h-3.5 text-[#c5a880]" />
+              <ExternalLink className="w-3.5 h-3.5 text-[#D6AD65]" />
             </Link>
           </div>
         </div>
 
         {/* Notifications and Banners */}
         {!event.isPaid ? (
-          <div className="mb-6 p-4 rounded-2xl bg-[#1f1716] border border-[#4a2422] text-[#fca5a5] text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="mb-6 p-4 rounded-2xl bg-[#FFF5F3] border border-[#F5B5C8] text-[#7D2921] text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
             <div className="flex items-center gap-2.5">
-              <ShieldAlert className="w-5 h-5 text-[#f87171] shrink-0" />
+              <ShieldAlert className="w-5 h-5 text-[#F27D72] shrink-0" />
               <span>
                 <strong>هذه المناسبة مسودة غير مدفوعة:</strong> رابط الدعوة ورمز الـ QR غير متاحين
                 للضيوف حتى إتمام الدفع ونشر المناسبة.
@@ -354,15 +355,15 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
             </div>
             <Link
               href={`/dashboard/events/${event.id}/checkout?package=${event.packageTier}`}
-              className="px-5 py-2.5 min-h-[44px] rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs hover:bg-[#d8be99] transition-all shrink-0 text-center shadow-sm flex items-center justify-center"
+              className="px-5 py-2.5 min-h-[44px] rounded-full bg-[#F27D72] text-white font-bold text-xs hover:bg-[#E2695E] transition-all shrink-0 text-center shadow-sm flex items-center justify-center"
             >
               الانتقال لصفحة الدفع
             </Link>
           </div>
         ) : !event.isPublished ? (
-          <div className="mb-6 p-4 rounded-2xl bg-[#1c1a15] border border-[#423824] text-[#fcd34d] text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="mb-6 p-4 rounded-2xl bg-[#FEF9EE] border border-[#F3DEB2] text-[#805712] text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-sm">
             <div className="flex items-center gap-2.5">
-              <Sparkles className="w-5 h-5 text-[#c5a880] shrink-0" />
+              <Sparkles className="w-5 h-5 text-[#D6AD65] shrink-0" />
               <span>
                 <strong>تم سداد الباقة بنجاح!</strong> مناسبتكم جاهزة للنشر الآن ليتمكن المدعوون من
                 الوصول لبطاقة الدعوة وتأكيد الحضور ومشاركة الصور.
@@ -371,7 +372,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
             <button
               onClick={handlePublish}
               disabled={publishLoading}
-              className="px-5 py-2.5 min-h-[44px] rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs hover:bg-[#d8be99] transition-all shrink-0 text-center shadow-sm flex items-center justify-center"
+              className="px-5 py-2.5 min-h-[44px] rounded-full bg-[#F27D72] text-white font-bold text-xs hover:bg-[#E2695E] transition-all shrink-0 text-center shadow-sm flex items-center justify-center"
             >
               نشر الدعوة والـ QR الآن
             </button>
@@ -379,21 +380,21 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
         ) : null}
 
         {publishMessage && (
-          <div className="mb-6 p-4 rounded-2xl bg-[#142318] border border-[#23482d] text-[#86efac] text-xs flex items-center gap-2 animate-fadeIn">
-            <CheckCircle className="w-4 h-4 text-[#86efac] shrink-0" />
+          <div className="mb-6 p-4 rounded-2xl bg-[#F0F7EE] border border-[#C5DEC0] text-[#2E6827] text-xs flex items-center gap-2 animate-fadeIn shadow-sm">
+            <CheckCircle className="w-4 h-4 text-[#5B9C51] shrink-0" />
             <span>{publishMessage}</span>
           </div>
         )}
 
         {upgradeSuccess && (
-          <div className="mb-6 p-4 rounded-2xl bg-[#142318] border border-[#23482d] text-[#86efac] text-xs flex items-center gap-2 animate-fadeIn">
-            <CheckCircle className="w-4 h-4 text-[#86efac] shrink-0" />
+          <div className="mb-6 p-4 rounded-2xl bg-[#F0F7EE] border border-[#C5DEC0] text-[#2E6827] text-xs flex items-center gap-2 animate-fadeIn shadow-sm">
+            <CheckCircle className="w-4 h-4 text-[#5B9C51] shrink-0" />
             <span>{upgradeSuccess}</span>
           </div>
         )}
 
-        {/* Tab Navigation (Minimal Line Style) */}
-        <div className="flex items-center gap-2 border-b border-[#26221d] pb-2 mb-8 overflow-x-auto text-xs">
+        {/* Tab Navigation */}
+        <div className="flex items-center gap-2 border-b border-[#EADBCE] pb-3 mb-8 overflow-x-auto text-xs">
           {[
             { id: "overview", label: "نظرة عامة والبيانات" },
             {
@@ -408,15 +409,15 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as typeof activeTab)}
-              className={`px-4 py-2.5 rounded-full transition-all shrink-0 flex items-center gap-2 ${
+              className={`px-4 py-2.5 rounded-full transition-all shrink-0 flex items-center gap-2 text-xs font-semibold ${
                 activeTab === tab.id
-                  ? "bg-[#c5a880] text-[#0c0b0a] font-bold shadow-sm"
-                  : "bg-[#141210] text-[#8e877c] hover:text-[#faf8f5] hover:bg-[#1c1916]"
+                  ? "bg-[#51354F] text-white shadow-sm"
+                  : "bg-white text-[#786C68] hover:text-[#51354F] hover:bg-[#FFFDF9] border border-[#EADBCE]"
               }`}
             >
               <span>{tab.label}</span>
               {tab.badge && (
-                <span className="w-4 h-4 rounded-full bg-[#f87171] text-black font-extrabold text-[10px] flex items-center justify-center">
+                <span className="w-4 h-4 rounded-full bg-[#F27D72] text-white font-extrabold text-[10px] flex items-center justify-center">
                   {tab.badge}
                 </span>
               )}
@@ -428,27 +429,27 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
         {activeTab === "overview" && (
           <div className="space-y-8">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="p-5 rounded-2xl bg-[#141210] border border-[#26221d] space-y-1">
-                <span className="text-[11px] text-[#8e877c] block">الضيوف المؤكد حضورهم</span>
-                <span className="text-2xl font-bold font-mono text-[#faf8f5]">
+              <div className="p-5 rounded-2xl bg-white border border-[#EADBCE] shadow-sm space-y-1">
+                <span className="text-[11px] text-[#786C68] font-medium block">الضيوف المؤكد حضورهم</span>
+                <span className="text-2xl font-bold font-mono text-[#51354F]">
                   {attendingGuests} فرد
                 </span>
               </div>
-              <div className="p-5 rounded-2xl bg-[#141210] border border-[#26221d] space-y-1">
-                <span className="text-[11px] text-[#8e877c] block">إجمالي ردود الـ RSVP</span>
-                <span className="text-2xl font-bold font-mono text-[#faf8f5]">
+              <div className="p-5 rounded-2xl bg-white border border-[#EADBCE] shadow-sm space-y-1">
+                <span className="text-[11px] text-[#786C68] font-medium block">إجمالي ردود الـ RSVP</span>
+                <span className="text-2xl font-bold font-mono text-[#51354F]">
                   {event.rsvps.length} رد
                 </span>
               </div>
-              <div className="p-5 rounded-2xl bg-[#141210] border border-[#26221d] space-y-1">
-                <span className="text-[11px] text-[#8e877c] block">صور بانتظار الاعتماد</span>
-                <span className="text-2xl font-bold font-mono text-[#c5a880]">
+              <div className="p-5 rounded-2xl bg-white border border-[#EADBCE] shadow-sm space-y-1">
+                <span className="text-[11px] text-[#786C68] font-medium block">صور بانتظار الاعتماد</span>
+                <span className="text-2xl font-bold font-mono text-[#F27D72]">
                   {pendingPhotos.length} صورة
                 </span>
               </div>
-              <div className="p-5 rounded-2xl bg-[#141210] border border-[#26221d] space-y-1">
-                <span className="text-[11px] text-[#8e877c] block">ذكريات منشورة بالمعرض</span>
-                <span className="text-2xl font-bold font-mono text-[#faf8f5]">
+              <div className="p-5 rounded-2xl bg-white border border-[#EADBCE] shadow-sm space-y-1">
+                <span className="text-[11px] text-[#786C68] font-medium block">ذكريات منشورة بالمعرض</span>
+                <span className="text-2xl font-bold font-mono text-[#2E6827]">
                   {approvedPhotos.length} ذكرى
                 </span>
               </div>
@@ -456,19 +457,19 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
 
             {/* Pending Photos Prompt */}
             {pendingPhotos.length > 0 && (
-              <div className="p-5 rounded-2xl bg-[#1c1814] border border-[#3d3223] flex items-center justify-between flex-wrap gap-4">
+              <div className="p-5 rounded-2xl bg-[#FFF6F3] border border-[#F5B5C8] flex items-center justify-between flex-wrap gap-4 shadow-sm">
                 <div className="space-y-1">
-                  <h4 className="font-bold text-[#faf8f5] text-sm flex items-center gap-1.5">
-                    <Camera className="w-4 h-4 text-[#c5a880]" />
+                  <h4 className="font-bold text-[#51354F] text-sm flex items-center gap-1.5">
+                    <Camera className="w-4 h-4 text-[#F27D72]" />
                     <span>يوجد {pendingPhotos.length} صور جديدة شاركها الضيوف</span>
                   </h4>
-                  <p className="text-xs text-[#8e877c]">
+                  <p className="text-xs text-[#786C68]">
                     راجع الصور واعتمدها لتظهر فوراً في معرض ذكريات الحفل الحي.
                   </p>
                 </div>
                 <button
                   onClick={() => setActiveTab("photos")}
-                  className="px-5 py-2 rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs hover:bg-[#d8be99] transition-colors shadow-sm"
+                  className="px-5 py-2.5 min-h-[44px] rounded-full bg-[#F27D72] text-white font-bold text-xs hover:bg-[#E2695E] transition-colors shadow-sm"
                 >
                   مراجعة الصور الآن
                 </button>
@@ -476,7 +477,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
             )}
 
             {/* Event Studio Details & Live Card Showcase */}
-            <div className="bg-[#141210] border border-[#26221d] rounded-3xl p-6 sm:p-10 relative overflow-hidden">
+            <div className="bg-white border border-[#EADBCE] rounded-3xl p-6 sm:p-10 relative overflow-hidden shadow-sm">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
                 {/* Left/Preview Column (5 cols) */}
                 <div className="lg:col-span-5 flex justify-center order-2 lg:order-1">
@@ -491,7 +492,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                       welcomeMessage={event.welcomeMessage}
                       eventType={event.eventType}
                       interactive={false}
-                      className="w-full shadow-2xl"
+                      className="w-full shadow-xl"
                     />
                   </div>
                 </div>
@@ -499,45 +500,45 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                 {/* Right/Info Column (7 cols) */}
                 <div className="lg:col-span-7 space-y-6 text-right order-1 lg:order-2">
                   <div>
-                    <span className="text-xs font-display tracking-widest text-[#c5a880] uppercase block">
+                    <span className="text-xs font-serif tracking-widest text-[#D6AD65] uppercase block font-semibold">
                       بطاقة المناسبة المعتمدة
                     </span>
-                    <h3 className="text-2xl sm:text-3xl font-bold font-display text-[#faf8f5] mt-1">
+                    <h3 className="text-2xl sm:text-3xl font-bold font-serif text-[#51354F] mt-1">
                       {event.title}
                     </h3>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                    <div className="p-3.5 rounded-xl bg-[#0c0b0a] border border-[#26221d] space-y-1">
-                      <span className="text-[#8e877c] text-[11px] block">القالب المعتمد:</span>
-                      <span className="font-bold text-[#c5a880]">
+                    <div className="p-3.5 rounded-xl bg-[#FFFDF9] border border-[#EADBCE] space-y-1">
+                      <span className="text-[#786C68] text-[11px] block">القالب المعتمد:</span>
+                      <span className="font-bold text-[#F27D72]">
                         {TEMPLATES[event.templateId]?.nameAr || event.templateId}
                       </span>
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-[#0c0b0a] border border-[#26221d] space-y-1">
-                      <span className="text-[#8e877c] text-[11px] block">باقة الاشتراك:</span>
-                      <span className="font-bold text-[#faf8f5]">باقة {event.packageTier}</span>
+                    <div className="p-3.5 rounded-xl bg-[#FFFDF9] border border-[#EADBCE] space-y-1">
+                      <span className="text-[#786C68] text-[11px] block">باقة الاشتراك:</span>
+                      <span className="font-bold text-[#51354F]">باقة {event.packageTier}</span>
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-[#0c0b0a] border border-[#26221d] space-y-1">
-                      <span className="text-[#8e877c] text-[11px] block">مكان وتفاصيل القاعة:</span>
-                      <span className="text-[#faf8f5] font-medium block">{event.venueName}</span>
-                      <span className="text-[#8e877c] text-[11px]">{event.address}</span>
+                    <div className="p-3.5 rounded-xl bg-[#FFFDF9] border border-[#EADBCE] space-y-1">
+                      <span className="text-[#786C68] text-[11px] block">مكان وتفاصيل القاعة:</span>
+                      <span className="text-[#493B38] font-semibold block">{event.venueName}</span>
+                      <span className="text-[#786C68] text-[11px]">{event.address}</span>
                     </div>
 
-                    <div className="p-3.5 rounded-xl bg-[#0c0b0a] border border-[#26221d] space-y-1">
-                      <span className="text-[#8e877c] text-[11px] block">رابط الحفل المباشر:</span>
-                      <span className="font-mono text-[#c5a880] dir-ltr text-right block text-[11px]">
+                    <div className="p-3.5 rounded-xl bg-[#FFFDF9] border border-[#EADBCE] space-y-1">
+                      <span className="text-[#786C68] text-[11px] block">رابط الحفل المباشر:</span>
+                      <span className="font-mono text-[#D6AD65] dir-ltr text-right block text-[11px] font-semibold">
                         /e/{event.slug}
                       </span>
                     </div>
                   </div>
 
                   {event.welcomeMessage && (
-                    <div className="p-4 rounded-xl bg-[#171412] border border-[#26221d] text-xs">
-                      <span className="text-[#8e877c] text-[11px] block mb-1">رسالة الترحيب بالضيوف:</span>
-                      <p className="text-[#c4bdaf] italic leading-relaxed">{event.welcomeMessage}</p>
+                    <div className="p-4 rounded-xl bg-[#FFFDF9] border border-[#EADBCE] text-xs">
+                      <span className="text-[#786C68] text-[11px] block mb-1">رسالة الترحيب بالضيوف:</span>
+                      <p className="text-[#493B38] italic leading-relaxed">{event.welcomeMessage}</p>
                     </div>
                   )}
 
@@ -545,7 +546,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                     <Link
                       href={`/e/${event.slug}`}
                       target="_blank"
-                      className="px-5 py-2.5 rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs hover:bg-[#d8be99] transition-all flex items-center gap-2 shadow-sm"
+                      className="px-5 py-2.5 min-h-[44px] rounded-full bg-[#F27D72] text-white font-bold text-xs hover:bg-[#E2695E] transition-all flex items-center gap-2 shadow-sm"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                       <span>عرض بطاقة الدعوة الحية للضيوف</span>
@@ -553,7 +554,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
 
                     <button
                       onClick={() => setActiveTab("qr")}
-                      className="px-4 py-2.5 rounded-full bg-[#1c1916] border border-[#2e2924] text-[#faf8f5] hover:border-[#3d3630] text-xs font-medium transition-colors"
+                      className="px-4 py-2.5 min-h-[44px] rounded-full bg-white border border-[#EADBCE] text-[#51354F] hover:border-[#F27D72] text-xs font-semibold transition-colors shadow-sm"
                     >
                       تنزيل بطاقة الـ QR للطباعة
                     </button>
@@ -569,16 +570,16 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
           <div className="space-y-8">
             {/* Pending Section */}
             <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-[#26221d] pb-3">
-                <h3 className="text-base font-bold font-display text-[#faf8f5] flex items-center gap-2">
-                  <Camera className="w-4 h-4 text-[#c5a880]" />
+              <div className="flex items-center justify-between border-b border-[#EADBCE] pb-3">
+                <h3 className="text-base font-bold font-serif text-[#51354F] flex items-center gap-2">
+                  <Camera className="w-4 h-4 text-[#F27D72]" />
                   <span>صور بانتظار المراجعة والاعتماد ({pendingPhotos.length})</span>
                 </h3>
-                <span className="text-xs text-[#8e877c]">لن تظهر هذه الصور حتى تعتمدها بنفسك</span>
+                <span className="text-xs text-[#786C68]">لن تظهر هذه الصور حتى تعتمدها بنفسك</span>
               </div>
 
               {pendingPhotos.length === 0 ? (
-                <div className="p-8 text-center bg-[#141210] border border-[#26221d] rounded-2xl text-xs text-[#8e877c]">
+                <div className="p-8 text-center bg-white border border-[#EADBCE] rounded-2xl text-xs text-[#786C68] shadow-sm">
                   لا توجد صور بانتظار المراجعة حالياً. عندما يمسح ضيوفكم رمز الـ QR سيرفعون لقطاتهم
                   هنا.
                 </div>
@@ -587,29 +588,29 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                   {pendingPhotos.map((photo) => (
                     <div
                       key={photo.id}
-                      className="bg-[#141210] border border-[#2e2924] rounded-2xl overflow-hidden shadow-lg flex flex-col justify-between"
+                      className="bg-white border border-[#EADBCE] rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between"
                     >
-                      <div className="relative aspect-square w-full bg-black">
+                      <div className="relative aspect-square w-full bg-[#FFF9F0]">
                         <Image src={photo.url} alt="صورة الضيف" fill className="object-cover" />
                       </div>
                       <div className="p-4 space-y-3">
                         <div>
-                          <span className="text-xs font-bold text-[#faf8f5] block">
+                          <span className="text-xs font-bold text-[#51354F] block">
                             {photo.guestName || "ضيف كريم"}
                           </span>
                           {photo.message && (
-                            <p className="text-xs text-[#8e877c] italic mt-1 bg-[#0c0b0a] p-2 rounded-lg">
+                            <p className="text-xs text-[#786C68] italic mt-1 bg-[#FFFDF9] border border-[#EADBCE] p-2 rounded-lg">
                               «{photo.message}»
                             </p>
                           )}
                         </div>
 
                         {/* Action buttons */}
-                        <div className="flex items-center gap-2 pt-2 border-t border-[#1c1916]">
+                        <div className="flex items-center gap-2 pt-2 border-t border-[#EADBCE]">
                           <button
                             onClick={() => handleModeratePhoto(photo.id, "APPROVED")}
                             disabled={actionLoading === photo.id}
-                            className="flex-1 py-2 rounded-xl bg-[#c5a880] text-[#0c0b0a] hover:bg-[#d8be99] font-bold text-xs transition-colors flex items-center justify-center gap-1 shadow-sm"
+                            className="flex-1 py-2 rounded-xl bg-[#F27D72] text-white hover:bg-[#E2695E] font-bold text-xs transition-colors flex items-center justify-center gap-1 shadow-sm"
                           >
                             <CheckCircle className="w-3.5 h-3.5" />
                             <span>موافقة ونشر</span>
@@ -617,7 +618,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                           <button
                             onClick={() => handleModeratePhoto(photo.id, "REJECTED")}
                             disabled={actionLoading === photo.id}
-                            className="py-2 px-3 rounded-xl bg-[#171412] hover:bg-[#241312] text-[#f87171] border border-[#2e2924] text-xs font-medium transition-colors flex items-center gap-1"
+                            className="py-2 px-3 rounded-xl bg-white hover:bg-[#FFF0EE] text-[#C24134] border border-[#F5B5C8] text-xs font-medium transition-colors flex items-center gap-1"
                           >
                             <XCircle className="w-3.5 h-3.5" />
                             <span>رفض</span>
@@ -631,14 +632,14 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
             </div>
 
             {/* Approved Section */}
-            <div className="space-y-4 pt-6 border-t border-[#26221d]">
-              <h3 className="text-base font-bold font-display text-[#faf8f5] flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-[#86efac]" />
+            <div className="space-y-4 pt-6 border-t border-[#EADBCE]">
+              <h3 className="text-base font-bold font-serif text-[#51354F] flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-[#5B9C51]" />
                 <span>الذكريات المنشورة في المعرض العام ({approvedPhotos.length})</span>
               </h3>
 
               {approvedPhotos.length === 0 ? (
-                <div className="p-8 text-center bg-[#141210] border border-[#26221d] rounded-2xl text-xs text-[#8e877c]">
+                <div className="p-8 text-center bg-white border border-[#EADBCE] rounded-2xl text-xs text-[#786C68] shadow-sm">
                   لم يتم نشر أي صور بعد في المعرض
                 </div>
               ) : (
@@ -646,13 +647,13 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                   {approvedPhotos.map((photo) => (
                     <div
                       key={photo.id}
-                      className="group relative aspect-square rounded-2xl overflow-hidden bg-[#141210] border border-[#26221d]"
+                      className="group relative aspect-square rounded-2xl overflow-hidden bg-white border border-[#EADBCE] shadow-sm"
                     >
                       <Image src={photo.url} alt="ذكرى" fill className="object-cover" />
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity p-3 flex flex-col justify-between text-right">
+                      <div className="absolute inset-0 bg-[#51354F]/75 opacity-0 group-hover:opacity-100 transition-opacity p-3 flex flex-col justify-between text-right">
                         <button
                           onClick={() => handleDeletePhoto(photo.id)}
-                          className="self-start p-1.5 rounded-full bg-[#f87171]/80 text-white hover:bg-[#f87171] transition-colors"
+                          className="self-start p-1.5 rounded-full bg-[#F27D72] text-white hover:bg-[#E2695E] transition-colors shadow-sm"
                           title="حذف الصورة"
                         >
                           <Trash2 className="w-3.5 h-3.5" />
@@ -660,7 +661,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                         <div>
                           <p className="text-xs font-bold text-white">{photo.guestName}</p>
                           {photo.message && (
-                            <p className="text-[10px] text-neutral-300 truncate">
+                            <p className="text-[10px] text-white/80 truncate">
                               «{photo.message}»
                             </p>
                           )}
@@ -677,24 +678,24 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
         {/* TAB 3: RSVPS */}
         {activeTab === "rsvps" && (
           <div className="space-y-6">
-            <div className="flex items-center justify-between border-b border-[#26221d] pb-3">
-              <h3 className="text-base font-bold font-display text-[#faf8f5] flex items-center gap-2">
-                <Users className="w-4 h-4 text-[#c5a880]" />
+            <div className="flex items-center justify-between border-b border-[#EADBCE] pb-3">
+              <h3 className="text-base font-bold font-serif text-[#51354F] flex items-center gap-2">
+                <Users className="w-4 h-4 text-[#F27D72]" />
                 <span>سجل تأكيدات الحضور (RSVP)</span>
               </h3>
-              <span className="text-xs font-medium text-[#c5a880] px-3 py-1 rounded-full bg-[#1c1814] border border-[#2e2924]">
+              <span className="text-xs font-semibold text-[#51354F] px-3 py-1 rounded-full bg-[#FFF0EE] border border-[#F5B5C8]">
                 {attendingGuests} فرد أكدوا حضورهم
               </span>
             </div>
 
             {event.rsvps.length === 0 ? (
-              <div className="p-12 text-center bg-[#141210] border border-[#26221d] rounded-3xl text-[#8e877c] text-xs">
+              <div className="p-12 text-center bg-white border border-[#EADBCE] rounded-3xl text-[#786C68] text-xs shadow-sm">
                 لم يتم تسجيل أي ردود بعد. شارك رابط الدعوة مع الأهل والأصدقاء ليؤكدوا حضورهم.
               </div>
             ) : (
-              <div className="overflow-x-auto rounded-2xl border border-[#26221d] bg-[#141210]">
+              <div className="overflow-x-auto rounded-2xl border border-[#EADBCE] bg-white shadow-sm">
                 <table className="w-full text-right text-xs">
-                  <thead className="bg-[#171412] text-[#8e877c] border-b border-[#26221d]">
+                  <thead className="bg-[#FFFDF9] text-[#786C68] border-b border-[#EADBCE] font-semibold">
                     <tr>
                       <th className="py-3 px-4">اسم الضيف</th>
                       <th className="py-3 px-4">حالة الحضور</th>
@@ -704,35 +705,35 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                       <th className="py-3 px-4">تاريخ الرد</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#1c1916]">
+                  <tbody className="divide-y divide-[#EADBCE]">
                     {event.rsvps.map((rsvp) => (
-                      <tr key={rsvp.id} className="hover:bg-[#1a1714] transition-colors">
-                        <td className="py-3 px-4 font-bold text-[#faf8f5]">{rsvp.guestName}</td>
+                      <tr key={rsvp.id} className="hover:bg-[#FFF9F0] transition-colors">
+                        <td className="py-3 px-4 font-bold text-[#51354F]">{rsvp.guestName}</td>
                         <td className="py-3 px-4">
                           {rsvp.attendanceStatus === "ATTENDING" ? (
-                            <span className="px-2.5 py-1 rounded-full bg-[#16271c] text-[#86efac] border border-[#23482d] font-medium text-[11px]">
+                            <span className="px-2.5 py-1 rounded-full bg-[#F0F7EE] text-[#2E6827] border border-[#C5DEC0] font-semibold text-[11px]">
                               حاضر بإذن الله
                             </span>
                           ) : rsvp.attendanceStatus === "MAYBE" ? (
-                            <span className="px-2.5 py-1 rounded-full bg-[#2a241a] text-[#fcd34d] border border-[#4d3d22] font-medium text-[11px]">
+                            <span className="px-2.5 py-1 rounded-full bg-[#FEF9EE] text-[#9A6B1A] border border-[#F3DEB2] font-semibold text-[11px]">
                               ربما
                             </span>
                           ) : (
-                            <span className="px-2.5 py-1 rounded-full bg-[#291717] text-[#fca5a5] border border-[#522525] font-medium text-[11px]">
+                            <span className="px-2.5 py-1 rounded-full bg-[#FFF0EE] text-[#C24134] border border-[#F5B5C8] font-semibold text-[11px]">
                               معتذر
                             </span>
                           )}
                         </td>
-                        <td className="py-3 px-4 font-mono font-bold text-[#faf8f5]">
+                        <td className="py-3 px-4 font-mono font-bold text-[#493B38]">
                           {rsvp.attendanceStatus === "ATTENDING" ? `${rsvp.guestCount} أفراد` : "-"}
                         </td>
-                        <td className="py-3 px-4 font-mono text-[#8e877c] dir-ltr text-right">
+                        <td className="py-3 px-4 font-mono text-[#786C68] dir-ltr text-right">
                           {rsvp.phone || "-"}
                         </td>
-                        <td className="py-3 px-4 text-[#8e877c] max-w-xs truncate">
+                        <td className="py-3 px-4 text-[#786C68] max-w-xs truncate">
                           {rsvp.note || "-"}
                         </td>
-                        <td className="py-3 px-4 text-[#5c554b]">
+                        <td className="py-3 px-4 text-[#A89F95]">
                           {new Date(rsvp.createdAt).toLocaleDateString("ar-EG")}
                         </td>
                       </tr>
@@ -748,19 +749,19 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
         {activeTab === "qr" && urls?.qr && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-w-4xl mx-auto">
             {/* Printable Table Card Preview (Editorial Luxury Aesthetic) */}
-            <div className="bg-[#faf8f5] text-[#141210] p-8 sm:p-10 rounded-3xl shadow-2xl border border-[#c5a880]/40 text-center space-y-5">
+            <div className="bg-[#FFFDF9] text-[#493B38] p-8 sm:p-10 rounded-3xl shadow-xl border border-[#EADBCE] text-center space-y-5">
               <div className="space-y-1">
-                <span className="text-[10px] uppercase tracking-widest text-[#8e877c] font-bold block">
+                <span className="text-[10px] uppercase tracking-widest text-[#D6AD65] font-bold block">
                   شاركنا فرحتنا ولحظاتك الجميلة
                 </span>
-                <h3 className="text-3xl font-bold font-display text-[#141210]">
-                  {event.groomName} <span className="text-[#c5a880] font-normal font-serif">&</span>{" "}
+                <h3 className="text-3xl font-bold font-serif text-[#51354F]">
+                  {event.groomName} <span className="text-[#F27D72] font-normal font-serif">&</span>{" "}
                   {event.brideName}
                 </h3>
               </div>
 
               {/* QR Image */}
-              <div className="w-56 h-56 mx-auto bg-white p-3 rounded-2xl border border-neutral-200 shadow-sm flex items-center justify-center">
+              <div className="w-56 h-56 mx-auto bg-white p-3 rounded-2xl border border-[#EADBCE] shadow-sm flex items-center justify-center">
                 <Image
                   src={urls.qr}
                   alt="رمز QR لرفع الصور"
@@ -771,14 +772,14 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
               </div>
 
               <div className="space-y-1">
-                <p className="text-xs font-bold text-[#141210]">امسح الكود بكاميرا هاتفك</p>
-                <p className="text-[11px] text-[#5c554b]">
+                <p className="text-xs font-bold text-[#51354F]">امسح الكود بكاميرا هاتفك</p>
+                <p className="text-[11px] text-[#786C68]">
                   وارفع صورك وتهنئتك لتظهر في ألبوم ذكريات الحفل فوراً
                 </p>
               </div>
 
-              <div className="pt-3 border-t border-neutral-200/80">
-                <span className="text-[10px] text-[#8e877c] font-display">
+              <div className="pt-3 border-t border-[#EADBCE]">
+                <span className="text-[10px] text-[#786C68] font-serif">
                   منصة لحظة • من دعوة… إلى ذكرى لا تُنسى
                 </span>
               </div>
@@ -787,10 +788,10 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
             {/* Actions & Instructions */}
             <div className="space-y-6 text-right">
               <div>
-                <h3 className="text-2xl font-bold font-display text-[#faf8f5]">
+                <h3 className="text-2xl font-bold font-serif text-[#51354F]">
                   بطاقة الطاولة ورمز الـ QR
                 </h3>
-                <p className="text-xs text-[#8e877c] mt-2 leading-relaxed">
+                <p className="text-xs text-[#786C68] mt-2 leading-relaxed">
                   اطبع هذا الرمز وضعه على طاولات المدعوين في القاعة. بمجرد أن يمسح أي ضيف الكود
                   بكاميرا هاتفه، سيفتح له رابط مباشر لرفع الصور دون الحاجة لإنشاء حساب أو تثبيت
                   تطبيقات.
@@ -801,7 +802,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                 <a
                   href={urls.qr}
                   download={`lahzah-qr-${event.slug}.png`}
-                  className="w-full py-3.5 rounded-full bg-[#c5a880] text-[#0c0b0a] font-bold text-xs hover:bg-[#d8be99] transition-all flex items-center justify-center gap-2 shadow-sm"
+                  className="w-full py-3.5 min-h-[44px] rounded-full bg-[#F27D72] text-white font-bold text-xs hover:bg-[#E2695E] transition-all flex items-center justify-center gap-2 shadow-sm"
                 >
                   <Download className="w-4 h-4" />
                   <span>تنزيل الـ QR عالي الدقة للطباعة (PNG)</span>
@@ -812,18 +813,18 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                   download={`lahzah-qr-${event.slug}.svg`}
                   target="_blank"
                   rel="noreferrer"
-                  className="w-full py-3 rounded-full bg-[#171412] border border-[#2e2924] text-[#faf8f5] hover:border-[#3d3630] font-medium text-xs transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-3 min-h-[44px] rounded-full bg-white border border-[#EADBCE] text-[#51354F] hover:border-[#F27D72] font-semibold text-xs transition-colors flex items-center justify-center gap-2 shadow-sm"
                 >
-                  <Download className="w-4 h-4 text-[#c5a880]" />
+                  <Download className="w-4 h-4 text-[#D6AD65]" />
                   <span>تنزيل بصيغة فيكتور للمطابع (SVG)</span>
                 </a>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#141210] border border-[#26221d] text-xs space-y-1">
-                <span className="font-medium text-[#c5a880] block">
+              <div className="p-4 rounded-2xl bg-white border border-[#EADBCE] text-xs space-y-1 shadow-sm">
+                <span className="font-semibold text-[#51354F] block">
                   رابط رفع الصور المباشر للضيوف:
                 </span>
-                <span className="font-mono text-[11px] text-[#8e877c] break-all">{urls.upload}</span>
+                <span className="font-mono text-[11px] text-[#786C68] break-all">{urls.upload}</span>
               </div>
             </div>
           </div>
@@ -833,15 +834,15 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
         {activeTab === "package" && (
           <div className="space-y-8">
             <div className="text-center max-w-xl mx-auto space-y-2">
-              <span className="text-xs text-[#c5a880] font-medium uppercase tracking-wider">
+              <span className="text-xs text-[#D6AD65] font-semibold uppercase tracking-wider">
                 باقات منصة لحظة
               </span>
-              <h3 className="text-2xl sm:text-3xl font-bold font-display text-[#faf8f5]">
+              <h3 className="text-2xl sm:text-3xl font-bold font-serif text-[#51354F]">
                 اختر الباقة المناسبة لمناسبتكم
               </h3>
-              <p className="text-xs text-[#8e877c]">
+              <p className="text-xs text-[#786C68]">
                 باقتكم الحالية:{" "}
-                <span className="font-bold text-[#faf8f5]">
+                <span className="font-bold text-[#51354F]">
                   {PACKAGES[event.packageTier]?.nameAr || event.packageTier}
                 </span>
               </p>
@@ -855,27 +856,34 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                     key={pkg.code}
                     className={`rounded-3xl p-6 sm:p-8 flex flex-col justify-between border transition-all relative ${
                       pkg.isPopular
-                        ? "bg-[#171412] border-[#c5a880] shadow-xl shadow-[#0c0b0a]"
-                        : "bg-[#141210] border-[#26221d]"
+                        ? "bg-white border-[#F27D72] shadow-xl ring-2 ring-[#F27D72]/20"
+                        : "bg-white border-[#EADBCE] shadow-sm"
                     }`}
                   >
                     <div>
-                      <h4 className="text-xl font-bold font-display text-[#faf8f5]">
+                      {pkg.isPopular && (
+                        <div className="absolute -top-3.5 right-6 bg-[#F27D72] text-white text-[11px] font-bold px-3 py-1 rounded-full shadow-sm flex items-center gap-1">
+                          <Heart className="w-3 h-3 fill-current" />
+                          <span>الأكثر طلباً للأعراس</span>
+                        </div>
+                      )}
+
+                      <h4 className="text-xl font-bold font-serif text-[#51354F]">
                         {pkg.nameAr}
                       </h4>
-                      <p className="text-xs text-[#8e877c] mt-1 mb-4">{pkg.taglineAr}</p>
+                      <p className="text-xs text-[#786C68] mt-1 mb-4">{pkg.taglineAr}</p>
 
                       <div className="flex items-baseline gap-1 my-4">
-                        <span className="text-3xl font-extrabold text-[#faf8f5] font-mono">
+                        <span className="text-3xl font-extrabold text-[#51354F] font-mono">
                           {pkg.price}
                         </span>
-                        <span className="text-xs text-[#8e877c]">{pkg.currency}</span>
+                        <span className="text-xs text-[#786C68]">{pkg.currency}</span>
                       </div>
 
-                      <ul className="space-y-2.5 text-xs text-[#c4bdaf] my-6">
+                      <ul className="space-y-2.5 text-xs text-[#493B38] my-6">
                         {pkg.features.map((feat, idx) => (
                           <li key={idx} className="flex items-center gap-2">
-                            <Check className="w-3.5 h-3.5 text-[#c5a880] shrink-0" />
+                            <Check className="w-3.5 h-3.5 text-[#F27D72] shrink-0" />
                             <span>{feat}</span>
                           </li>
                         ))}
@@ -885,10 +893,10 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                     {!event.isPaid ? (
                       <Link
                         href={`/dashboard/events/${event.id}/checkout?package=${pkg.code}`}
-                        className={`w-full py-3.5 rounded-full font-bold text-xs text-center transition-all block ${
+                        className={`w-full py-3.5 min-h-[44px] rounded-full font-bold text-xs text-center transition-all flex items-center justify-center ${
                           pkg.isPopular
-                            ? "bg-[#c5a880] text-[#0c0b0a] hover:bg-[#d8be99] shadow-sm"
-                            : "bg-[#1a1714] text-[#faf8f5] border border-[#2e2924] hover:border-[#3d3630]"
+                            ? "bg-[#F27D72] text-white hover:bg-[#E2695E] shadow-sm"
+                            : "bg-[#FFFDF9] text-[#51354F] border border-[#EADBCE] hover:border-[#F27D72]"
                         }`}
                       >
                         اختيار وسداد {pkg.nameAr} ({pkg.price} {pkg.currency})
@@ -896,12 +904,12 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
                     ) : (
                       <Link
                         href={`/dashboard/events/${event.id}/checkout?package=${pkg.code}`}
-                        className={`w-full py-3 rounded-full font-medium text-xs text-center transition-all block ${
+                        className={`w-full py-3 min-h-[44px] rounded-full font-semibold text-xs text-center transition-all flex items-center justify-center ${
                           isCurrent
-                            ? "bg-[#171412] text-[#5c554b] border border-[#26221d] pointer-events-none"
+                            ? "bg-[#FFFDF9] text-[#A89F95] border border-[#EADBCE] pointer-events-none"
                             : pkg.isPopular
-                            ? "bg-[#c5a880] text-[#0c0b0a] hover:bg-[#d8be99] shadow-sm"
-                            : "bg-[#1a1714] text-[#faf8f5] border border-[#2e2924] hover:border-[#3d3630]"
+                            ? "bg-[#F27D72] text-white hover:bg-[#E2695E] shadow-sm"
+                            : "bg-[#FFFDF9] text-[#51354F] border border-[#EADBCE] hover:border-[#F27D72]"
                         }`}
                       >
                         {isCurrent ? "الباقة المفعلة حالياً" : `ترقية إلى ${pkg.nameAr}`}

@@ -4,16 +4,49 @@
   :root {
     --font-cairo: 'Cairo', system-ui, -apple-system, sans-serif;
     --font-amiri: 'Amiri', serif;
+
+    /* Joyful Luxury Celebration Palette */
+    --color-warm-ivory: #FFF9F0;
+    --color-ivory-surface: #FFFDF9;
+    --color-ivory-muted: #F8F1E5;
+    --color-celebration-coral: #F27D72;
+    --color-coral-hover: #DE685D;
+    --color-rose-pink: #F5B5C8;
+    --color-rose-soft: #FDF0F4;
+    --color-peach: #FFCBA4;
+    --color-peach-light: #FFF4EC;
+    --color-champagne-gold: #D6AD65;
+    --color-champagne-light: #FAF3E5;
+    --color-fresh-sage: #A8C5A0;
+    --color-sage-soft: #F1F7F0;
+    --color-deep-plum: #51354F;
+    --color-plum-hover: #3E273C;
+    --color-warm-brown: #493B38;
+    --color-warm-brown-muted: #6E5D59;
+    --color-warm-brown-light: #9B8D89;
+    --color-warm-border: #EADBCE;
+    --color-warm-border-subtle: #F3EAE1;
+    --color-white: #FFFFFF;
+
+    /* Elevation & Shadows */
+    --shadow-warm-xs: 0 1px 3px rgba(73, 59, 56, 0.04), 0 1px 2px rgba(73, 59, 56, 0.02);
+    --shadow-warm-sm: 0 4px 12px rgba(73, 59, 56, 0.06), 0 1px 3px rgba(73, 59, 56, 0.03);
+    --shadow-warm-md: 0 12px 28px -4px rgba(73, 59, 56, 0.08), 0 4px 12px -2px rgba(73, 59, 56, 0.04);
+    --shadow-warm-lg: 0 20px 40px -8px rgba(73, 59, 56, 0.12), 0 8px 16px -4px rgba(73, 59, 56, 0.04);
+    --shadow-coral-glow: 0 10px 25px -3px rgba(242, 125, 114, 0.35);
+    --shadow-gold-glow: 0 10px 25px -3px rgba(214, 173, 101, 0.3);
   }
 
   html {
     scroll-behavior: smooth;
     font-family: var(--font-cairo);
+    background-color: var(--color-warm-ivory);
+    color: var(--color-warm-brown);
   }
 
   body {
-    background-color: #0c0b0a;
-    color: #f7f4ee;
+    background-color: var(--color-warm-ivory);
+    color: var(--color-warm-brown);
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -34,59 +67,133 @@
   font-family: var(--font-cairo), sans-serif;
 }
 
-/* Subtle Editorial Champagne Glow & Text Accents */
-.text-champagne {
-  color: #c5a880;
+/* Color Utility Tokens */
+.bg-warm-ivory { background-color: #FFF9F0; }
+.bg-ivory-surface { background-color: #FFFDF9; }
+.bg-ivory-muted { background-color: #F8F1E5; }
+.bg-celebration-coral { background-color: #F27D72; }
+.bg-rose-pink { background-color: #F5B5C8; }
+.bg-rose-soft { background-color: #FDF0F4; }
+.bg-peach-light { background-color: #FFF4EC; }
+.bg-champagne-light { background-color: #FAF3E5; }
+.bg-sage-soft { background-color: #F1F7F0; }
+.bg-deep-plum { background-color: #51354F; }
+
+.text-warm-brown { color: #493B38; }
+.text-warm-brown-muted { color: #6E5D59; }
+.text-warm-brown-light { color: #9B8D89; }
+.text-celebration-coral { color: #F27D72; }
+.text-deep-plum { color: #51354F; }
+.text-champagne-gold { color: #D6AD65; }
+.text-fresh-sage { color: #5C8852; }
+
+.border-warm { border-color: #EADBCE; }
+.border-warm-subtle { border-color: #F3EAE1; }
+.border-coral { border-color: #F27D72; }
+.border-champagne { border-color: #D6AD65; }
+
+/* Elegant Gradients */
+.bg-gradient-celebration {
+  background: linear-gradient(135deg, #FFF9F0 0%, #FFF3EC 50%, #FDF0F4 100%);
 }
 
-.text-champagne-light {
-  color: #e8d8c3;
+.bg-gradient-coral {
+  background: linear-gradient(135deg, #F27D72 0%, #F5978E 100%);
 }
 
-.bg-champagne {
-  background-color: #c5a880;
+.bg-gradient-plum {
+  background: linear-gradient(135deg, #51354F 0%, #684265 100%);
 }
 
-.border-champagne-subtle {
-  border-color: rgba(197, 168, 128, 0.2);
+.bg-gradient-champagne {
+  background: linear-gradient(135deg, #D6AD65 0%, #E6C588 100%);
 }
 
+/* Shadows */
+.shadow-warm-sm { box-shadow: var(--shadow-warm-sm); }
+.shadow-warm-md { box-shadow: var(--shadow-warm-md); }
+.shadow-warm-lg { box-shadow: var(--shadow-warm-lg); }
+.shadow-coral-glow { box-shadow: var(--shadow-coral-glow); }
+.shadow-gold-glow { box-shadow: var(--shadow-gold-glow); }
+
+/* Dividers */
 .hairline-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(197, 168, 128, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(214, 173, 101, 0.35), transparent);
 }
 
-/* Elegant Animation Keyframes */
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
+.hairline-divider-rose {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245, 181, 200, 0.4), transparent);
+}
+
+/* Animations & Celebration Micro-interactions */
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
   }
-  to {
+  50% {
+    transform: translateY(-8px) rotate(1.5deg);
+  }
+}
+
+@keyframes gentlePulse {
+  0%, 100% {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  50% {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1.03);
   }
 }
 
-.animate-fade-up {
-  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+@keyframes ribbonSway {
+  0%, 100% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
 }
 
-/* Custom Scrollbar - Minimal & Discrete */
+.animate-float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.animate-gentle-pulse {
+  animation: gentlePulse 4s ease-in-out infinite;
+}
+
+.animate-ribbon-sway {
+  animation: ribbonSway 5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom Scrollbar - Warm & Soft */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0c0b0a;
+  background: #FFF9F0;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #23201b;
+  background: #EADBCE;
   border-radius: 9999px;
+  border: 2px solid #FFF9F0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3b362e;
+  background: #D5C2B1;
 }

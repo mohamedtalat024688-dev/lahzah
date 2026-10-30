@@ -40,20 +40,20 @@ export default async function GuestUploadPage({ params }: PageProps) {
   const coupleNames = `${event.groomName} و ${event.brideName}`;
 
   return (
-    <div className="min-h-screen bg-[#0c0b0a] text-[#faf8f5] py-8 px-4 flex flex-col justify-between selection:bg-[#c5a880]/30 selection:text-[#f5f2eb]">
+    <div className="min-h-screen bg-[#FFF9F0] text-[#493B38] py-8 px-4 flex flex-col justify-between selection:bg-[#F27D72]/20 selection:text-[#51354F]">
       {/* Top Bar */}
       <div className="max-w-md mx-auto w-full flex items-center justify-between mb-6">
         <Link
           href={`/e/${event.slug}`}
-          className="flex items-center gap-1.5 text-xs text-[#8e877c] hover:text-[#c5a880] transition-colors"
+          className="flex items-center gap-1.5 text-xs text-[#786C68] hover:text-[#F27D72] transition-colors"
         >
           <ArrowRight className="w-3.5 h-3.5" />
           <span>العودة لصفحة الدعوة</span>
         </Link>
 
-        <div className="flex items-center gap-1.5 text-xs text-[#8e877c]">
-          <span className="font-display">لحظة</span>
-          <Sparkles className="w-3 h-3 text-[#c5a880]" />
+        <div className="flex items-center gap-1.5 text-xs text-[#51354F] font-semibold">
+          <span className="font-serif">لحظة</span>
+          <Sparkles className="w-3 h-3 text-[#F27D72]" />
         </div>
       </div>
 
@@ -68,11 +68,11 @@ export default async function GuestUploadPage({ params }: PageProps) {
 
       {/* Bottom info */}
       <div className="max-w-md mx-auto w-full text-center mt-8 space-y-1.5">
-        <div className="flex items-center justify-center gap-1.5 text-xs text-[#8e877c]">
+        <div className="flex items-center justify-center gap-1.5 text-xs text-[#786C68]">
           <span>أدام الله الأفراح بدياركم العامرة</span>
-          <Heart className="w-3 h-3 text-[#c5a880] fill-[#c5a880]" />
+          <Heart className="w-3 h-3 text-[#F27D72] fill-[#F27D72]" />
         </div>
-        <p className="text-[10px] text-[#5c554b] font-display">منصة لحظة لتوثيق أسعد الذكريات</p>
+        <p className="text-[10px] text-[#A89F95] font-serif">منصة لحظة لتوثيق أسعد الذكريات</p>
       </div>
     </div>
   );
