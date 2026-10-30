@@ -36,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ar" dir="rtl" className={`${cairo.variable} ${amiri.variable}`} suppressHydrationWarning>
-      <body className="min-h-screen bg-[#FFF9F0] text-[#493B38] antialiased selection:bg-[#F27D72]/20 selection:text-[#51354F] font-sans">
+      <body className="min-h-screen bg-[#FFF9F5] text-[#493B3B] antialiased selection:bg-[#790D20]/15 selection:text-[#390E19] font-sans">
         {children}
       </body>
     </html>

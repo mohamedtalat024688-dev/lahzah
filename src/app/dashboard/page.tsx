@@ -91,25 +91,25 @@ export default function DashboardPage() {
   const otherEvents = events.slice(1);
 
   return (
-    <div className="min-h-screen bg-[#FFF9F0] text-[#493B38] flex flex-col justify-between selection:bg-[#F27D72]/20 selection:text-[#51354F] font-body relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#FFF9F5] text-[#493B3B] flex flex-col justify-between selection:bg-[#790D20]/15 selection:text-[#390E19] font-body relative overflow-x-hidden">
       <CelebrationPetals />
       <Navbar />
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full flex-1 relative z-10">
         {/* Top Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10 pb-6 border-b border-[#EADBCE]">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-10 pb-6 border-b border-[#EFE4DC]">
           <div className="space-y-1">
-            <h1 className="text-2xl sm:text-3xl font-bold font-display text-[#51354F]">
+            <h1 className="text-2xl sm:text-3xl font-bold font-serif text-[#390E19]">
               أهلاً بكم في استوديو لحظة ✦
             </h1>
-            <p className="text-xs sm:text-sm text-[#6E5D59]">
+            <p className="text-xs sm:text-sm text-[#8B7778]">
               تابعوا بطاقة دعوتكم الرقمية وتأكيدات الحضور وألبوم ذكريات ضيوفكم
             </p>
           </div>
 
           <Link
             href="/dashboard/events/new"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#F27D72] text-white font-bold text-xs hover:bg-[#DE685D] transition-all shadow-coral-glow hover:scale-105 active:scale-95 min-h-[44px]"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#790D20] text-white font-bold text-xs hover:bg-[#630A19] transition-all shadow-[0_4px_12px_rgba(121,13,32,0.25)] hover:scale-[1.01] active:scale-[0.99] min-h-[44px]"
           >
             <PlusCircle className="w-4 h-4" />
             <span>إنشاء مناسبة جديدة</span>
@@ -117,28 +117,28 @@ export default function DashboardPage() {
         </div>
 
         {loading ? (
-          <div className="py-24 text-center flex flex-col items-center justify-center text-[#6E5D59] space-y-3">
-            <Loader2 className="w-8 h-8 animate-spin text-[#F27D72]" />
+          <div className="py-24 text-center flex flex-col items-center justify-center text-[#8B7778] space-y-3">
+            <Loader2 className="w-8 h-8 animate-spin text-[#790D20]" />
             <p className="text-xs">جاري تجهيز استوديو مناسباتكم...</p>
           </div>
         ) : events.length === 0 ? (
-          /* Empty State: Warm & Romantic */
-          <div className="py-16 px-6 text-center bg-[#FFFDF9] border border-[#EADBCE] rounded-[2.5rem] max-w-xl mx-auto space-y-5 shadow-warm-sm">
-            <div className="w-16 h-16 rounded-full bg-[#FFF4EC] text-[#F27D72] border border-[#FFCBA4] flex items-center justify-center mx-auto shadow-sm">
-              <Heart className="w-7 h-7 text-[#F27D72] fill-[#F27D72]/20" />
+          /* Empty State: Warm Burgundy Luxury */
+          <div className="py-16 px-6 text-center bg-[#FFFDFC] border border-[#EFE4DC] rounded-[2.5rem] max-w-xl mx-auto space-y-5 shadow-soft-sm">
+            <div className="w-16 h-16 rounded-full bg-[#FAF2F3] text-[#790D20] border border-[#F1DEDF] flex items-center justify-center mx-auto shadow-sm">
+              <Heart className="w-7 h-7 text-[#790D20] fill-[#790D20]/20" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-2xl font-bold font-display text-[#51354F]">
+              <h3 className="text-2xl font-bold font-serif text-[#390E19]">
                 من هنا تبدأ أولى ذكرياتكم السعيدة
               </h3>
-              <p className="text-[#6E5D59] text-xs leading-relaxed max-w-md mx-auto">
+              <p className="text-[#8B7778] text-xs leading-relaxed max-w-md mx-auto">
                 لم تقم بإنشاء أي بطاقة دعوة بعد. صمم بطاقة رقمية تفاعلية تليق بمقام ليلتكم وشاركها مع
                 الأهل والأحباب بكل فخامة.
               </p>
             </div>
             <Link
               href="/dashboard/events/new"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#F27D72] text-white font-bold text-xs hover:bg-[#DE685D] transition-all shadow-coral-glow hover:scale-105 active:scale-95 min-h-[44px]"
+              className="inline-flex items-center gap-2 px-7 py-3 rounded-full bg-[#790D20] text-white font-bold text-xs hover:bg-[#630A19] transition-all shadow-[0_4px_12px_rgba(121,13,32,0.25)] hover:scale-105 active:scale-95 min-h-[44px]"
             >
               <PlusCircle className="w-4 h-4" />
               <span>ابدأ تصميم بطاقتكم الأولى</span>
@@ -149,19 +149,19 @@ export default function DashboardPage() {
             {/* Primary Event Showcase */}
             {primaryEvent && (
               <section className="space-y-4">
-                <div className="flex items-center justify-between text-xs text-[#6E5D59] px-1">
-                  <span className="font-semibold text-[#51354F] flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-[#F27D72]" />
+                <div className="flex items-center justify-between text-xs text-[#8B7778] px-1">
+                  <span className="font-semibold text-[#390E19] flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-[#790D20]" />
                     <span>استوديو مناسبتكم القادمة</span>
                   </span>
-                  <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-[#FFFDF9] border border-[#EADBCE] text-[#51354F]">
+                  <span className="text-[11px] font-mono px-2.5 py-0.5 rounded-full bg-white border border-[#EFE4DC] text-[#390E19]">
                     باقة {primaryEvent.packageTier}
                   </span>
                 </div>
 
-                <div className="bg-[#FFFDF9] border border-[#EADBCE] rounded-[2.5rem] p-6 sm:p-10 relative overflow-hidden shadow-warm-sm">
+                <div className="bg-[#FFFDFC] border border-[#EFE4DC] rounded-[2.5rem] p-6 sm:p-10 relative overflow-hidden shadow-soft-sm">
                   {/* Subtle corner aura */}
-                  <div className="absolute top-0 left-0 w-80 h-80 bg-gradient-to-br from-[#F5B5C8]/20 via-[#FFCBA4]/10 to-transparent rounded-br-full pointer-events-none" />
+                  <div className="absolute top-0 left-0 w-80 h-80 bg-gradient-to-br from-[#F1DEDF]/30 via-[#D8B8B8]/15 to-transparent rounded-br-full pointer-events-none" />
 
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center relative z-10">
                     {/* LEFT / PREVIEW COLUMN (Desktop 5 cols) */}
@@ -174,7 +174,7 @@ export default function DashboardPage() {
                           eventDate={primaryEvent.eventDate}
                           venueName={primaryEvent.venueName}
                           interactive={false}
-                          className="w-full transform hover:scale-[1.02] transition-transform duration-300"
+                          className="w-full transform hover:scale-[1.01] transition-transform duration-300"
                         />
                       </div>
                     </div>
@@ -185,17 +185,17 @@ export default function DashboardPage() {
                       <div className="flex flex-wrap items-center justify-between gap-3">
                         <div className="inline-flex items-center gap-2">
                           {primaryEvent.isPublished ? (
-                            <span className="px-3.5 py-1.5 rounded-full bg-[#F1F7F0] text-[#5C8852] border border-[#A8C5A0] text-xs font-semibold flex items-center gap-1.5 shadow-sm">
+                            <span className="px-3.5 py-1.5 rounded-full bg-[#F0F7F1] text-[#3D7A42] border border-[#D5EAD7] text-xs font-semibold flex items-center gap-1.5 shadow-sm">
                               <CheckCircle2 className="w-3.5 h-3.5" />
                               <span>منشورة ومتاحة للضيوف ✦</span>
                             </span>
                           ) : primaryEvent.isPaid ? (
-                            <span className="px-3.5 py-1.5 rounded-full bg-[#FAF3E5] text-[#D6AD65] border border-[#D6AD65]/40 text-xs font-semibold flex items-center gap-1.5 shadow-sm">
+                            <span className="px-3.5 py-1.5 rounded-full bg-[#FEF9EE] text-[#B37D22] border border-[#F6E5BF] text-xs font-semibold flex items-center gap-1.5 shadow-sm">
                               <Clock className="w-3.5 h-3.5" />
                               <span>مسودة مدفوعة • جاهزة للنشر</span>
                             </span>
                           ) : (
-                            <span className="px-3.5 py-1.5 rounded-full bg-[#FFF4EC] text-[#DE685D] border border-[#FFCBA4] text-xs font-semibold flex items-center gap-1.5 shadow-sm">
+                            <span className="px-3.5 py-1.5 rounded-full bg-[#FFF0F0] text-[#A82323] border border-[#F1DEDF] text-xs font-semibold flex items-center gap-1.5 shadow-sm">
                               <CreditCard className="w-3.5 h-3.5" />
                               <span>مسودة • غير مدفوعة</span>
                             </span>
@@ -204,7 +204,7 @@ export default function DashboardPage() {
 
                         <Link
                           href={`/dashboard/events/${primaryEvent.id}`}
-                          className="px-4 py-2.5 sm:py-1.5 min-h-[44px] sm:min-h-0 rounded-full bg-[#FFF9F0] border border-[#EADBCE] text-[#51354F] hover:text-[#F27D72] hover:border-[#F27D72]/40 text-xs transition-colors flex items-center justify-center gap-1 font-semibold shadow-warm-xs"
+                          className="px-4 py-2.5 sm:py-1.5 min-h-[44px] sm:min-h-0 rounded-full bg-[#FFF9F5] border border-[#EFE4DC] text-[#390E19] hover:text-[#790D20] hover:border-[#790D20] text-xs transition-colors flex items-center justify-center gap-1 font-semibold shadow-soft-xs"
                         >
                           <span>استوديو الإدارة الكاملة</span>
                           <ChevronLeft className="w-3.5 h-3.5" />
@@ -213,22 +213,22 @@ export default function DashboardPage() {
 
                       {/* Couple Names & Event Details */}
                       <div className="space-y-3">
-                        <p className="text-xs uppercase tracking-wider font-semibold text-[#F27D72]">
+                        <p className="text-xs uppercase tracking-wider font-semibold text-[#790D20]">
                           {primaryEvent.eventType === "WEDDING"
                             ? "حفل زفاف مبارك"
                             : primaryEvent.eventType === "ENGAGEMENT"
                             ? "حفل خطوبة مبارك"
                             : "مناسبة خاصة"}
                         </p>
-                        <h2 className="text-3xl sm:text-4xl font-bold font-display text-[#51354F] tracking-wide leading-tight">
+                        <h2 className="text-3xl sm:text-4xl font-bold font-serif text-[#390E19] tracking-wide leading-tight">
                           {primaryEvent.groomName}
-                          <span className="text-[#F27D72] mx-3 font-serif font-normal">&</span>
+                          <span className="text-[#790D20] mx-3 font-serif font-normal">&</span>
                           {primaryEvent.brideName}
                         </h2>
 
-                        <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-[#6E5D59] pt-1">
+                        <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-[#8B7778] pt-1">
                           <div className="flex items-center gap-2">
-                            <Calendar className="w-4 h-4 text-[#D6AD65]" />
+                            <Calendar className="w-4 h-4 text-[#D6B77A]" />
                             <span>
                               {new Date(primaryEvent.eventDate).toLocaleDateString("ar-EG", {
                                 weekday: "long",
@@ -239,7 +239,7 @@ export default function DashboardPage() {
                             </span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#EADBCE]" />
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#EFE4DC]" />
                             <span>{primaryEvent.venueName}</span>
                           </div>
                         </div>
@@ -248,36 +248,36 @@ export default function DashboardPage() {
                       {/* Contextual Action Area */}
                       <div className="pt-2">
                         {!primaryEvent.isPaid ? (
-                          <div className="p-5 rounded-2xl bg-[#FFF4EC] border border-[#FFCBA4] space-y-3 text-right">
+                          <div className="p-5 rounded-2xl bg-[#FFF9F5] border border-[#EFE4DC] space-y-3 text-right">
                             <div className="space-y-0.5">
-                              <p className="text-xs font-bold text-[#51354F]">
+                              <p className="text-xs font-bold text-[#390E19]">
                                 بطاقة دعوتكم جاهزة بانتظار التفعيل
                               </p>
-                              <p className="text-[11px] text-[#6E5D59] leading-relaxed">
+                              <p className="text-[11px] text-[#8B7778] leading-relaxed">
                                 أكمل سداد باقة المناسبة لتفعيل الرابط ورمز الـ QR وبدء استقبال تأكيدات الحضور والصور.
                               </p>
                             </div>
                             <Link
                               href={`/dashboard/events/${primaryEvent.id}/checkout?package=${primaryEvent.packageTier}`}
-                              className="w-full py-3.5 rounded-full bg-[#F27D72] text-white font-bold text-xs hover:bg-[#DE685D] transition-all flex items-center justify-center gap-2 shadow-coral-glow min-h-[44px]"
+                              className="w-full py-3.5 rounded-full bg-[#790D20] text-white font-bold text-xs hover:bg-[#630A19] transition-all flex items-center justify-center gap-2 shadow-[0_4px_12px_rgba(121,13,32,0.25)] min-h-[44px]"
                             >
                               <CreditCard className="w-3.5 h-3.5" />
                               <span>ادفع وانشر دعوتك الآن</span>
                             </Link>
                           </div>
                         ) : !primaryEvent.isPublished ? (
-                          <div className="p-5 rounded-2xl bg-[#FAF3E5] border border-[#D6AD65]/40 space-y-3 text-right">
+                          <div className="p-5 rounded-2xl bg-[#FAF4E8] border border-[#D6B77A]/40 space-y-3 text-right">
                             <div className="space-y-0.5">
-                              <p className="text-xs font-bold text-[#51354F]">
+                              <p className="text-xs font-bold text-[#390E19]">
                                 تم سداد الباقة بنجاح! المناسبة جاهزة للنشر
                               </p>
-                              <p className="text-[11px] text-[#6E5D59]">
+                              <p className="text-[11px] text-[#8B7778]">
                                 انشر بطاقة الدعوة الآن ليتمكن الضيوف من فتحها وتأكيد الحضور.
                               </p>
                             </div>
                             <Link
                               href={`/dashboard/events/${primaryEvent.id}`}
-                              className="w-full py-3.5 rounded-full bg-[#F27D72] text-white font-bold text-xs hover:bg-[#DE685D] transition-all flex items-center justify-center gap-2 shadow-coral-glow min-h-[44px]"
+                              className="w-full py-3.5 rounded-full bg-[#790D20] text-white font-bold text-xs hover:bg-[#630A19] transition-all flex items-center justify-center gap-2 shadow-[0_4px_12px_rgba(121,13,32,0.25)] min-h-[44px]"
                             >
                               <Sparkles className="w-3.5 h-3.5" />
                               <span>نشر الدعوة وتفعيل الرابط</span>
@@ -287,7 +287,7 @@ export default function DashboardPage() {
                           <div className="flex flex-wrap items-center gap-3">
                             <Link
                               href={`/dashboard/events/${primaryEvent.id}`}
-                              className="px-6 py-3 rounded-full bg-[#F27D72] text-white font-bold text-xs hover:bg-[#DE685D] transition-all flex items-center gap-2 shadow-coral-glow min-h-[44px]"
+                              className="px-6 py-3 rounded-full bg-[#790D20] text-white font-bold text-xs hover:bg-[#630A19] transition-all flex items-center gap-2 shadow-[0_4px_12px_rgba(121,13,32,0.25)] min-h-[44px]"
                             >
                               <span>إدارة ومتابعة الحضور</span>
                               <ArrowRight className="w-3.5 h-3.5" />
@@ -295,16 +295,16 @@ export default function DashboardPage() {
                             <Link
                               href={`/e/${primaryEvent.slug}`}
                               target="_blank"
-                              className="px-5 py-3 rounded-full bg-[#FFF9F0] border border-[#EADBCE] text-[#51354F] hover:text-[#F27D72] font-semibold text-xs transition-colors flex items-center gap-2 min-h-[44px] shadow-warm-xs"
+                              className="px-5 py-3 rounded-full bg-[#FFF9F5] border border-[#EFE4DC] text-[#390E19] hover:text-[#790D20] font-semibold text-xs transition-colors flex items-center gap-2 min-h-[44px] shadow-soft-xs"
                             >
-                              <ExternalLink className="w-3.5 h-3.5 text-[#D6AD65]" />
+                              <ExternalLink className="w-3.5 h-3.5 text-[#D6B77A]" />
                               <span>عرض كرت الدعوة</span>
                             </Link>
                             <button
                               onClick={() => handleShare(primaryEvent)}
-                              className="px-4 py-3 rounded-full bg-[#FFF9F0] border border-[#EADBCE] text-[#6E5D59] hover:text-[#51354F] text-xs font-semibold transition-colors flex items-center gap-1.5 min-h-[44px] shadow-warm-xs"
+                              className="px-4 py-3 rounded-full bg-[#FFF9F5] border border-[#EFE4DC] text-[#8B7778] hover:text-[#790D20] text-xs font-semibold transition-colors flex items-center gap-1.5 min-h-[44px] shadow-soft-xs"
                             >
-                              <Share2 className="w-3.5 h-3.5 text-[#F27D72]" />
+                              <Share2 className="w-3.5 h-3.5 text-[#790D20]" />
                               <span>{copiedSlug === primaryEvent.slug ? "تم النسخ!" : "مشاركة"}</span>
                             </button>
                           </div>
@@ -312,36 +312,36 @@ export default function DashboardPage() {
                       </div>
 
                       {/* Organic Activity Indicators */}
-                      <div className="pt-4 border-t border-[#F3EAE1] grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
+                      <div className="pt-4 border-t border-[#EFE4DC] grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
                         <div className="space-y-1">
-                          <span className="text-[11px] text-[#6E5D59] flex items-center gap-1.5">
-                            <Users className="w-3.5 h-3.5 text-[#F27D72]" />
+                          <span className="text-[11px] text-[#8B7778] flex items-center gap-1.5">
+                            <Users className="w-3.5 h-3.5 text-[#790D20]" />
                             <span>تأكيدات الحضور (RSVP)</span>
                           </span>
-                          <p className="font-mono text-base font-bold text-[#51354F]">
+                          <p className="font-mono text-base font-bold text-[#390E19]">
                             {primaryEvent.stats.attendingGuests} فرد مؤكد
                           </p>
                         </div>
 
                         <div className="space-y-1">
-                          <span className="text-[11px] text-[#6E5D59] flex items-center gap-1.5">
-                            <Camera className="w-3.5 h-3.5 text-[#D6AD65]" />
+                          <span className="text-[11px] text-[#8B7778] flex items-center gap-1.5">
+                            <Camera className="w-3.5 h-3.5 text-[#D6B77A]" />
                             <span>ألبوم الذكريات</span>
                           </span>
-                          <p className="font-mono text-base font-bold text-[#51354F]">
+                          <p className="font-mono text-base font-bold text-[#390E19]">
                             {primaryEvent.stats.approvedPhotos} ذكرى منشورة
                           </p>
                         </div>
 
                         {primaryEvent.stats.pendingPhotos > 0 && (
                           <div className="space-y-1 col-span-2 sm:col-span-1">
-                            <span className="text-[11px] text-[#DE685D] font-semibold flex items-center gap-1.5">
-                              <Clock className="w-3.5 h-3.5 text-[#DE685D]" />
+                            <span className="text-[11px] text-[#790D20] font-semibold flex items-center gap-1.5">
+                              <Clock className="w-3.5 h-3.5 text-[#790D20]" />
                               <span>صور بانتظار المراجعة</span>
                             </span>
                             <Link
                               href={`/dashboard/events/${primaryEvent.id}?tab=photos`}
-                              className="font-mono text-sm font-bold text-[#DE685D] hover:underline block"
+                              className="font-mono text-sm font-bold text-[#790D20] hover:underline block"
                             >
                               {primaryEvent.stats.pendingPhotos} صور جديدة
                             </Link>
@@ -357,18 +357,18 @@ export default function DashboardPage() {
             {/* Other Events List */}
             {otherEvents.length > 0 && (
               <section className="space-y-4 pt-6">
-                <h3 className="text-lg font-bold font-display text-[#51354F]">
+                <h3 className="text-lg font-bold font-serif text-[#390E19]">
                   مناسباتكم الأخرى
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {otherEvents.map((evt) => (
                     <div
                       key={evt.id}
-                      className="p-6 rounded-3xl bg-[#FFFDF9] border border-[#EADBCE] hover:border-[#D6AD65] transition-all flex flex-col justify-between shadow-warm-xs"
+                      className="p-6 rounded-3xl bg-[#FFFDFC] border border-[#EFE4DC] hover:border-[#790D20] transition-all flex flex-col justify-between shadow-soft-xs"
                     >
                       <div className="space-y-2">
                         <div className="flex items-center justify-between text-xs">
-                          <span className="text-[11px] text-[#6E5D59]">
+                          <span className="text-[11px] text-[#8B7778]">
                             {new Date(evt.eventDate).toLocaleDateString("ar-EG", {
                               year: "numeric",
                               month: "short",
@@ -378,26 +378,26 @@ export default function DashboardPage() {
                           <span
                             className={`text-[10px] px-2.5 py-0.5 rounded-full font-bold ${
                               evt.isPublished
-                                ? "bg-[#F1F7F0] text-[#5C8852]"
-                                : "bg-[#FAF3E5] text-[#D6AD65]"
+                                ? "bg-[#F0F7F1] text-[#3D7A42]"
+                                : "bg-[#FAF4E8] text-[#B37D22]"
                             }`}
                           >
                             {evt.isPublished ? "منشورة" : "مسودة"}
                           </span>
                         </div>
-                        <h4 className="font-bold font-display text-base text-[#51354F]">
+                        <h4 className="font-bold font-serif text-base text-[#390E19]">
                           {evt.groomName} & {evt.brideName}
                         </h4>
-                        <p className="text-xs text-[#6E5D59]">{evt.venueName}</p>
+                        <p className="text-xs text-[#8B7778]">{evt.venueName}</p>
                       </div>
 
-                      <div className="mt-4 pt-3 border-t border-[#F3EAE1] flex items-center justify-between text-xs">
-                        <span className="text-[#6E5D59] text-[11px]">
+                      <div className="mt-4 pt-3 border-t border-[#EFE4DC] flex items-center justify-between text-xs">
+                        <span className="text-[#8B7778] text-[11px]">
                           {evt.stats.attendingGuests} ضيف • {evt.stats.approvedPhotos} صورة
                         </span>
                         <Link
                           href={`/dashboard/events/${evt.id}`}
-                          className="text-[#F27D72] hover:text-[#DE685D] font-bold flex items-center gap-1 min-h-[44px]"
+                          className="text-[#790D20] hover:text-[#630A19] font-bold flex items-center gap-1 min-h-[44px]"
                         >
                           <span>إدارة</span>
                           <ChevronLeft className="w-3.5 h-3.5" />

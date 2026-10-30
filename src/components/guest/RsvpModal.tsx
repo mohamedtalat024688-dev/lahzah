@@ -74,7 +74,7 @@ export default function RsvpModal({
           particleCount: 80,
           spread: 70,
           origin: { y: 0.6 },
-          colors: ["#c5a880", "#faf8f5", "#86efac"],
+          colors: ["#790D20", "#c5a880", "#faf8f5", "#86efac", "#D6B77A"],
         });
       }
     } catch (err: unknown) {

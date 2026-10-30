@@ -8,7 +8,7 @@ export function fireCelebrationConfetti(origin?: { x: number; y: number }) {
   const count = 40;
   const defaults = {
     origin: origin || { y: 0.7, x: 0.5 },
-    colors: ["#F27D72", "#F5B5C8", "#FFCBA4", "#D6AD65", "#A8C5A0", "#FFF9F0"],
+    colors: ["#790D20", "#390E19", "#D8B8B8", "#D6B77A", "#F1DEDF", "#FFF9F5"],
     disableForReducedMotion: true,
   };
 

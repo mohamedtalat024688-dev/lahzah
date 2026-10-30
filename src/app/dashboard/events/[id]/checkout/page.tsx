@@ -118,17 +118,20 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || "فشلت عملية الدفع");
+        throw new Error(data.error || "فشل بدء عملية الدفع");
       }
 
-      if (data.checkoutUrl) {
-        window.location.href = data.checkoutUrl;
+      if (data.gatewayUrl) {
+        window.location.href = data.gatewayUrl;
         return;
       }
 
-      setPaymentSuccess(true);
-      if (data.event) {
-        setEvent(data.event);
+      if (data.success && data.payment?.status === "PAID") {
+        setPaymentSuccess(true);
+        if (data.urls) setUrls(data.urls);
+        if (data.event?.isPublished) setPublished(true);
+      } else {
+        throw new Error("لم تكتمل عملية الدفع");
       }
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "حدث خطأ أثناء معالجة الدفع";
@@ -145,7 +148,6 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
     try {
       const res = await fetch(`/api/events/${id}/publish`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
       });
 
       const data = await res.json();
@@ -154,11 +156,9 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
       }
 
       setPublished(true);
-      if (data.urls) {
-        setUrls(data.urls);
-      }
+      if (data.urls) setUrls(data.urls);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "حدث خطأ أثناء النشر";
+      const msg = err instanceof Error ? err.message : "حدث خطأ أثناء محاولة النشر";
       setErrorMessage(msg);
     } finally {
       setPublishing(false);
@@ -175,19 +175,19 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FFF9F0] flex items-center justify-center text-[#51354F]">
-        <Loader2 className="w-8 h-8 animate-spin text-[#F27D72]" />
+      <div className="min-h-screen bg-[#FFF9F5] flex items-center justify-center text-[#390E19]">
+        <Loader2 className="w-8 h-8 animate-spin text-[#790D20]" />
       </div>
     );
   }
 
   if (!event) {
     return (
-      <div className="min-h-screen bg-[#FFF9F0] text-[#493B38] flex flex-col justify-between">
+      <div className="min-h-screen bg-[#FFF9F5] text-[#493B3B] flex flex-col justify-between">
         <Navbar />
         <div className="text-center py-24 space-y-3">
-          <p className="text-base text-[#786C68]">المناسبة غير موجودة</p>
-          <Link href="/dashboard" className="text-[#F27D72] text-xs hover:underline inline-block font-semibold">
+          <p className="text-base text-[#8B7778]">المناسبة غير موجودة</p>
+          <Link href="/dashboard" className="text-[#790D20] text-xs hover:underline inline-block font-semibold">
             العودة للوحة التحكم
           </Link>
         </div>
@@ -197,7 +197,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF9F0] text-[#493B38] flex flex-col justify-between selection:bg-[#F27D72]/20 selection:text-[#51354F]">
+    <div className="min-h-screen bg-[#FFF9F5] text-[#493B3B] flex flex-col justify-between selection:bg-[#790D20]/15 selection:text-[#390E19] font-sans">
       <Navbar />
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1">
@@ -205,19 +205,19 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
         <div className="mb-6 flex items-center justify-between">
           <Link
             href={`/dashboard/events/${id}`}
-            className="inline-flex items-center gap-1.5 text-xs text-[#786C68] hover:text-[#F27D72] transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs text-[#8B7778] hover:text-[#790D20] transition-colors"
           >
             <ArrowRight className="w-3.5 h-3.5" />
             <span>العودة لاستوديو المناسبة</span>
           </Link>
 
-          <span className="text-[11px] text-[#51354F] font-semibold bg-[#FFFDF9] px-3 py-1 rounded-full border border-[#EADBCE]">
+          <span className="text-[11px] text-[#390E19] font-semibold bg-[#FFFDFC] px-3 py-1 rounded-full border border-[#EFE4DC]">
             {published ? "منشورة ونشطة" : paymentSuccess ? "مدفوعة وجاهزة للنشر" : "مسودة بانتظار الدفع"}
           </span>
         </div>
 
         {/* Commercial Step Tracker */}
-        <div className="mb-8 p-3 rounded-2xl bg-white border border-[#EADBCE] shadow-sm">
+        <div className="mb-8 p-3 rounded-2xl bg-[#FFFDFC] border border-[#EFE4DC] shadow-sm">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
             <div className="p-2 rounded-xl bg-[#F0F7EE] border border-[#C5DEC0] text-[#2E6827] font-semibold flex items-center justify-center gap-1.5">
               <Check className="w-3.5 h-3.5 text-[#5B9C51]" />
@@ -227,20 +227,20 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
               className={`p-2 rounded-xl font-semibold flex items-center justify-center gap-1.5 ${
                 paymentSuccess
                   ? "bg-[#F0F7EE] border border-[#C5DEC0] text-[#2E6827]"
-                  : "bg-[#FFF0EE] border border-[#F5B5C8] text-[#51354F]"
+                  : "bg-[#F1DEDF]/50 border border-[#D8B8B8] text-[#390E19]"
               }`}
             >
-              {paymentSuccess ? <Check className="w-3.5 h-3.5 text-[#5B9C51]" /> : <CreditCard className="w-3.5 h-3.5 text-[#F27D72]" />}
+              {paymentSuccess ? <Check className="w-3.5 h-3.5 text-[#5B9C51]" /> : <CreditCard className="w-3.5 h-3.5 text-[#790D20]" />}
               <span>2. اختيار الباقة</span>
             </div>
             <div
               className={`p-2 rounded-xl font-semibold flex items-center justify-center gap-1.5 ${
                 paymentSuccess
                   ? "bg-[#F0F7EE] border border-[#C5DEC0] text-[#2E6827]"
-                  : "bg-white border border-[#EADBCE] text-[#786C68]"
+                  : "bg-[#FFFDFC] border border-[#EFE4DC] text-[#8B7778]"
               }`}
             >
-              {paymentSuccess ? <Check className="w-3.5 h-3.5 text-[#5B9C51]" /> : <Lock className="w-3.5 h-3.5" />}
+              {paymentSuccess ? <Check className="w-3.5 h-3.5 text-[#5B9C51]" /> : <Lock className="w-3.5 h-3.5 text-[#8B7778]" />}
               <span>3. الدفع الآمن</span>
             </div>
             <div
@@ -248,43 +248,43 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
                 published
                   ? "bg-[#F0F7EE] border border-[#C5DEC0] text-[#2E6827]"
                   : paymentSuccess
-                  ? "bg-[#FFF0EE] border border-[#F5B5C8] text-[#51354F]"
-                  : "bg-white border border-[#EADBCE] text-[#786C68]"
+                  ? "bg-[#F1DEDF]/50 border border-[#D8B8B8] text-[#390E19]"
+                  : "bg-[#FFFDFC] border border-[#EFE4DC] text-[#8B7778]"
               }`}
             >
-              {published ? <Check className="w-3.5 h-3.5 text-[#5B9C51]" /> : <Sparkles className="w-3.5 h-3.5 text-[#D6AD65]" />}
+              {published ? <Check className="w-3.5 h-3.5 text-[#5B9C51]" /> : <Sparkles className="w-3.5 h-3.5 text-[#D6B77A]" />}
               <span>4. النشر والـ QR</span>
             </div>
           </div>
         </div>
 
         {errorMessage && (
-          <div className="mb-6 p-4 rounded-2xl bg-[#FFF0EE] border border-[#F5B5C8] text-[#C24134] text-xs flex items-center gap-2 shadow-sm">
-            <AlertCircle className="w-4 h-4 text-[#F27D72] shrink-0" />
+          <div className="mb-6 p-4 rounded-2xl bg-[#F1DEDF]/50 border border-[#D8B8B8] text-[#790D20] text-xs flex items-center gap-2 shadow-sm">
+            <AlertCircle className="w-4 h-4 text-[#790D20] shrink-0" />
             <span>{errorMessage}</span>
           </div>
         )}
 
         {/* STATE 3: PUBLISHED */}
         {published ? (
-          <div className="bg-white border border-[#C5DEC0] rounded-3xl p-6 sm:p-10 space-y-8 animate-fadeIn text-right shadow-sm">
+          <div className="bg-[#FFFDFC] border border-[#C5DEC0] rounded-3xl p-6 sm:p-10 space-y-8 animate-fadeIn text-right shadow-sm">
             <div className="text-center space-y-2">
               <div className="w-16 h-16 rounded-full bg-[#F0F7EE] border border-[#C5DEC0] text-[#2E6827] flex items-center justify-center mx-auto mb-2">
                 <CheckCircle className="w-8 h-8 text-[#5B9C51]" />
               </div>
-              <h2 className="text-2xl sm:text-3xl font-bold font-serif text-[#51354F]">
+              <h2 className="text-2xl sm:text-3xl font-bold font-serif text-[#390E19]">
                 ألف مبروك! دعوتكم منشورة الآن وجاهزة للمشاركة
               </h2>
-              <p className="text-xs text-[#786C68] max-w-md mx-auto leading-relaxed">
+              <p className="text-xs text-[#8B7778] max-w-md mx-auto leading-relaxed">
                 تم تفعيل باقة ({currentPkg.nameAr}) بنجاح. أصبحت بطاقة الدعوة التفاعلية ورمز الـ QR الخاص
                 بجمع الصور نشطة فوراً لجميع ضيوفكم.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center p-6 rounded-2xl bg-[#FFFDF9] border border-[#EADBCE]">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center p-6 rounded-2xl bg-[#FFF9F5] border border-[#EFE4DC]">
               {/* QR Preview */}
               {urls?.qr && (
-                <div className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl text-center shadow-md border border-[#EADBCE]">
+                <div className="flex flex-col items-center justify-center p-6 bg-[#FFFDFC] rounded-2xl text-center shadow-md border border-[#EFE4DC]">
                   <Image
                     src={urls.qr}
                     alt="رمز QR للدعوة"
@@ -292,13 +292,13 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
                     height={180}
                     className="rounded-lg"
                   />
-                  <span className="text-[11px] font-bold text-[#51354F] mt-2">
+                  <span className="text-[11px] font-bold text-[#390E19] mt-2">
                     رمز الـ QR المخصص لرفع الصور
                   </span>
                   <a
                     href={urls.qr}
                     download={`lahzah-qr-${event.slug}.png`}
-                    className="mt-3 px-4 py-1.5 rounded-full bg-[#51354F] text-white text-[11px] font-bold hover:bg-[#3D283C] flex items-center gap-1.5 shadow-sm"
+                    className="mt-3 px-4 py-2 min-h-[44px] rounded-full bg-[#790D20] text-white text-[11px] font-bold hover:bg-[#390E19] flex items-center gap-1.5 shadow-sm transition-colors"
                   >
                     <Download className="w-3.5 h-3.5" />
                     <span>تنزيل الـ QR للطباعة</span>
@@ -309,7 +309,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
               {/* Links & Sharing */}
               <div className="space-y-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-semibold text-[#51354F]">
+                  <label className="text-xs font-semibold text-[#390E19]">
                     رابط بطاقة الدعوة التفاعلية:
                   </label>
                   <div className="flex items-center gap-2">
@@ -317,11 +317,11 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
                       type="text"
                       readOnly
                       value={urls?.invitation || ""}
-                      className="w-full px-3 py-2 rounded-xl bg-white border border-[#EADBCE] text-[#493B38] font-mono text-xs dir-ltr"
+                      className="w-full px-3 py-2 rounded-xl bg-white border border-[#EFE4DC] text-[#493B3B] font-mono text-xs dir-ltr"
                     />
                     <button
                       onClick={handleCopyLink}
-                      className="px-4 py-2 rounded-xl bg-[#F27D72] text-white font-bold text-xs hover:bg-[#E2695E] flex items-center gap-1 shrink-0 shadow-sm"
+                      className="px-4 py-2 min-h-[40px] rounded-xl bg-[#790D20] text-white font-bold text-xs hover:bg-[#390E19] flex items-center gap-1 shrink-0 shadow-sm transition-colors"
                     >
                       {copied ? <Check className="w-3.5 h-3.5 text-white" /> : <Copy className="w-3.5 h-3.5" />}
                       <span>{copied ? "تم النسخ" : "نسخ"}</span>
@@ -345,15 +345,15 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
                   <Link
                     href={`/e/${event.slug}`}
                     target="_blank"
-                    className="w-full py-3 min-h-[44px] rounded-full bg-white border border-[#EADBCE] text-[#51354F] hover:border-[#F27D72] font-semibold text-xs flex items-center justify-center gap-2 transition-colors shadow-sm"
+                    className="w-full py-3 min-h-[44px] rounded-full bg-[#FFFDFC] border border-[#EFE4DC] text-[#390E19] hover:border-[#790D20] font-semibold text-xs flex items-center justify-center gap-2 transition-colors shadow-sm"
                   >
                     <span>معاينة بطاقة الدعوة الحية</span>
-                    <ExternalLink className="w-3.5 h-3.5 text-[#D6AD65]" />
+                    <ExternalLink className="w-3.5 h-3.5 text-[#D6B77A]" />
                   </Link>
 
                   <Link
                     href={`/dashboard/events/${id}`}
-                    className="w-full py-3 min-h-[44px] rounded-full bg-gradient-to-r from-[#F27D72] to-[#E2695E] text-white font-bold text-xs flex items-center justify-center gap-2 hover:shadow-md transition-all shadow-sm"
+                    className="w-full py-3 min-h-[44px] rounded-full bg-[#790D20] hover:bg-[#390E19] text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm"
                   >
                     <span>الانتقال لاستوديو إدارة الحفل وتأكيد الحضور (RSVP)</span>
                   </Link>
@@ -363,27 +363,27 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
           </div>
         ) : paymentSuccess ? (
           /* STATE 2: PAID BUT NOT PUBLISHED */
-          <div className="bg-white border border-[#C5DEC0] rounded-3xl p-6 sm:p-10 space-y-8 animate-fadeIn text-right shadow-sm">
+          <div className="bg-[#FFFDFC] border border-[#C5DEC0] rounded-3xl p-6 sm:p-10 space-y-8 animate-fadeIn text-right shadow-sm">
             <div className="text-center space-y-2">
               <div className="w-16 h-16 rounded-full bg-[#F0F7EE] border border-[#C5DEC0] text-[#2E6827] flex items-center justify-center mx-auto mb-2">
                 <CheckCircle className="w-8 h-8 text-[#5B9C51]" />
               </div>
-              <h2 className="text-2xl font-bold font-serif text-[#51354F]">
+              <h2 className="text-2xl font-bold font-serif text-[#390E19]">
                 تم استلام الدفع وتأكيد الحجز بنجاح!
               </h2>
-              <p className="text-xs text-[#786C68] max-w-lg mx-auto">
+              <p className="text-xs text-[#8B7778] max-w-lg mx-auto">
                 باقة ({currentPkg.nameAr}) مفعلة لمناسبتكم. اضغط على زر النشر لإطلاق بطاقة الدعوة وتفعيل
                 رمز الـ QR فوراً.
               </p>
             </div>
 
-            <div className="p-5 rounded-2xl bg-[#FFFDF9] border border-[#EADBCE] flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="p-5 rounded-2xl bg-[#FFF9F5] border border-[#EFE4DC] flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="space-y-1">
-                <span className="text-[11px] text-[#786C68] block">المناسبة جاهزة للنشر:</span>
-                <span className="font-bold font-serif text-[#51354F] text-base">
+                <span className="text-[11px] text-[#8B7778] block">المناسبة جاهزة للنشر:</span>
+                <span className="font-bold font-serif text-[#390E19] text-base">
                   {event.groomName} & {event.brideName}
                 </span>
-                <span className="text-xs text-[#D6AD65] block font-mono font-semibold">
+                <span className="text-xs text-[#D6B77A] block font-mono font-semibold">
                   الباقة: {currentPkg.nameAr} ({currentPkg.price} ج.م)
                 </span>
               </div>
@@ -391,7 +391,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
               <button
                 onClick={handlePublish}
                 disabled={publishing}
-                className="w-full sm:w-auto px-8 py-3.5 min-h-[44px] rounded-full bg-gradient-to-r from-[#F27D72] to-[#E2695E] text-white font-bold text-xs hover:shadow-md transition-all flex items-center justify-center gap-2 shadow-sm disabled:opacity-60"
+                className="w-full sm:w-auto px-8 py-3.5 min-h-[44px] rounded-full bg-[#790D20] hover:bg-[#390E19] text-white font-bold text-xs transition-all flex items-center justify-center gap-2 shadow-sm disabled:opacity-60"
               >
                 {publishing ? (
                   <>
@@ -414,10 +414,10 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
               {/* INVITATION PREVIEW COLUMN (Desktop 5 cols) */}
               <div className="lg:col-span-5 space-y-4">
                 <div className="text-right">
-                  <span className="text-xs font-serif tracking-wide text-[#D6AD65] uppercase block font-semibold">
+                  <span className="text-xs font-serif tracking-wide text-[#D6B77A] uppercase block font-semibold">
                     بطاقة دعوتكم
                   </span>
-                  <p className="text-xs text-[#786C68]">
+                  <p className="text-xs text-[#8B7778]">
                     هذه المعاينة الحية لبطاقتكم التي ستُنشر فور إتمام السداد
                   </p>
                 </div>
@@ -441,14 +441,14 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
               {/* PACKAGE SELECTION & PAYMENT COLUMN (Desktop 7 cols) */}
               <div className="lg:col-span-7 space-y-6 text-right">
                 {/* Header info */}
-                <div className="bg-white border border-[#EADBCE] rounded-3xl p-6 space-y-2 shadow-sm">
-                  <span className="text-[11px] text-[#F27D72] font-semibold bg-[#FFF0EE] px-2.5 py-0.5 rounded-full border border-[#F5B5C8] inline-block">
+                <div className="bg-[#FFFDFC] border border-[#EFE4DC] rounded-3xl p-6 space-y-2 shadow-sm">
+                  <span className="text-[11px] text-[#790D20] font-semibold bg-[#F1DEDF]/50 px-2.5 py-0.5 rounded-full border border-[#D8B8B8] inline-block">
                     مسودة بانتظار السداد
                   </span>
-                  <h2 className="text-2xl font-bold font-serif text-[#51354F]">
+                  <h2 className="text-2xl font-bold font-serif text-[#390E19]">
                     اختر باقة التفعيل وانشر دعوتكم
                   </h2>
-                  <p className="text-xs text-[#786C68] leading-relaxed">
+                  <p className="text-xs text-[#8B7778] leading-relaxed">
                     اختر الباقة المناسبة لمناسبتكم لإتمام عملية السداد وتفعيل الدعوة التفاعلية والـ QR فوراً.
                     الدفع مشفر وآمن 100%.
                   </p>
@@ -456,8 +456,8 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
 
                 {/* Package Selector */}
                 <div className="space-y-3">
-                  <label className="text-xs font-semibold text-[#51354F] flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-[#D6AD65]" />
+                  <label className="text-xs font-semibold text-[#390E19] flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-[#D6B77A]" />
                     <span>اختر الباقة:</span>
                   </label>
 
@@ -470,37 +470,37 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
                           onClick={() => setSelectedTier(pkg.code)}
                           className={`rounded-2xl p-4 border text-right cursor-pointer transition-all relative flex flex-col justify-between ${
                             isSelected
-                              ? "bg-[#FFF9F0] border-[#F27D72] ring-2 ring-[#F27D72]/20 shadow-md"
-                              : "bg-white border-[#EADBCE] hover:border-[#D6AD65] shadow-sm"
+                              ? "bg-[#F1DEDF]/40 border-[#790D20] ring-1 ring-[#790D20]/30 shadow-md"
+                              : "bg-[#FFFDFC] border-[#EFE4DC] hover:border-[#D6B77A] shadow-sm"
                           }`}
                         >
                           <div>
                             <div className="flex items-center justify-between mb-1.5">
-                              <h4 className="font-bold text-sm font-serif text-[#51354F]">
+                              <h4 className="font-bold text-sm font-serif text-[#390E19]">
                                 {pkg.nameAr}
                               </h4>
                               <div
                                 className={`w-4 h-4 rounded-full border flex items-center justify-center ${
-                                  isSelected ? "border-[#F27D72] bg-[#F27D72]" : "border-[#EADBCE]"
+                                  isSelected ? "border-[#790D20] bg-[#790D20]" : "border-[#EFE4DC]"
                                 }`}
                               >
                                 {isSelected && <Check className="w-3 h-3 text-white stroke-[3]" />}
                               </div>
                             </div>
 
-                            <p className="text-[10px] text-[#786C68] mb-2">{pkg.taglineAr}</p>
+                            <p className="text-[10px] text-[#8B7778] mb-2">{pkg.taglineAr}</p>
 
                             <div className="flex items-baseline gap-1 mb-3">
-                              <span className="text-2xl font-black text-[#51354F] font-mono">
+                              <span className="text-2xl font-black text-[#390E19] font-mono">
                                 {pkg.price}
                               </span>
-                              <span className="text-[10px] text-[#786C68]">{pkg.currency}</span>
+                              <span className="text-[10px] text-[#8B7778]">{pkg.currency}</span>
                             </div>
 
-                            <ul className="space-y-1.5 text-[11px] text-[#493B38]">
+                            <ul className="space-y-1.5 text-[11px] text-[#493B3B]">
                               {pkg.features.slice(0, 3).map((f, i) => (
                                 <li key={i} className="flex items-start gap-1">
-                                  <Check className="w-3 h-3 text-[#F27D72] shrink-0 mt-0.5" />
+                                  <Check className="w-3 h-3 text-[#790D20] shrink-0 mt-0.5" />
                                   <span className="line-clamp-2">{f}</span>
                                 </li>
                               ))}
@@ -513,22 +513,22 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
                 </div>
 
                 {/* Invoice Breakdown & Payment Button */}
-                <div className="bg-white border border-[#EADBCE] rounded-3xl p-6 space-y-5 shadow-sm">
-                  <div className="flex items-center justify-between border-b border-[#EADBCE] pb-3">
-                    <span className="text-xs text-[#786C68]">ملخص التكلفة:</span>
+                <div className="bg-[#FFFDFC] border border-[#EFE4DC] rounded-3xl p-6 space-y-5 shadow-sm">
+                  <div className="flex items-center justify-between border-b border-[#EFE4DC] pb-3">
+                    <span className="text-xs text-[#8B7778]">ملخص التكلفة:</span>
                     <div className="flex items-baseline gap-1.5">
-                      <span className="text-2xl font-black font-mono text-[#F27D72]">
+                      <span className="text-2xl font-black font-mono text-[#790D20]">
                         {currentPkg.price}
                       </span>
-                      <span className="text-xs text-[#51354F] font-semibold">جنيه مصري</span>
+                      <span className="text-xs text-[#390E19] font-semibold">جنيه مصري</span>
                     </div>
                   </div>
 
                   {/* Payment Gateway Info Badge */}
-                  <div className="p-3 rounded-xl bg-[#FFFDF9] border border-[#EADBCE] flex items-center justify-between text-xs">
+                  <div className="p-3 rounded-xl bg-[#FFF9F5] border border-[#EFE4DC] flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">
-                      <CreditCard className="w-4 h-4 text-[#D6AD65]" />
-                      <span className="text-[#51354F] font-semibold">بطاقات بنكية / فودافون كاش / إنستاباي</span>
+                      <CreditCard className="w-4 h-4 text-[#D6B77A]" />
+                      <span className="text-[#390E19] font-semibold">بطاقات بنكية / فودافون كاش / إنستاباي</span>
                     </div>
                     <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#F0F7EE] border border-[#C5DEC0] text-[#2E6827] font-semibold">
                       {gatewayInfo.provider}
@@ -540,7 +540,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
                     <button
                       onClick={handlePay}
                       disabled={paying}
-                      className="w-full py-4 min-h-[44px] rounded-full bg-gradient-to-r from-[#F27D72] to-[#E2695E] text-white font-bold text-sm hover:shadow-lg transition-all flex items-center justify-center gap-2 shadow-md disabled:opacity-60"
+                      className="w-full py-4 min-h-[44px] rounded-full bg-[#790D20] hover:bg-[#390E19] text-white font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-md disabled:opacity-60"
                     >
                       {paying ? (
                         <>
@@ -555,8 +555,8 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
                       )}
                     </button>
 
-                    <div className="flex items-center justify-center gap-2 text-[11px] text-[#786C68]">
-                      <Lock className="w-3 h-3 text-[#D6AD65]" />
+                    <div className="flex items-center justify-center gap-2 text-[11px] text-[#8B7778]">
+                      <Lock className="w-3 h-3 text-[#D6B77A]" />
                       <span>دفع إلكتروني فوري وآمن 100% • بدون أي مصاريف خفية</span>
                     </div>
                   </div>

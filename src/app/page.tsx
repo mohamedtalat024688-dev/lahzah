@@ -43,7 +43,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF9F0] text-[#493B38] selection:bg-[#F27D72]/20 selection:text-[#51354F] overflow-x-hidden font-body">
+    <div className="min-h-screen bg-[#FFF9F5] text-[#493B3B] selection:bg-[#790D20]/15 selection:text-[#390E19] overflow-x-hidden font-body">
       <Navbar />
 
       {/* ========================================================================= */}
@@ -52,73 +52,72 @@ export default function HomePage() {
       <section className="relative pt-12 sm:pt-20 pb-20 sm:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
         <CelebrationPetals />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
-          {/* RIGHT COLUMN (RTL): Evocative Arabic Headline & Direct Value Proposition */}
-          <div className="lg:col-span-6 space-y-8 text-right">
-            {/* Fine Hairline Roman/Arabic Tag */}
-            <div className="flex items-center gap-3 text-[11px] font-serif uppercase tracking-widest text-[#9A7B38]">
-              <span className="w-8 h-[1px] bg-[#D6AD65]" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          {/* RIGHT COLUMN (RTL): Evocative Arabic Headline & Value Proposition (5 cols) */}
+          <div className="lg:col-span-5 space-y-7 text-right">
+            {/* Fine Hairline Burgundy & Champagne Tag */}
+            <div className="flex items-center gap-3 text-[11px] font-serif uppercase tracking-widest text-[#790D20]">
+              <span className="w-8 h-[1px] bg-[#790D20]" />
               <span>لحظة • أتيلييه الدعوات والذكريات</span>
             </div>
 
             {/* Emotional, Memorable Headline */}
             <div className="space-y-4">
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight font-serif text-[#51354F] leading-[1.15]">
-                أول خطوة في <br />
-                <span className="text-[#F27D72] italic font-normal">حكاية العمر.</span>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight font-serif text-[#390E19] leading-[1.2]">
+                كل حكاية جميلة <br />
+                <span className="text-[#790D20] italic font-normal">تبدأ بدعوة استثنائية.</span>
               </h1>
 
-              <p className="text-base sm:text-lg text-[#6E5D59] font-normal leading-relaxed max-w-xl">
-                دعوة زفاف إلكترونية تليق بمقام ليلتكم، تُرسل بلمسة واحدة على واتساب، مع تأكيد حضور فوري
-                وباركود لكل طاولة يجمع صور وتهاني أحبابكم في ألبوم حي ليلة الفرح.
+              <p className="text-base sm:text-lg text-[#6E5D59] font-normal leading-relaxed max-w-lg">
+                صمّموا دعوتكم الرقمية الفاخرة التي تليق بليلة العمر، شاركوها بلمسة واحدة مع أحبابكم على واتساب، واجمعوا أجمل صور وتهاني ليلة الفرح في ألبوم حي لا يُنسى.
               </p>
             </div>
 
             {/* Unmistakable Primary CTA & Editorial Secondary Link */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-1">
               <Link
                 href="/dashboard/events/new"
                 onClick={handleCtaClick}
-                className="px-8 py-4 rounded-full bg-[#51354F] hover:bg-[#3D283C] text-white font-bold text-sm shadow-[0_10px_25px_-3px_rgba(81,53,79,0.3)] hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 min-h-[48px]"
+                className="px-8 py-4 rounded-full bg-[#790D20] hover:bg-[#630A19] text-white font-bold text-sm shadow-[0_10px_25px_-3px_rgba(121,13,32,0.35)] hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 min-h-[48px]"
               >
                 <span>اصنع دعوتك الآن</span>
-                <ArrowLeft className="w-4 h-4 text-[#F5B5C8]" />
+                <ArrowLeft className="w-4 h-4 text-[#D8B8B8]" />
               </Link>
 
               <Link
                 href="#designs"
-                className="px-6 py-4 text-xs font-semibold text-[#51354F] hover:text-[#F27D72] transition-colors flex items-center justify-center gap-1.5"
+                className="px-6 py-4 text-xs font-semibold text-[#493B3B] hover:text-[#790D20] transition-colors flex items-center justify-center gap-1.5"
               >
-                <span>تصفح نماذج الدعوات</span>
-                <ChevronLeft className="w-4 h-4" />
+                <span>اكتشف التصاميم</span>
+                <ChevronLeft className="w-4 h-4 text-[#790D20]" />
               </Link>
             </div>
 
             {/* Three Authentic Value Foundations */}
-            <div className="pt-8 border-t border-[#EADBCE]/80 grid grid-cols-3 gap-6 text-right">
+            <div className="pt-7 border-t border-[#EFE4DC] grid grid-cols-3 gap-4 text-right">
               <div className="space-y-1">
-                <span className="text-xs font-bold text-[#51354F] block">تأكيد الحضور (RSVP)</span>
-                <p className="text-[11px] text-[#786C68] leading-relaxed">
-                  تأكيد عدد الأفراد واعتذار الضيوف بنقرة واحدة
+                <span className="text-xs font-bold text-[#390E19] block">تأكيد الحضور (RSVP)</span>
+                <p className="text-[11px] text-[#8B7778] leading-relaxed">
+                  تأكيد الأفراد بضغطة واحدة
                 </p>
               </div>
               <div className="space-y-1">
-                <span className="text-xs font-bold text-[#51354F] block">باركود طاولات القاعة</span>
-                <p className="text-[11px] text-[#786C68] leading-relaxed">
-                  يمسحه الضيوف بكاميرا هواتفهم دون أي تطبيق
+                <span className="text-xs font-bold text-[#390E19] block">رمز QR للطاولات</span>
+                <p className="text-[11px] text-[#8B7778] leading-relaxed">
+                  مسح مباشر بكاميرا الهاتف
                 </p>
               </div>
               <div className="space-y-1">
-                <span className="text-xs font-bold text-[#51354F] block">ألبوم ذكريات خاص</span>
-                <p className="text-[11px] text-[#786C68] leading-relaxed">
-                  اعتماد الصور وحفظها بأعلى دقة أصلية
+                <span className="text-xs font-bold text-[#390E19] block">ألبوم ذكريات حي</span>
+                <p className="text-[11px] text-[#8B7778] leading-relaxed">
+                  حفظ الصور بأعلى دقة أصلية
                 </p>
               </div>
             </div>
           </div>
 
-          {/* LEFT COLUMN (RTL): Interactive Physical Stationery Suite */}
-          <div className="lg:col-span-6 relative flex justify-center">
+          {/* LEFT COLUMN (RTL): Interactive Cinematic Wedding Invitation Browser Showcase (7 cols) */}
+          <div className="lg:col-span-7 relative flex justify-center w-full">
             <InteractiveHeroInvitation />
           </div>
         </div>
@@ -127,49 +126,49 @@ export default function HomePage() {
       {/* ========================================================================= */}
       {/* 2. THE LAHZAH EXPERIENCE: TWO-ACT EDITORIAL NARRATIVE                     */}
       {/* ========================================================================= */}
-      <section id="experience" className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#EADBCE]">
+      <section id="experience" className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#EFE4DC]">
         {/* Section Header */}
         <div className="max-w-2xl text-right mb-16 space-y-2">
-          <div className="flex items-center gap-3 text-[11px] font-serif uppercase tracking-widest text-[#9A7B38]">
-            <span className="w-8 h-[1px] bg-[#D6AD65]" />
+          <div className="flex items-center gap-3 text-[11px] font-serif uppercase tracking-widest text-[#790D20]">
+            <span className="w-8 h-[1px] bg-[#790D20]" />
             <span>٠١ / التجربة الكاملة</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold font-serif text-[#51354F]">
+          <h2 className="text-3xl sm:text-5xl font-bold font-serif text-[#390E19]">
             من وصول الدعوة… إلى ختام ليلة العمر
           </h2>
-          <p className="text-sm text-[#786C68] leading-relaxed">
-            صممنا لحظة لتجمع بين رقي المطبوعات الكلاسيكية وسهولة التقنية الحديثة
+          <p className="text-sm text-[#8B7778] leading-relaxed">
+            صممنا لحظة لتجمع بين فخامة القرطاسية المترفة وسهولة التقنية الرقمية
           </p>
         </div>
 
         {/* Two-Act Editorial Spread */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-stretch">
           {/* Act I: The Digital Invitation */}
-          <div className="bg-white border border-[#EADBCE] rounded-[2.5rem] p-8 sm:p-12 flex flex-col justify-between text-right shadow-[0_4px_20px_rgba(73,59,56,0.04)] relative overflow-hidden">
+          <div className="bg-[#FFFDFC] border border-[#EFE4DC] rounded-[2.5rem] p-8 sm:p-12 flex flex-col justify-between text-right shadow-soft-sm relative overflow-hidden">
             <div className="space-y-6">
-              <span className="font-serif text-3xl text-[#D6AD65] font-light">الفصل الأول</span>
+              <span className="font-serif text-3xl text-[#D6B77A] font-light">الفصل الأول</span>
               <div className="space-y-2">
-                <h3 className="text-2xl sm:text-3xl font-bold font-serif text-[#51354F]">
+                <h3 className="text-2xl sm:text-3xl font-bold font-serif text-[#390E19]">
                   بطاقة دعوة تفاعلية تصل لأحبابكم على واتساب
                 </h3>
                 <p className="text-xs sm:text-sm text-[#6E5D59] leading-relaxed">
-                  تصل رسالة الدعوة بأسمائكم وصياغة راقية. بلمسة واحدة يفتح الضيف بطاقة زفافكم التفاعلية،
+                  تصل رسالة الدعوة بأسمائكم وصياغة راقية تليق بالمقام. بلمسة واحدة يفتح الضيف بطاقة زفافكم التفاعلية،
                   ليجد تفاصيل الحفل، وعداداً تنازلياً لموعد ليلتكم، وموقع القاعة على خرائط جوجل، مع زر فوري لتأكيد الحضور وعدد المرافقين.
                 </p>
               </div>
 
               {/* Feature Checklist */}
-              <ul className="space-y-3 pt-4 border-t border-[#F3EAE1] text-xs text-[#51354F] font-semibold">
+              <ul className="space-y-3 pt-4 border-t border-[#EFE4DC] text-xs text-[#493B3B] font-semibold">
                 <li className="flex items-center gap-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#F27D72]" />
-                  <span>تأكيد الحضور التلقائي (RSVP) مع بيان عدد الأفراد بدقة</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#790D20]" />
+                  <span>تأكيد الحضور التلقائي (RSVP) مع حصر عدد الأفراد بدقة</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#F27D72]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#790D20]" />
                   <span>توجيه فوري لموقع القاعة عبر خرائط Google Maps</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#F27D72]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#790D20]" />
                   <span>إمكانية إضافة موعد الحفل إلى تقويم هاتف الضيف بنقرة زر</span>
                 </li>
               </ul>
@@ -178,7 +177,7 @@ export default function HomePage() {
             <div className="pt-8">
               <Link
                 href="/preview?template=royal-gold"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#F27D72] hover:text-[#DE685D] transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#790D20] hover:text-[#630A19] transition-colors"
               >
                 <span>شاهد نموذجاً حياً لبطاقة الدعوة</span>
                 <ArrowLeft className="w-3.5 h-3.5" />
@@ -187,11 +186,11 @@ export default function HomePage() {
           </div>
 
           {/* Act II: The Live Memories & QR */}
-          <div className="bg-white border border-[#EADBCE] rounded-[2.5rem] p-8 sm:p-12 flex flex-col justify-between text-right shadow-[0_4px_20px_rgba(73,59,56,0.04)] relative overflow-hidden">
+          <div className="bg-[#FFFDFC] border border-[#EFE4DC] rounded-[2.5rem] p-8 sm:p-12 flex flex-col justify-between text-right shadow-soft-sm relative overflow-hidden">
             <div className="space-y-6">
-              <span className="font-serif text-3xl text-[#A8C5A0] font-light">الفصل الثاني</span>
+              <span className="font-serif text-3xl text-[#790D20] font-light">الفصل الثاني</span>
               <div className="space-y-2">
-                <h3 className="text-2xl sm:text-3xl font-bold font-serif text-[#51354F]">
+                <h3 className="text-2xl sm:text-3xl font-bold font-serif text-[#390E19]">
                   رمز الـ QR للطاولات وألبوم الذكريات الحي
                 </h3>
                 <p className="text-xs sm:text-sm text-[#6E5D59] leading-relaxed">
@@ -200,17 +199,17 @@ export default function HomePage() {
               </div>
 
               {/* Feature Checklist */}
-              <ul className="space-y-3 pt-4 border-t border-[#F3EAE1] text-xs text-[#51354F] font-semibold">
+              <ul className="space-y-3 pt-4 border-t border-[#EFE4DC] text-xs text-[#493B3B] font-semibold">
                 <li className="flex items-center gap-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#5B9C51]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#3D7A42]" />
                   <span>بطاقة طاولة جاهزة للطباعة بصيغتي PNG و SVG للمطابع</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#5B9C51]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#3D7A42]" />
                   <span>خصوصية تامة: أنتم من يعتمد الصور قبل ظهورها في الألبوم العام</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#5B9C51]" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#3D7A42]" />
                   <span>تنزيل كامل الألبوم الأصلي بعد انتهاء الفرح لتخليده للأبد</span>
                 </li>
               </ul>
@@ -219,7 +218,7 @@ export default function HomePage() {
             <div className="pt-8">
               <Link
                 href="/dashboard/events/new"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#51354F] hover:text-[#F27D72] transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#790D20] hover:text-[#630A19] transition-colors"
               >
                 <span>ابدأ بتجهيز بطاقة زفافكم ورمز الـ QR</span>
                 <ArrowLeft className="w-3.5 h-3.5" />
@@ -232,18 +231,18 @@ export default function HomePage() {
       {/* ========================================================================= */}
       {/* 3. TEMPLATE ATELIER: CURATED WEDDING STYLES                              */}
       {/* ========================================================================= */}
-      <section id="designs" className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#EADBCE]">
+      <section id="designs" className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#EFE4DC]">
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14 text-right">
           <div className="space-y-2 max-w-2xl">
-            <div className="flex items-center gap-3 text-[11px] font-serif uppercase tracking-widest text-[#9A7B38]">
-              <span className="w-8 h-[1px] bg-[#D6AD65]" />
+            <div className="flex items-center gap-3 text-[11px] font-serif uppercase tracking-widest text-[#790D20]">
+              <span className="w-8 h-[1px] bg-[#790D20]" />
               <span>٠٢ / أتيليه التصاميم</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-bold font-serif text-[#51354F]">
+            <h2 className="text-3xl sm:text-5xl font-bold font-serif text-[#390E19]">
               تصاميم صُممت بروح الفخامة
             </h2>
-            <p className="text-sm text-[#786C68]">
+            <p className="text-sm text-[#8B7778]">
               كل قالب يعكس شخصية مختلفة من أرقى مراسم الأعراس الملكية والعصرية
             </p>
           </div>
@@ -262,8 +261,8 @@ export default function HomePage() {
                 onClick={() => setSelectedStyleFilter(tab.id)}
                 className={`px-4 py-2 rounded-full transition-all min-h-[40px] ${
                   selectedStyleFilter === tab.id
-                    ? "bg-[#51354F] text-white shadow-sm"
-                    : "bg-white text-[#786C68] border border-[#EADBCE] hover:text-[#51354F]"
+                    ? "bg-[#790D20] text-white shadow-soft-sm"
+                    : "bg-white text-[#8B7778] border border-[#EFE4DC] hover:text-[#790D20]"
                 }`}
               >
                 {tab.label}
@@ -277,19 +276,19 @@ export default function HomePage() {
           {filteredTemplates.map((tmpl) => (
             <div
               key={tmpl.id}
-              className="group flex flex-col bg-white border border-[#EADBCE] rounded-[2rem] p-5 shadow-[0_4px_16px_rgba(73,59,56,0.04)] hover:shadow-[0_12px_28px_rgba(73,59,56,0.08)] transition-all duration-500"
+              className="group flex flex-col bg-[#FFFDFC] border border-[#EFE4DC] rounded-[2rem] p-5 shadow-soft-sm hover:shadow-soft-md transition-all duration-500"
             >
               {/* Template Header Info */}
               <div className="w-full flex items-center justify-between mb-4 px-2 text-right">
                 <div>
-                  <h3 className="font-bold font-serif text-lg text-[#51354F]">
+                  <h3 className="font-bold font-serif text-lg text-[#390E19]">
                     {tmpl.nameAr}
                   </h3>
-                  <span className="text-[11px] text-[#9A7B38] font-serif block">
+                  <span className="text-[11px] text-[#790D20] font-serif block">
                     {tmpl.taglineAr}
                   </span>
                 </div>
-                <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-[#FFFDF9] text-[#786C68] border border-[#EADBCE]">
+                <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-[#FFF9F5] text-[#8B7778] border border-[#EFE4DC]">
                   {tmpl.styleTag}
                 </span>
               </div>
@@ -302,7 +301,7 @@ export default function HomePage() {
                   brideName="سارة الجوهري"
                   venueName="فندق الفورسيزونز - قاعة البلازا"
                   interactive={false}
-                  className="w-full shadow-[0_8px_20px_rgba(0,0,0,0.12)]"
+                  className="w-full shadow-[0_8px_20px_rgba(57,14,25,0.1)]"
                 />
               </div>
 
@@ -310,17 +309,17 @@ export default function HomePage() {
               <div className="w-full mt-6 flex items-center gap-2.5 px-1">
                 <Link
                   href={`/dashboard/events/new?template=${tmpl.id}`}
-                  className="flex-1 py-3 px-4 rounded-full bg-[#51354F] hover:bg-[#3D283C] text-white font-bold text-xs shadow-sm transition-all text-center min-h-[44px] flex items-center justify-center"
+                  className="flex-1 py-3 px-4 rounded-full bg-[#790D20] hover:bg-[#630A19] text-white font-bold text-xs shadow-soft-xs transition-all text-center min-h-[44px] flex items-center justify-center"
                 >
                   اختيار هذا التصميم
                 </Link>
 
                 <Link
                   href={`/preview?template=${tmpl.id}`}
-                  className="py-3 px-4 rounded-full bg-white border border-[#EADBCE] text-[#786C68] hover:text-[#51354F] hover:border-[#51354F] text-xs font-semibold transition-all flex items-center gap-1.5 min-h-[44px]"
+                  className="py-3 px-4 rounded-full bg-white border border-[#EFE4DC] text-[#493B3B] hover:text-[#790D20] hover:border-[#790D20] text-xs font-semibold transition-all flex items-center gap-1.5 min-h-[44px]"
                 >
                   <span>معاينة</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-[#D6AD65]" />
+                  <ExternalLink className="w-3.5 h-3.5 text-[#D6B77A]" />
                 </Link>
               </div>
             </div>
@@ -331,26 +330,26 @@ export default function HomePage() {
       {/* ========================================================================= */}
       {/* 4. THE 3-STEP FLOW: CLEAR, REASSURING STEPS                               */}
       {/* ========================================================================= */}
-      <section id="how-it-works" className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#EADBCE]">
+      <section id="how-it-works" className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#EFE4DC]">
         {/* Section Header */}
         <div className="max-w-xl text-right mb-16 space-y-2">
-          <div className="flex items-center gap-3 text-[11px] font-serif uppercase tracking-widest text-[#9A7B38]">
-            <span className="w-8 h-[1px] bg-[#D6AD65]" />
+          <div className="flex items-center gap-3 text-[11px] font-serif uppercase tracking-widest text-[#790D20]">
+            <span className="w-8 h-[1px] bg-[#790D20]" />
             <span>٠٣ / كيف نعمل</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold font-serif text-[#51354F]">
+          <h2 className="text-3xl sm:text-5xl font-bold font-serif text-[#390E19]">
             رحلتكم مع لحظة في ثلاث خطوات
           </h2>
-          <p className="text-sm text-[#786C68]">
+          <p className="text-sm text-[#8B7778]">
             صممنا المنصة لتكون غاية في البساطة والسرعة لكما ولضيوفكما
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Step 1 */}
-          <div className="bg-white border border-[#EADBCE] rounded-[2rem] p-8 sm:p-10 space-y-4 text-right shadow-[0_4px_16px_rgba(73,59,56,0.03)]">
-            <span className="font-serif text-4xl font-light text-[#D6AD65] block">٠١</span>
-            <h3 className="text-xl font-bold font-serif text-[#51354F]">
+          <div className="bg-[#FFFDFC] border border-[#EFE4DC] rounded-[2rem] p-8 sm:p-10 space-y-4 text-right shadow-soft-xs">
+            <span className="font-serif text-4xl font-light text-[#D6B77A] block">٠١</span>
+            <h3 className="text-xl font-bold font-serif text-[#390E19]">
               اختر التصميم وخصّص التفاصيل
             </h3>
             <p className="text-xs sm:text-sm text-[#6E5D59] leading-relaxed">
@@ -359,9 +358,9 @@ export default function HomePage() {
           </div>
 
           {/* Step 2 */}
-          <div className="bg-white border border-[#EADBCE] rounded-[2rem] p-8 sm:p-10 space-y-4 text-right shadow-[0_4px_16px_rgba(73,59,56,0.03)]">
-            <span className="font-serif text-4xl font-light text-[#F27D72] block">٠٢</span>
-            <h3 className="text-xl font-bold font-serif text-[#51354F]">
+          <div className="bg-[#FFFDFC] border border-[#EFE4DC] rounded-[2rem] p-8 sm:p-10 space-y-4 text-right shadow-soft-xs">
+            <span className="font-serif text-4xl font-light text-[#790D20] block">٠٢</span>
+            <h3 className="text-xl font-bold font-serif text-[#390E19]">
               شارك الدعوة واطبع الـ QR
             </h3>
             <p className="text-xs sm:text-sm text-[#6E5D59] leading-relaxed">
@@ -370,9 +369,9 @@ export default function HomePage() {
           </div>
 
           {/* Step 3 */}
-          <div className="bg-white border border-[#EADBCE] rounded-[2rem] p-8 sm:p-10 space-y-4 text-right shadow-[0_4px_16px_rgba(73,59,56,0.03)]">
-            <span className="font-serif text-4xl font-light text-[#A8C5A0] block">٠٣</span>
-            <h3 className="text-xl font-bold font-serif text-[#51354F]">
+          <div className="bg-[#FFFDFC] border border-[#EFE4DC] rounded-[2rem] p-8 sm:p-10 space-y-4 text-right shadow-soft-xs">
+            <span className="font-serif text-4xl font-light text-[#3D7A42] block">٠٣</span>
+            <h3 className="text-xl font-bold font-serif text-[#390E19]">
               اجمع اللحظات وخلد الذكريات
             </h3>
             <p className="text-xs sm:text-sm text-[#6E5D59] leading-relaxed">
@@ -385,17 +384,17 @@ export default function HomePage() {
       {/* ========================================================================= */}
       {/* 5. PRICING AS A BESPOKE COMMISSION MENU                                   */}
       {/* ========================================================================= */}
-      <section id="pricing" className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#EADBCE]">
+      <section id="pricing" className="py-20 sm:py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-[#EFE4DC]">
         {/* Section Header */}
         <div className="max-w-xl text-right mb-16 space-y-2">
-          <div className="flex items-center gap-3 text-[11px] font-serif uppercase tracking-widest text-[#9A7B38]">
-            <span className="w-8 h-[1px] bg-[#D6AD65]" />
+          <div className="flex items-center gap-3 text-[11px] font-serif uppercase tracking-widest text-[#790D20]">
+            <span className="w-8 h-[1px] bg-[#790D20]" />
             <span>٠٤ / الباقات والاستثمار</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-bold font-serif text-[#51354F]">
+          <h2 className="text-3xl sm:text-5xl font-bold font-serif text-[#390E19]">
             باقات واضحة • استثمار لمرة واحدة
           </h2>
-          <p className="text-sm text-[#786C68]">
+          <p className="text-sm text-[#8B7778]">
             سعر ثابت شامل تصميم الدعوة، وتأكيد الحضور، واستضافة الصور ليلة العمر دون أي اشتراكات متكررة
           </p>
         </div>
@@ -408,35 +407,35 @@ export default function HomePage() {
                 key={pkg.code}
                 className={`rounded-[2.2rem] p-7 sm:p-9 flex flex-col justify-between border text-right transition-all relative ${
                   isPopular
-                    ? "bg-white border-[#F27D72] shadow-[0_15px_35px_-5px_rgba(242,125,114,0.18)] scale-[1.02] z-10"
-                    : "bg-white border-[#EADBCE] shadow-[0_4px_16px_rgba(73,59,56,0.03)]"
+                    ? "bg-[#FFFDFC] border-[#790D20] shadow-[0_15px_35px_-5px_rgba(121,13,32,0.2)] scale-[1.02] z-10"
+                    : "bg-[#FFFDFC] border-[#EFE4DC] shadow-soft-xs"
                 }`}
               >
                 {isPopular && (
-                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[#F27D72] text-white font-bold text-[11px] shadow-sm">
-                    الأكثر طلباً للأعراس
+                  <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[#790D20] text-white font-bold text-[11px] shadow-sm">
+                    الأكثر طلباً للأعراس ✦
                   </span>
                 )}
 
                 <div className="space-y-5">
                   <div className="space-y-1">
-                    <h3 className="text-2xl font-bold font-serif text-[#51354F]">
+                    <h3 className="text-2xl font-bold font-serif text-[#390E19]">
                       {pkg.nameAr}
                     </h3>
-                    <p className="text-xs text-[#786C68]">{pkg.taglineAr}</p>
+                    <p className="text-xs text-[#8B7778]">{pkg.taglineAr}</p>
                   </div>
 
                   <div className="flex items-baseline gap-1 py-1">
-                    <span className="text-4xl font-extrabold font-mono text-[#51354F]">
+                    <span className="text-4xl font-extrabold font-mono text-[#390E19]">
                       {pkg.price}
                     </span>
-                    <span className="text-xs font-semibold text-[#786C68]">{pkg.currency}</span>
+                    <span className="text-xs font-semibold text-[#8B7778]">{pkg.currency}</span>
                   </div>
 
-                  <ul className="space-y-3 text-xs text-[#493B38] pt-4 border-t border-[#F3EAE1]">
+                  <ul className="space-y-3 text-xs text-[#493B3B] pt-4 border-t border-[#EFE4DC]">
                     {pkg.features.map((feature, idx) => (
                       <li key={idx} className="flex items-start gap-2.5">
-                        <Check className="w-4 h-4 text-[#F27D72] shrink-0 mt-0.5" />
+                        <Check className="w-4 h-4 text-[#790D20] shrink-0 mt-0.5" />
                         <span className="leading-relaxed">{feature}</span>
                       </li>
                     ))}
@@ -448,8 +447,8 @@ export default function HomePage() {
                     href={`/dashboard/events/new?package=${pkg.code}`}
                     className={`w-full py-3.5 rounded-full font-bold text-xs text-center transition-all flex items-center justify-center gap-1.5 min-h-[46px] ${
                       isPopular
-                        ? "bg-[#F27D72] text-white hover:bg-[#DE685D] shadow-sm"
-                        : "bg-[#FFF9F0] text-[#51354F] border border-[#EADBCE] hover:border-[#51354F]"
+                        ? "bg-[#790D20] text-white hover:bg-[#630A19] shadow-soft-xs"
+                        : "bg-[#FFF9F5] text-[#390E19] border border-[#EFE4DC] hover:border-[#790D20]"
                     }`}
                   >
                     <span>اختر {pkg.nameAr}</span>
@@ -463,27 +462,30 @@ export default function HomePage() {
       </section>
 
       {/* ========================================================================= */}
-      {/* 6. EDITORIAL CLOSING STATEMENT                                            */}
+      {/* 6. EDITORIAL CLOSING STATEMENT IN DEEP WINE                               */}
       {/* ========================================================================= */}
       <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
-        <div className="bg-[#51354F] text-white rounded-[3rem] p-10 sm:p-16 shadow-[0_25px_60px_-15px_rgba(81,53,79,0.3)] space-y-6 relative overflow-hidden">
-          <div className="space-y-3">
-            <span className="text-xs font-serif uppercase tracking-widest text-[#D6AD65] block font-semibold">
+        <div className="bg-gradient-to-br from-[#390E19] via-[#4A0A16] to-[#270810] text-white rounded-[3rem] p-10 sm:p-16 shadow-[0_25px_60px_-15px_rgba(57,14,25,0.4)] space-y-6 relative overflow-hidden">
+          {/* Subtle Champagne Radial Glow */}
+          <div className="absolute top-0 right-0 w-72 h-72 bg-radial from-[#D6B77A]/15 to-transparent blur-3xl pointer-events-none" />
+
+          <div className="space-y-3 relative z-10">
+            <span className="text-xs font-serif uppercase tracking-widest text-[#D6B77A] block font-semibold">
               ليلة الفرح لا تتكرر
             </span>
             <h2 className="text-3xl sm:text-5xl font-bold font-serif text-white leading-tight">
               ابدأوا اليوم بدعوة تليق بمقام ليلتكم
             </h2>
-            <p className="text-sm text-[#EADBCE] max-w-lg mx-auto leading-relaxed">
+            <p className="text-sm text-[#D8B8B8] max-w-lg mx-auto leading-relaxed">
               انضموا إلى عائلات وثقت أسعد لحظاتها وشاركت بهجة ليلة زفافها برقي وسهولة مع لحظة
             </p>
           </div>
 
-          <div className="pt-4">
+          <div className="pt-4 relative z-10">
             <Link
               href="/dashboard/events/new"
               onClick={handleCtaClick}
-              className="inline-flex items-center gap-2 px-9 py-4 rounded-full bg-[#F27D72] text-white font-bold text-sm hover:bg-[#DE685D] shadow-[0_10px_25px_-3px_rgba(242,125,114,0.4)] hover:scale-105 active:scale-95 transition-all min-h-[48px]"
+              className="inline-flex items-center gap-2 px-9 py-4 rounded-full bg-[#790D20] text-white font-bold text-sm hover:bg-[#9B1A31] shadow-[0_10px_25px_-3px_rgba(121,13,32,0.5)] hover:scale-105 active:scale-95 transition-all min-h-[48px]"
             >
               <span>ابدأ تصميم دعوتك الآن</span>
               <ArrowLeft className="w-4 h-4" />

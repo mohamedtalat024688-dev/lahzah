@@ -5,48 +5,61 @@
     --font-cairo: 'Cairo', system-ui, -apple-system, sans-serif;
     --font-amiri: 'Amiri', serif;
 
-    /* Joyful Luxury Celebration Palette */
-    --color-warm-ivory: #FFF9F0;
-    --color-ivory-surface: #FFFDF9;
-    --color-ivory-muted: #F8F1E5;
-    --color-celebration-coral: #F27D72;
-    --color-coral-hover: #DE685D;
-    --color-rose-pink: #F5B5C8;
-    --color-rose-soft: #FDF0F4;
-    --color-peach: #FFCBA4;
-    --color-peach-light: #FFF4EC;
-    --color-champagne-gold: #D6AD65;
-    --color-champagne-light: #FAF3E5;
-    --color-fresh-sage: #A8C5A0;
-    --color-sage-soft: #F1F7F0;
-    --color-deep-plum: #51354F;
-    --color-plum-hover: #3E273C;
-    --color-warm-brown: #493B38;
-    --color-warm-brown-muted: #6E5D59;
-    --color-warm-brown-light: #9B8D89;
-    --color-warm-border: #EADBCE;
-    --color-warm-border-subtle: #F3EAE1;
-    --color-white: #FFFFFF;
+    /* Modern Burgundy Luxury Design Tokens */
+    --color-primary-burgundy: #790D20;
+    --color-burgundy-hover: #630A19;
+    --color-burgundy-light: #9B1A31;
+    --color-deep-wine: #390E19;
+    --color-wine-dark: #270810;
+    
+    --color-warm-ivory: #FFF9F5;
+    --color-soft-white: #FFFDFC;
+    --color-ivory-surface: #FAF3EE;
+    --color-ivory-border: #EFE4DC;
+    
+    --color-dusty-rose: #D8B8B8;
+    --color-rose-muted: #EAD5D5;
+    --color-soft-blush: #F1DEDF;
+    --color-blush-light: #FAF2F3;
+    
+    --color-champagne: #D6B77A;
+    --color-champagne-light: #FAF4E8;
+    --color-champagne-dark: #B89656;
+    
+    --color-soft-silver: #D5D8DC;
+    --color-silver-light: #ECEEF0;
+    
+    --color-warm-text: #493B3B;
+    --color-muted-text: #8B7778;
+    --color-light-text: #B4A6A7;
 
-    /* Elevation & Shadows */
-    --shadow-warm-xs: 0 1px 3px rgba(73, 59, 56, 0.04), 0 1px 2px rgba(73, 59, 56, 0.02);
-    --shadow-warm-sm: 0 4px 12px rgba(73, 59, 56, 0.06), 0 1px 3px rgba(73, 59, 56, 0.03);
-    --shadow-warm-md: 0 12px 28px -4px rgba(73, 59, 56, 0.08), 0 4px 12px -2px rgba(73, 59, 56, 0.04);
-    --shadow-warm-lg: 0 20px 40px -8px rgba(73, 59, 56, 0.12), 0 8px 16px -4px rgba(73, 59, 56, 0.04);
-    --shadow-coral-glow: 0 10px 25px -3px rgba(242, 125, 114, 0.35);
-    --shadow-gold-glow: 0 10px 25px -3px rgba(214, 173, 101, 0.3);
+    /* Semantic Accents */
+    --color-success: #3D7A42;
+    --color-success-bg: #F0F7F1;
+    --color-warning: #B37D22;
+    --color-warning-bg: #FEF9EE;
+    --color-error: #A82323;
+    --color-error-bg: #FFF0F0;
+
+    /* Luxury Elevation & Material Shadows */
+    --shadow-soft-xs: 0 1px 2px rgba(57, 14, 25, 0.03);
+    --shadow-soft-sm: 0 2px 8px rgba(57, 14, 25, 0.05);
+    --shadow-soft-md: 0 8px 24px -4px rgba(57, 14, 25, 0.08), 0 2px 6px -1px rgba(57, 14, 25, 0.03);
+    --shadow-soft-lg: 0 20px 48px -10px rgba(57, 14, 25, 0.12), 0 6px 16px -2px rgba(57, 14, 25, 0.04);
+    --shadow-burgundy-glow: 0 10px 25px -4px rgba(121, 13, 32, 0.35);
+    --shadow-wax-seal: 0 8px 20px rgba(121, 13, 32, 0.45), inset 0 2px 3px rgba(255, 255, 255, 0.4), inset 0 -3px 5px rgba(0, 0, 0, 0.5);
   }
 
   html {
     scroll-behavior: smooth;
     font-family: var(--font-cairo);
     background-color: var(--color-warm-ivory);
-    color: var(--color-warm-brown);
+    color: var(--color-warm-text);
   }
 
   body {
     background-color: var(--color-warm-ivory);
-    color: var(--color-warm-brown);
+    color: var(--color-warm-text);
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -67,73 +80,46 @@
   font-family: var(--font-cairo), sans-serif;
 }
 
-/* Color Utility Tokens */
-.bg-warm-ivory { background-color: #FFF9F0; }
-.bg-ivory-surface { background-color: #FFFDF9; }
-.bg-ivory-muted { background-color: #F8F1E5; }
-.bg-celebration-coral { background-color: #F27D72; }
-.bg-rose-pink { background-color: #F5B5C8; }
-.bg-rose-soft { background-color: #FDF0F4; }
-.bg-peach-light { background-color: #FFF4EC; }
-.bg-champagne-light { background-color: #FAF3E5; }
-.bg-sage-soft { background-color: #F1F7F0; }
-.bg-deep-plum { background-color: #51354F; }
+/* Custom Utilities for Modern Burgundy Luxury */
+.bg-warm-ivory { background-color: #FFF9F5; }
+.bg-soft-white { background-color: #FFFDFC; }
+.bg-soft-blush { background-color: #F1DEDF; }
+.bg-blush-light { background-color: #FAF2F3; }
+.bg-primary-burgundy { background-color: #790D20; }
+.bg-deep-wine { background-color: #390E19; }
+.bg-champagne-light { background-color: #FAF4E8; }
 
-.text-warm-brown { color: #493B38; }
-.text-warm-brown-muted { color: #6E5D59; }
-.text-warm-brown-light { color: #9B8D89; }
-.text-celebration-coral { color: #F27D72; }
-.text-deep-plum { color: #51354F; }
-.text-champagne-gold { color: #D6AD65; }
-.text-fresh-sage { color: #5C8852; }
+.text-primary-burgundy { color: #790D20; }
+.text-deep-wine { color: #390E19; }
+.text-warm-brown { color: #493B3B; }
+.text-muted-brown { color: #8B7778; }
+.text-dusty-rose { color: #D8B8B8; }
+.text-champagne { color: #D6B77A; }
 
-.border-warm { border-color: #EADBCE; }
-.border-warm-subtle { border-color: #F3EAE1; }
-.border-coral { border-color: #F27D72; }
-.border-champagne { border-color: #D6AD65; }
+.border-burgundy { border-color: #790D20; }
+.border-soft-silver { border-color: #D5D8DC; }
+.border-dusty-rose { border-color: #D8B8B8; }
+.border-ivory { border-color: #EFE4DC; }
+.border-champagne { border-color: #D6B77A; }
 
-/* Elegant Gradients */
-.bg-gradient-celebration {
-  background: linear-gradient(135deg, #FFF9F0 0%, #FFF3EC 50%, #FDF0F4 100%);
-}
-
-.bg-gradient-coral {
-  background: linear-gradient(135deg, #F27D72 0%, #F5978E 100%);
-}
-
-.bg-gradient-plum {
-  background: linear-gradient(135deg, #51354F 0%, #684265 100%);
-}
-
-.bg-gradient-champagne {
-  background: linear-gradient(135deg, #D6AD65 0%, #E6C588 100%);
-}
-
-/* Shadows */
-.shadow-warm-sm { box-shadow: var(--shadow-warm-sm); }
-.shadow-warm-md { box-shadow: var(--shadow-warm-md); }
-.shadow-warm-lg { box-shadow: var(--shadow-warm-lg); }
-.shadow-coral-glow { box-shadow: var(--shadow-coral-glow); }
-.shadow-gold-glow { box-shadow: var(--shadow-gold-glow); }
-
-/* Dividers */
-.hairline-divider {
+/* Hairline Dividers */
+.hairline-gold {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(214, 173, 101, 0.35), transparent);
+  background: linear-gradient(90deg, transparent, rgba(214, 183, 122, 0.4), transparent);
 }
 
-.hairline-divider-rose {
+.hairline-burgundy {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(245, 181, 200, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(121, 13, 32, 0.25), transparent);
 }
 
-/* Animations & Celebration Micro-interactions */
-@keyframes floatSlow {
+/* Smooth Luxury Animations */
+@keyframes softFloat {
   0%, 100% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translateY(0px);
   }
   50% {
-    transform: translateY(-8px) rotate(1.5deg);
+    transform: translateY(-6px);
   }
 }
 
@@ -144,29 +130,58 @@
   }
   50% {
     opacity: 1;
-    transform: scale(1.03);
+    transform: scale(1.02);
   }
 }
 
-@keyframes ribbonSway {
-  0%, 100% {
-    transform: rotate(-2deg);
-  }
-  50% {
-    transform: rotate(2deg);
-  }
-}
-
-.animate-float-slow {
-  animation: floatSlow 6s ease-in-out infinite;
+.animate-soft-float {
+  animation: softFloat 5s ease-in-out infinite;
 }
 
 .animate-gentle-pulse {
   animation: gentlePulse 4s ease-in-out infinite;
 }
 
-.animate-ribbon-sway {
-  animation: ribbonSway 5s ease-in-out infinite;
+/* 3D Perspective & Envelope Stationery Motion */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.perspective-1200 {
+  perspective: 1200px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+@keyframes goldFoilShimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.gold-foil-shimmer {
+  background: linear-gradient(
+    90deg,
+    #D6B77A 0%,
+    #FFF4E0 35%,
+    #D6B77A 50%,
+    #FFF4E0 65%,
+    #D6B77A 100%
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: goldFoilShimmer 6s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -178,22 +193,22 @@
   }
 }
 
-/* Custom Scrollbar - Warm & Soft */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #FFF9F0;
+  background: #FFF9F5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #EADBCE;
+  background: #D8B8B8;
   border-radius: 9999px;
-  border: 2px solid #FFF9F0;
+  border: 2px solid #FFF9F5;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #D5C2B1;
+  background: #790D20;
 }

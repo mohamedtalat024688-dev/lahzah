@@ -98,7 +98,7 @@ export default function PhotoUploader({
         particleCount: 75,
         spread: 65,
         origin: { y: 0.6 },
-        colors: ["#F27D72", "#F5B5C8", "#FFCBA4", "#D6AD65", "#A8C5A0"],
+        colors: ["#790D20", "#390E19", "#D8B8B8", "#D6B77A", "#F1DEDF", "#FFF9F5"],
       });
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "حدث خطأ أثناء رفع الصورة";
@@ -120,14 +120,14 @@ export default function PhotoUploader({
   };
 
   return (
-    <div className="w-full max-w-md mx-auto bg-white border border-[#EADBCE] rounded-3xl p-6 sm:p-8 shadow-xl text-right">
+    <div className="w-full max-w-md mx-auto bg-[#FFFDFC] border border-[#EFE4DC] rounded-3xl p-6 sm:p-8 shadow-xl text-right">
       {/* Event Header */}
       <div className="text-center mb-6 space-y-1.5">
-        <span className="text-[11px] font-serif uppercase tracking-widest text-[#D6AD65] font-semibold block">
+        <span className="text-[11px] font-serif uppercase tracking-widest text-[#D6B77A] font-semibold block">
           شاركنا لحظة من يومنا
         </span>
-        <h2 className="text-2xl font-bold font-serif text-[#51354F]">{eventTitle}</h2>
-        <p className="text-xs text-[#786C68]">خلّد أجمل اللحظات مع {coupleNames}</p>
+        <h2 className="text-2xl font-bold font-serif text-[#390E19]">{eventTitle}</h2>
+        <p className="text-xs text-[#8B7778]">خلّد أجمل اللحظات مع {coupleNames}</p>
       </div>
 
       {isSuccess ? (
@@ -137,26 +137,26 @@ export default function PhotoUploader({
           </div>
 
           <div className="space-y-1">
-            <h3 className="text-2xl font-bold font-serif text-[#51354F]">تم استلام صورتك الكريمة</h3>
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#FEF9EE] text-[#9A6B1A] text-[11px] font-semibold border border-[#F3DEB2]">
-              <Clock className="w-3 h-3 text-[#D6AD65]" />
+            <h3 className="text-2xl font-bold font-serif text-[#390E19]">تم استلام صورتك الكريمة</h3>
+            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#FAF3E5] text-[#8B6B23] text-[11px] font-semibold border border-[#D6B77A]/40">
+              <Clock className="w-3 h-3 text-[#D6B77A]" />
               <span>الحالة: بانتظار اعتماد العروسين</span>
             </span>
           </div>
 
-          <p className="text-[#786C68] text-xs leading-relaxed max-w-xs mx-auto">
+          <p className="text-[#8B7778] text-xs leading-relaxed max-w-xs mx-auto">
             شكراً لمشاركتكم هذه اللحظة الغالية. ستظهر صورتكم في ألبوم ذكريات الحفل فور اعتمادها من
             أصحاب المناسبة.
           </p>
 
-          <div className="p-3 bg-[#FFFDF9] rounded-2xl border border-[#EADBCE] text-[11px] text-[#786C68] flex items-center justify-center gap-1.5">
+          <div className="p-3 bg-[#FFF9F5] rounded-2xl border border-[#EFE4DC] text-[11px] text-[#8B7778] flex items-center justify-center gap-1.5">
             <ShieldCheck className="w-4 h-4 text-[#5B9C51]" />
             <span>نحافظ على خصوصية الحفل بمراجعة جميع المشاركات</span>
           </div>
 
           <button
             onClick={handleReset}
-            className="mt-4 w-full py-3 min-h-[44px] rounded-full bg-gradient-to-r from-[#F27D72] to-[#E2695E] text-white font-bold text-xs hover:shadow-md transition-all flex items-center justify-center gap-2 shadow-sm"
+            className="mt-4 w-full py-3 min-h-[44px] rounded-full bg-[#790D20] text-white font-bold text-xs hover:bg-[#390E19] transition-all flex items-center justify-center gap-2 shadow-sm"
           >
             <ImagePlus className="w-4 h-4" />
             <span>مشاركة صورة أخرى</span>
@@ -165,8 +165,8 @@ export default function PhotoUploader({
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           {errorMessage && (
-            <div className="p-3.5 text-xs bg-[#FFF0EE] border border-[#F5B5C8] text-[#C24134] rounded-xl flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 shrink-0 text-[#F27D72]" />
+            <div className="p-3.5 text-xs bg-[#F1DEDF]/50 border border-[#D8B8B8] text-[#790D20] rounded-xl flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-[#790D20]" />
               <span>{errorMessage}</span>
             </div>
           )}
@@ -174,7 +174,7 @@ export default function PhotoUploader({
           {/* Upload Area / Camera Trigger */}
           <div
             onClick={() => fileInputRef.current?.click()}
-            className="cursor-pointer border-2 border-dashed border-[#EADBCE] hover:border-[#F27D72] bg-[#FFFDF9] rounded-2xl p-6 text-center transition-all group relative overflow-hidden"
+            className="cursor-pointer border-2 border-dashed border-[#EFE4DC] hover:border-[#790D20] bg-[#FFF9F5] rounded-2xl p-6 text-center transition-all group relative overflow-hidden"
           >
             <input
               ref={fileInputRef}
@@ -188,7 +188,7 @@ export default function PhotoUploader({
             {previewUrl ? (
               <div className="relative w-full h-56 rounded-xl overflow-hidden shadow-inner">
                 <Image src={previewUrl} alt="معاينة الصورة" fill className="object-cover" />
-                <div className="absolute inset-0 bg-[#51354F]/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="absolute inset-0 bg-[#390E19]/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                   <span className="text-xs font-semibold text-white bg-black/70 px-3 py-1.5 rounded-full border border-white/20">
                     اضغط لتغيير الصورة
                   </span>
@@ -196,14 +196,14 @@ export default function PhotoUploader({
               </div>
             ) : (
               <div className="space-y-3 py-4">
-                <div className="w-14 h-14 rounded-full bg-[#FFF0EE] border border-[#F5B5C8] text-[#F27D72] flex items-center justify-center mx-auto group-hover:scale-105 transition-transform shadow-sm">
+                <div className="w-14 h-14 rounded-full bg-[#F1DEDF]/50 border border-[#D8B8B8] text-[#790D20] flex items-center justify-center mx-auto group-hover:scale-105 transition-transform shadow-sm">
                   <Camera className="w-7 h-7" />
                 </div>
                 <div className="space-y-1">
-                  <p className="text-xs font-bold text-[#51354F]">
+                  <p className="text-xs font-bold text-[#390E19]">
                     التقط صورة بكاميرا هاتفك أو اختر من المعرض
                   </p>
-                  <p className="text-[11px] text-[#786C68]">JPG أو PNG أو WebP حتى 12 ميجابايت</p>
+                  <p className="text-[11px] text-[#8B7778]">JPG أو PNG أو WebP حتى 12 ميجابايت</p>
                 </div>
               </div>
             )}
@@ -212,13 +212,13 @@ export default function PhotoUploader({
           {/* Progress Bar during upload */}
           {isUploading && (
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-[11px] text-[#786C68]">
+              <div className="flex items-center justify-between text-[11px] text-[#8B7778]">
                 <span>جاري إرسال الصورة...</span>
-                <span className="font-mono text-[#F27D72] font-bold">{uploadProgress}%</span>
+                <span className="font-mono text-[#790D20] font-bold">{uploadProgress}%</span>
               </div>
-              <div className="w-full bg-[#EADBCE]/50 rounded-full h-1.5 overflow-hidden">
+              <div className="w-full bg-[#EFE4DC] rounded-full h-1.5 overflow-hidden">
                 <div
-                  className="bg-[#F27D72] h-1.5 rounded-full transition-all duration-300"
+                  className="bg-[#790D20] h-1.5 rounded-full transition-all duration-300"
                   style={{ width: `${uploadProgress}%` }}
                 />
               </div>
@@ -227,19 +227,19 @@ export default function PhotoUploader({
 
           {/* Guest Name */}
           <div className="space-y-1.5 text-right">
-            <label className="text-xs font-semibold text-[#51354F]">اسمك الكريم (اختياري)</label>
+            <label className="text-xs font-semibold text-[#390E19]">اسمك الكريم (اختياري)</label>
             <input
               type="text"
               value={guestName}
               onChange={(e) => setGuestName(e.target.value)}
               placeholder="مثال: من عائلة العريس"
-              className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#EADBCE] text-[#493B38] placeholder-[#A89F95] focus:outline-none focus:border-[#F27D72] text-xs text-right transition-colors"
+              className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#EFE4DC] text-[#493B3B] placeholder-[#8B7778]/60 focus:outline-none focus:border-[#790D20] text-xs text-right transition-colors"
             />
           </div>
 
           {/* Message / Caption */}
           <div className="space-y-1.5 text-right">
-            <label className="text-xs font-semibold text-[#51354F]">
+            <label className="text-xs font-semibold text-[#390E19]">
               كلمة أو تهنئة للعروسين (اختياري)
             </label>
             <textarea
@@ -247,7 +247,7 @@ export default function PhotoUploader({
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="ألف مليون مبروك لأحلى عروسين! ✨"
-              className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#EADBCE] text-[#493B38] placeholder-[#A89F95] focus:outline-none focus:border-[#F27D72] text-xs text-right resize-none transition-colors"
+              className="w-full px-4 py-2.5 rounded-xl bg-white border border-[#EFE4DC] text-[#493B3B] placeholder-[#8B7778]/60 focus:outline-none focus:border-[#790D20] text-xs text-right resize-none transition-colors"
             />
           </div>
 
@@ -256,8 +256,8 @@ export default function PhotoUploader({
             disabled={isUploading || !file}
             className={`w-full py-3.5 rounded-full font-bold text-xs flex items-center justify-center gap-2 transition-all min-h-[44px] shadow-sm ${
               file && !isUploading
-                ? "bg-gradient-to-r from-[#F27D72] to-[#E2695E] text-white hover:shadow-md cursor-pointer"
-                : "bg-[#EADBCE]/60 text-[#A89F95] cursor-not-allowed"
+                ? "bg-[#790D20] text-white hover:bg-[#390E19] cursor-pointer"
+                : "bg-[#EFE4DC] text-[#8B7778]/60 cursor-not-allowed"
             }`}
           >
             {isUploading ? (

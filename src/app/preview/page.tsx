@@ -79,30 +79,30 @@ function TemplatePreviewContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF9F0] text-[#493B38] selection:bg-[#F27D72]/20 selection:text-[#51354F] flex flex-col font-body">
+    <div className="min-h-screen bg-[#FFF9F5] text-[#493B3B] selection:bg-[#790D20]/15 selection:text-[#390E19] flex flex-col font-sans">
       {/* ========================================================================= */}
       {/* 1. TOP STICKY PREVIEW BAR (UX CONTROLS)                                   */}
       {/* ========================================================================= */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#FFF9F0]/90 border-b border-[#EADBCE] shadow-warm-xs">
+      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#FFF9F5]/90 border-b border-[#EFE4DC] shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
             {/* Right: Breadcrumb & Title */}
             <div className="flex items-center justify-between md:justify-start gap-4">
               <Link
                 href="/#templates"
-                className="inline-flex items-center gap-1.5 text-xs text-[#6E5D59] hover:text-[#F27D72] transition-colors py-2"
+                className="inline-flex items-center gap-1.5 text-xs text-[#8B7778] hover:text-[#790D20] transition-colors py-2"
               >
                 <ArrowRight className="w-4 h-4" />
                 <span>العودة للقوالب</span>
               </Link>
 
-              <div className="h-4 w-px bg-[#EADBCE] hidden sm:block" />
+              <div className="h-4 w-px bg-[#EFE4DC] hidden sm:block" />
 
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold font-display text-[#51354F]">
+                <span className="text-xs font-bold font-serif text-[#390E19]">
                   معاينة حية:
                 </span>
-                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-[#FFFDF9] text-[#51354F] border border-[#EADBCE] flex items-center gap-1.5 shadow-warm-xs">
+                <span className="text-xs font-semibold px-3 py-1 rounded-full bg-[#FFFDFC] text-[#390E19] border border-[#EFE4DC] flex items-center gap-1.5 shadow-sm">
                   <span
                     className="w-2.5 h-2.5 rounded-full"
                     style={{ backgroundColor: activeTemplate.theme.accentColor }}
@@ -124,8 +124,8 @@ function TemplatePreviewContent() {
                     onClick={() => handleTemplateChange(tmpl.id)}
                     className={`px-3.5 py-1.5 rounded-full whitespace-nowrap transition-all flex items-center gap-1.5 font-medium shrink-0 min-h-[38px] ${
                       isActive
-                        ? "bg-[#F27D72] text-white font-bold shadow-coral-glow"
-                        : "bg-[#FFFDF9] border border-[#EADBCE] text-[#6E5D59] hover:text-[#51354F] hover:border-[#D6AD65]"
+                        ? "bg-[#790D20] text-white font-bold shadow-sm"
+                        : "bg-[#FFFDFC] border border-[#EFE4DC] text-[#8B7778] hover:text-[#390E19] hover:border-[#D6B77A]"
                     }`}
                   >
                     <span
@@ -134,7 +134,7 @@ function TemplatePreviewContent() {
                     />
                     <span>{tmpl.nameAr}</span>
                     {isLuxury && (
-                      <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-[#FAF3E5] text-[#D6AD65] border border-[#D6AD65]/40 font-mono">
+                      <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-[#FAF3E5] text-[#D6B77A] border border-[#D6B77A]/40 font-mono">
                         VIP
                       </span>
                     )}
@@ -144,16 +144,16 @@ function TemplatePreviewContent() {
             </div>
 
             {/* Left: View Mode Toggle & Primary CTA Button */}
-            <div className="flex items-center justify-between md:justify-end gap-3 pt-1 md:pt-0 border-t md:border-t-0 border-[#EADBCE]">
+            <div className="flex items-center justify-between md:justify-end gap-3 pt-1 md:pt-0 border-t md:border-t-0 border-[#EFE4DC]">
               {/* View Mode Toggle */}
-              <div className="flex items-center p-1 bg-[#FFFDF9] rounded-full border border-[#EADBCE] shadow-warm-xs">
+              <div className="flex items-center p-1 bg-[#FFFDFC] rounded-full border border-[#EFE4DC] shadow-sm">
                 <button
                   type="button"
                   onClick={() => setViewMode("card")}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all min-h-[36px] ${
                     viewMode === "card"
-                      ? "bg-[#F27D72] text-white shadow-sm"
-                      : "text-[#6E5D59] hover:text-[#493B38]"
+                      ? "bg-[#790D20] text-white shadow-sm"
+                      : "text-[#8B7778] hover:text-[#390E19]"
                   }`}
                 >
                   <Eye className="w-3.5 h-3.5" />
@@ -165,8 +165,8 @@ function TemplatePreviewContent() {
                   onClick={() => setViewMode("full")}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all min-h-[36px] ${
                     viewMode === "full"
-                      ? "bg-[#F27D72] text-white shadow-sm"
-                      : "text-[#6E5D59] hover:text-[#493B38]"
+                      ? "bg-[#790D20] text-white shadow-sm"
+                      : "text-[#8B7778] hover:text-[#390E19]"
                   }`}
                 >
                   <Smartphone className="w-3.5 h-3.5" />
@@ -178,7 +178,7 @@ function TemplatePreviewContent() {
               {/* Use This Template Button */}
               <Link
                 href={`/dashboard/events/new?template=${activeTemplate.id}`}
-                className="px-5 py-2.5 rounded-full bg-[#F27D72] text-white font-bold text-xs hover:bg-[#DE685D] shadow-coral-glow transition-all flex items-center gap-1.5 min-h-[44px] shrink-0 hover:scale-105 active:scale-95"
+                className="px-5 py-2.5 rounded-full bg-[#790D20] text-white font-bold text-xs hover:bg-[#390E19] shadow-sm transition-all flex items-center gap-1.5 min-h-[44px] shrink-0 hover:scale-105 active:scale-95"
               >
                 <span>استخدم هذا التصميم</span>
                 <Sparkles className="w-3.5 h-3.5 fill-current" />
@@ -197,13 +197,13 @@ function TemplatePreviewContent() {
           <div className="py-12 sm:py-16 px-4 max-w-4xl mx-auto flex flex-col items-center justify-center space-y-8 animate-fadeIn">
             {/* Template Description Header */}
             <div className="text-center max-w-lg space-y-2">
-              <span className="text-xs font-bold tracking-widest uppercase block text-[#F27D72]">
+              <span className="text-xs font-bold tracking-widest uppercase block text-[#790D20]">
                 {activeTemplate.styleTag}
               </span>
-              <h1 className="text-2xl sm:text-4xl font-bold font-display text-[#51354F]">
+              <h1 className="text-2xl sm:text-4xl font-bold font-serif text-[#390E19]">
                 قالب {activeTemplate.nameAr}
               </h1>
-              <p className="text-xs sm:text-sm text-[#6E5D59] leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#8B7778] leading-relaxed">
                 {activeTemplate.descriptionAr}
               </p>
             </div>
@@ -233,7 +233,7 @@ function TemplatePreviewContent() {
             <div className="flex items-center gap-3 pt-4">
               <Link
                 href={`/dashboard/events/new?template=${activeTemplate.id}`}
-                className="px-8 py-3.5 rounded-full bg-[#F27D72] text-white font-bold text-xs hover:bg-[#DE685D] shadow-coral-glow transition-all flex items-center gap-2 min-h-[44px]"
+                className="px-8 py-3.5 rounded-full bg-[#790D20] text-white font-bold text-xs hover:bg-[#390E19] shadow-sm transition-all flex items-center gap-2 min-h-[44px]"
               >
                 <span>صمم دعوتك بهذا القالب</span>
                 <Sparkles className="w-3.5 h-3.5 fill-current" />
@@ -243,9 +243,9 @@ function TemplatePreviewContent() {
         ) : (
           /* Full Interactive Event Page Simulation (Mobile Mockup Frame) */
           <div className="py-8 px-4 flex flex-col items-center justify-center animate-fadeIn">
-            <div className="w-full max-w-md mx-auto border-[10px] border-[#493B38] rounded-[3rem] shadow-2xl overflow-hidden bg-black relative">
+            <div className="w-full max-w-md mx-auto border-[10px] border-[#390E19] rounded-[3rem] shadow-2xl overflow-hidden bg-black relative">
               {/* Phone Speaker Notch */}
-              <div className="w-32 h-4 bg-[#493B38] mx-auto rounded-b-xl relative z-30" />
+              <div className="w-32 h-4 bg-[#390E19] mx-auto rounded-b-xl relative z-30" />
 
               {/* Real Event Page Container */}
               <div className="max-h-[750px] overflow-y-auto no-scrollbar">
@@ -265,9 +265,9 @@ export default function TemplatePreviewStudio() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#FFF9F0] flex items-center justify-center text-[#51354F]">
+        <div className="min-h-screen bg-[#FFF9F5] flex items-center justify-center text-[#390E19]">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-5 h-5 animate-spin text-[#F27D72]" />
+            <Sparkles className="w-5 h-5 animate-spin text-[#790D20]" />
             <span className="text-sm font-semibold">جاري تجهيز استوديو المعاينة...</span>
           </div>
         </div>
