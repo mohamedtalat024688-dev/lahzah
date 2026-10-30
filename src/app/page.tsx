@@ -19,6 +19,7 @@ import RealisticInvitationCard from "@/components/templates/RealisticInvitationC
 
 export default function HomePage() {
   const [selectedStyleFilter, setSelectedStyleFilter] = useState<string>("ALL");
+  const [isEnvelopeOpen, setIsEnvelopeOpen] = useState<boolean>(false);
 
   const templatesList = Object.values(TEMPLATES);
 
@@ -50,15 +51,15 @@ export default function HomePage() {
       {/* 1. HERO SECTION: EDITORIAL WEDDING ATELIER COMPOSITION                    */}
       {/* ========================================================================= */}
       <section className="relative pt-12 sm:pt-20 pb-20 sm:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
-        <CelebrationPetals />
+        <CelebrationPetals isOpen={isEnvelopeOpen} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           {/* RIGHT COLUMN (RTL): Evocative Arabic Headline & Value Proposition (5 cols) */}
           <div className="lg:col-span-5 space-y-7 text-right">
             {/* Fine Hairline Burgundy & Champagne Tag */}
-            <div className="flex items-center gap-3 text-[11px] font-serif uppercase tracking-widest text-[#790D20]">
+            <div className="flex items-center gap-3 text-[11px] font-serif tracking-wide text-[#790D20]">
               <span className="w-8 h-[1px] bg-[#790D20]" />
-              <span>لحظة • أتيلييه الدعوات والذكريات</span>
+              <span>دعوات زفاف رقمية • ذكريات تدوم</span>
             </div>
 
             {/* Emotional, Memorable Headline */}
@@ -118,7 +119,7 @@ export default function HomePage() {
 
           {/* LEFT COLUMN (RTL): Interactive Cinematic Wedding Invitation Browser Showcase (7 cols) */}
           <div className="lg:col-span-7 relative flex justify-center w-full">
-            <InteractiveHeroInvitation />
+            <InteractiveHeroInvitation onOpenChange={setIsEnvelopeOpen} />
           </div>
         </div>
       </section>
