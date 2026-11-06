@@ -66,6 +66,92 @@ export interface TemplateLayoutConfig {
 export type OpeningAnimationArchetype = "wax-seal" | "sliding-sleeve" | "gatefold-doors";
 export type GalleryArchetype = "editorial" | "polaroid";
 
+export type TemplateSectionId =
+  | "hero"
+  | "couplePhotos"
+  | "countdown"
+  | "venue"
+  | "schedule"
+  | "dressCode"
+  | "rsvp"
+  | "gallery";
+
+export interface TemplateSectionMeta {
+  id: TemplateSectionId;
+  titleAr: string;
+  descriptionAr: string;
+  isRequired: boolean;
+  defaultEnabled: boolean;
+  defaultOrder: number;
+}
+
+export const MASTER_SECTIONS_CATALOG: Record<TemplateSectionId, TemplateSectionMeta> = {
+  hero: {
+    id: "hero",
+    titleAr: "الافتتاحية وتفاصيل العروسين",
+    descriptionAr: "أسماء العروسين، البسملة، وتاريخ الحفل (قسم أساسي لا يمكن إخفاؤه)",
+    isRequired: true,
+    defaultEnabled: true,
+    defaultOrder: 1,
+  },
+  couplePhotos: {
+    id: "couplePhotos",
+    titleAr: "ألبوم صور العروسين",
+    descriptionAr: "صور الخطوبة وما قبل الفرح مع إمكانية التكبير والشروحات",
+    isRequired: false,
+    defaultEnabled: true,
+    defaultOrder: 2,
+  },
+  countdown: {
+    id: "countdown",
+    titleAr: "العد التنازلي لليلة العمر",
+    descriptionAr: "عداد حي بالأيام والساعات والدقائق حتى موعد الحفل",
+    isRequired: false,
+    defaultEnabled: true,
+    defaultOrder: 3,
+  },
+  venue: {
+    id: "venue",
+    titleAr: "مكان الحفل وتفاصيل القاعة",
+    descriptionAr: "اسم القاعة، العنوان التفصيلي، ورابط خرائط جوجل",
+    isRequired: false,
+    defaultEnabled: true,
+    defaultOrder: 4,
+  },
+  schedule: {
+    id: "schedule",
+    titleAr: "برنامج وفقرات الحفل",
+    descriptionAr: "جدول المواعيد الزمنية لفقرات الفرح من الاستقبال حتى العشاء",
+    isRequired: false,
+    defaultEnabled: true,
+    defaultOrder: 5,
+  },
+  dressCode: {
+    id: "dressCode",
+    titleAr: "قواعد الزي والألوان (Dress Code)",
+    descriptionAr: "إرشادات الملابس والألوان المفضلة لحضور الحفل",
+    isRequired: false,
+    defaultEnabled: true,
+    defaultOrder: 6,
+  },
+  rsvp: {
+    id: "rsvp",
+    titleAr: "تأكيد الحضور (RSVP)",
+    descriptionAr: "نموذج تسجيل الحضور المباشر وحساب عدد المقاعد والتهاني",
+    isRequired: true,
+    defaultEnabled: true,
+    defaultOrder: 7,
+  },
+  gallery: {
+    id: "gallery",
+    titleAr: "ألبوم ذكريات الحفل التفاعلي",
+    descriptionAr: "معرض الصور الحية والتهاني التي يشاركها الضيوف والمعتمدة من المضيف",
+    isRequired: false,
+    defaultEnabled: true,
+    defaultOrder: 8,
+  },
+};
+
 export interface TemplateConfig {
   id: string;
   nameAr: string;
@@ -80,6 +166,8 @@ export interface TemplateConfig {
   featured?: boolean;
   openingAnimation?: OpeningAnimationArchetype;
   galleryStyle?: GalleryArchetype;
+  supportedSections?: TemplateSectionId[];
+  defaultSectionsOrder?: TemplateSectionId[];
   theme: {
     background: string;
     cardBackground: string;
@@ -778,4 +866,45 @@ export function getTemplateGalleryStyle(template: TemplateConfig): GalleryArchet
   }
   return "editorial";
 }
+
+export function getTemplateSupportedSections(templateId: string): TemplateSectionMeta[] {
+  const tmpl = TEMPLATES[templateId] || TEMPLATES["default"];
+  if (tmpl?.supportedSections && tmpl.supportedSections.length > 0) {
+    return tmpl.supportedSections.map((id) => MASTER_SECTIONS_CATALOG[id]).filter(Boolean);
+  }
+  // Default: all 8 master sections supported
+  return Object.values(MASTER_SECTIONS_CATALOG);
+}
+
+export function getTemplateDefaultSections(templateId: string): Array<{ id: TemplateSectionId; enabled: boolean; order: number }> {
+  const tmpl = TEMPLATES[templateId] || TEMPLATES["default"];
+  if (tmpl?.defaultSectionsOrder && tmpl.defaultSectionsOrder.length > 0) {
+    return tmpl.defaultSectionsOrder.map((id, idx) => ({
+      id,
+      enabled: true,
+      order: idx + 1,
+    }));
+  }
+
+  // Minimalist & Couture: photo-forward modern layout
+  if (tmpl?.style === "minimal" || tmpl?.style === "couture") {
+    const order: TemplateSectionId[] = ["hero", "couplePhotos", "countdown", "venue", "dressCode", "rsvp", "gallery", "schedule"];
+    return order.map((id, idx) => ({
+      id,
+      enabled: id !== "schedule",
+      order: idx + 1,
+    }));
+  }
+
+  // Romantic & Botanical: love story & couple photos upfront
+  if (tmpl?.style === "romantic" || tmpl?.style === "botanical" || tmpl?.style === "craft") {
+    const order: TemplateSectionId[] = ["hero", "couplePhotos", "countdown", "schedule", "venue", "dressCode", "rsvp", "gallery"];
+    return order.map((id, idx) => ({ id, enabled: true, order: idx + 1 }));
+  }
+
+  // Classic, Royal, Aristocratic, Heritage default order
+  const classicOrder: TemplateSectionId[] = ["hero", "countdown", "venue", "schedule", "dressCode", "couplePhotos", "rsvp", "gallery"];
+  return classicOrder.map((id, idx) => ({ id, enabled: true, order: idx + 1 }));
+}
+
 

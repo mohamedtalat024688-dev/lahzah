@@ -28,6 +28,8 @@ import Footer from "@/components/ui/Footer";
 import { PACKAGES } from "@/lib/packages";
 import { TEMPLATES } from "@/lib/templates";
 import RealisticInvitationCard from "@/components/templates/RealisticInvitationCard";
+import SectionCustomizer from "@/components/dashboard/SectionCustomizer";
+import { SectionConfigItem } from "@/lib/validations/event";
 
 interface EventDetails {
   id: string;
@@ -46,6 +48,11 @@ interface EventDetails {
   isPublished: boolean;
   isPaid: boolean;
   packageTier: string;
+  parsedCouplePhotos?: Array<{ id: string; url: string; caption?: string | null; order: number }>;
+  parsedMusicConfig?: { enabled: boolean; trackUrl?: string | null; title?: string | null; allowAutoplay: boolean } | null;
+  parsedScheduleItems?: Array<{ id: string; time: string; title: string; description?: string | null; location?: string | null }>;
+  parsedDressCode?: { title: string; description?: string | null; preferredColors?: string[] } | null;
+  parsedSectionsConfig?: SectionConfigItem[];
   rsvps: Array<{
     id: string;
     guestName: string;
@@ -70,8 +77,16 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
 
   const [event, setEvent] = useState<EventDetails | null>(null);
   const [urls, setUrls] = useState<{ invitation: string; upload: string; qr: string } | null>(null);
-  const [activeTab, setActiveTab] = useState<"overview" | "photos" | "rsvps" | "qr" | "package">(
-    "overview"
+  const [activeTab, setActiveTab] = useState<"overview" | "sections" | "photos" | "rsvps" | "qr" | "package">(
+    () => {
+      if (typeof window !== "undefined") {
+        const tab = new URLSearchParams(window.location.search).get("tab");
+        if (tab === "sections" || tab === "photos" || tab === "rsvps" || tab === "qr" || tab === "package") {
+          return tab as "overview" | "sections" | "photos" | "rsvps" | "qr" | "package";
+        }
+      }
+      return "overview";
+    }
   );
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -397,6 +412,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
         <div className="flex items-center gap-2 border-b border-[#EFE4DC] pb-3 mb-8 overflow-x-auto text-xs">
           {[
             { id: "overview", label: "نظرة عامة والبيانات" },
+            { id: "sections", label: "تخصيص الأقسام (Section Studio)" },
             {
               id: "photos",
               label: `ألبوم الذكريات (${pendingPhotos.length} معلقة)`,
@@ -408,6 +424,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
           ].map((tab) => (
             <button
               key={tab.id}
+              data-testid={`tab-${tab.id}`}
               onClick={() => setActiveTab(tab.id as typeof activeTab)}
               className={`px-4 py-2.5 rounded-full transition-all shrink-0 flex items-center gap-2 text-xs font-semibold min-h-[44px] ${
                 activeTab === tab.id
@@ -565,7 +582,16 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
           </div>
         )}
 
-        {/* TAB 2: PHOTO MODERATION */}
+        {/* TAB 2: SECTION CUSTOMIZER STUDIO */}
+        {activeTab === "sections" && (
+          <SectionCustomizer
+            key={`${event.id}-${event.templateId}-${event.parsedSectionsConfig ? JSON.stringify(event.parsedSectionsConfig) : "default"}`}
+            event={event}
+            onSaveSuccess={fetchEventData}
+          />
+        )}
+
+        {/* TAB 3: PHOTO MODERATION */}
         {activeTab === "photos" && (
           <div className="space-y-8">
             {/* Pending Section */}

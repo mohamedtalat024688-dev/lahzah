@@ -129,12 +129,26 @@ export async function PUT(
     }
 
     // Phase 1 Schema Validations (Zod)
+    const safeParseJson = (val: unknown): { parsed: unknown; ok: boolean } => {
+      if (typeof val === "string") {
+        try {
+          return { parsed: JSON.parse(val), ok: true };
+        } catch {
+          return { parsed: null, ok: false };
+        }
+      }
+      return { parsed: val, ok: true };
+    };
+
     let validatedScheduleItems = existing.scheduleItems;
     if (body.scheduleItems !== undefined) {
       if (body.scheduleItems === null) {
         validatedScheduleItems = null;
       } else {
-        const parsed = typeof body.scheduleItems === "string" ? JSON.parse(body.scheduleItems) : body.scheduleItems;
+        const { parsed, ok } = safeParseJson(body.scheduleItems);
+        if (!ok) {
+          return NextResponse.json({ error: "بيانات جدول الحفل غير صالحة (JSON غير صالح)" }, { status: 400 });
+        }
         const result = ScheduleItemsArraySchema.safeParse(parsed);
         if (!result.success) {
           return NextResponse.json(
@@ -151,7 +165,10 @@ export async function PUT(
       if (body.dressCode === null) {
         validatedDressCode = null;
       } else {
-        const parsed = typeof body.dressCode === "string" ? JSON.parse(body.dressCode) : body.dressCode;
+        const { parsed, ok } = safeParseJson(body.dressCode);
+        if (!ok) {
+          return NextResponse.json({ error: "بيانات كود الملابس غير صالحة (JSON غير صالح)" }, { status: 400 });
+        }
         const result = DressCodeSchema.safeParse(parsed);
         if (!result.success) {
           return NextResponse.json(
@@ -168,7 +185,10 @@ export async function PUT(
       if (body.couplePhotos === null) {
         validatedCouplePhotos = null;
       } else {
-        const parsed = typeof body.couplePhotos === "string" ? JSON.parse(body.couplePhotos) : body.couplePhotos;
+        const { parsed, ok } = safeParseJson(body.couplePhotos);
+        if (!ok) {
+          return NextResponse.json({ error: "بيانات صور العروسين غير صالحة (JSON غير صالح)" }, { status: 400 });
+        }
         const result = CouplePhotosArraySchema.safeParse(parsed);
         if (!result.success) {
           return NextResponse.json(
@@ -185,7 +205,10 @@ export async function PUT(
       if (body.musicConfig === null) {
         validatedMusicConfig = null;
       } else {
-        const parsed = typeof body.musicConfig === "string" ? JSON.parse(body.musicConfig) : body.musicConfig;
+        const { parsed, ok } = safeParseJson(body.musicConfig);
+        if (!ok) {
+          return NextResponse.json({ error: "إعدادات الموسيقى غير صالحة (JSON غير صالح)" }, { status: 400 });
+        }
         const result = MusicConfigSchema.safeParse(parsed);
         if (!result.success) {
           return NextResponse.json(
@@ -202,7 +225,10 @@ export async function PUT(
       if (body.sectionsConfig === null) {
         validatedSectionsConfig = null;
       } else {
-        const parsed = typeof body.sectionsConfig === "string" ? JSON.parse(body.sectionsConfig) : body.sectionsConfig;
+        const { parsed, ok } = safeParseJson(body.sectionsConfig);
+        if (!ok) {
+          return NextResponse.json({ error: "تنسيق ترتيب الأقسام غير صالح (JSON غير صالح)" }, { status: 400 });
+        }
         const result = SectionsConfigArraySchema.safeParse(parsed);
         if (!result.success) {
           return NextResponse.json(

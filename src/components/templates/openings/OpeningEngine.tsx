@@ -20,6 +20,7 @@ interface OpeningEngineProps {
   eventType?: string;
   welcomeMessage?: string | null;
   onOpened?: () => void;
+  isEditorPreview?: boolean;
   children: React.ReactNode;
 }
 
@@ -32,9 +33,10 @@ export default function OpeningEngine({
   eventType,
   welcomeMessage,
   onOpened,
+  isEditorPreview = false,
   children,
 }: OpeningEngineProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(isEditorPreview);
   const [isReducedMotion, setIsReducedMotion] = useState(() => {
     if (typeof window !== "undefined" && window.matchMedia) {
       return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -146,7 +148,7 @@ export default function OpeningEngine({
         {children}
 
         {/* Floating Replay Button */}
-        {isOpen && (
+        {isOpen && !isEditorPreview && (
           <div className="fixed bottom-5 right-5 z-40">
             <button
               onClick={handleReplay}
