@@ -585,7 +585,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
         {/* TAB 2: SECTION CUSTOMIZER STUDIO */}
         {activeTab === "sections" && (
           <SectionCustomizer
-            key={`${event.id}-${event.templateId}-${event.parsedSectionsConfig ? JSON.stringify(event.parsedSectionsConfig) : "default"}`}
+            key={event.id}
             event={event}
             onSaveSuccess={fetchEventData}
           />

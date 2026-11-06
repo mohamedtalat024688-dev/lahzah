@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   GripVertical,
   Eye,
@@ -88,6 +88,21 @@ export default function SectionCustomizer({ event, onSaveSuccess }: SectionCusto
   const hasUnsavedChanges = useMemo(() => {
     return JSON.stringify(sections) !== JSON.stringify(originalSections);
   }, [sections, originalSections]);
+
+  // Protect against accidental navigation with unsaved changes
+  useEffect(() => {
+    if (!hasUnsavedChanges) return;
+
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [hasUnsavedChanges]);
 
   // Sections that are currently not in the active list but are supported by the template
   const availableToAdd = useMemo(() => {
@@ -334,18 +349,34 @@ export default function SectionCustomizer({ event, onSaveSuccess }: SectionCusto
       {/* Notifications */}
       {saveMessage && (
         <div
-          className={`p-4 rounded-2xl border text-xs flex items-center gap-2.5 animate-fadeIn shadow-xs ${
+          data-testid="save-message-alert"
+          className={`p-4 rounded-2xl border text-xs flex items-center justify-between gap-3 animate-fadeIn shadow-xs ${
             saveMessage.type === "success"
               ? "bg-[#F0F7F1] border-[#C5DEC0] text-[#2E6827]"
               : "bg-[#FFF0F0] border-[#F1DEDF] text-[#A82323]"
           }`}
         >
-          {saveMessage.type === "success" ? (
-            <CheckCircle className="w-4 h-4 shrink-0 text-[#3D7A42]" />
-          ) : (
-            <AlertCircle className="w-4 h-4 shrink-0 text-[#A82323]" />
+          <div className="flex items-center gap-2.5">
+            {saveMessage.type === "success" ? (
+              <CheckCircle className="w-4 h-4 shrink-0 text-[#3D7A42]" />
+            ) : (
+              <AlertCircle className="w-4 h-4 shrink-0 text-[#A82323]" />
+            )}
+            <span className="font-medium">{saveMessage.text}</span>
+          </div>
+
+          {saveMessage.type === "error" && (
+            <button
+              onClick={handleSave}
+              disabled={isSaving}
+              data-testid="retry-save-btn"
+              type="button"
+              className="px-3 py-1.5 min-h-[36px] rounded-xl bg-[#A82323] text-white hover:bg-[#851919] font-bold text-xs transition-colors shrink-0 flex items-center gap-1 cursor-pointer"
+            >
+              <RotateCcw className="w-3 h-3" />
+              <span>إعادة المحاولة</span>
+            </button>
           )}
-          <span className="font-medium">{saveMessage.text}</span>
         </div>
       )}
 

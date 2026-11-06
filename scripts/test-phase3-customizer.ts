@@ -417,29 +417,34 @@ async function runPhase3Tests() {
     ];
 
     for (const vp of viewports) {
-      await page.setViewport({ width: vp.width, height: vp.height, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
-      await page.goto(`${BASE_URL}/dashboard/events/${testEvent.id}?tab=sections`, { waitUntil: "networkidle0" });
-      const secTab = await page.waitForSelector('[data-testid="tab-sections"]', { timeout: 15000 });
-      if (secTab) {
-        await secTab.click();
-        await new Promise((r) => setTimeout(r, 400));
+      const vpPage = await browser.newPage();
+      try {
+        await vpPage.setViewport({ width: vp.width, height: vp.height, deviceScaleFactor: 1 });
+        await vpPage.goto(`${BASE_URL}/dashboard/events/${testEvent.id}?tab=sections`, { waitUntil: "networkidle0" });
+        const secTab = await vpPage.waitForSelector('[data-testid="tab-sections"]', { timeout: 15000 });
+        if (secTab) {
+          await secTab.click();
+          await new Promise((r) => setTimeout(r, 400));
+        }
+        await vpPage.waitForSelector('[data-testid="section-customizer-studio"]');
+        await new Promise((r) => setTimeout(r, 600));
+
+        // Check horizontal overflow
+        const overflow = await vpPage.evaluate(() => {
+          return {
+            scrollWidth: document.documentElement.scrollWidth,
+            clientWidth: document.documentElement.clientWidth,
+            hasOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
+          };
+        });
+
+        assert.ok(!overflow.hasOverflow, `Viewport ${vp.width}px must NOT have horizontal overflow. scrollWidth=${overflow.scrollWidth}, clientWidth=${overflow.clientWidth}`);
+        const ssVp = await saveScreenshot(vpPage, vp.file);
+        recordTest("RESP-02", `Viewport ${vp.width}px`, `Studio renders perfectly at ${vp.width}px without horizontal overflow`, "PASS", 
+          `scrollWidth (${overflow.scrollWidth}) <= clientWidth (${overflow.clientWidth})`, ssVp);
+      } finally {
+        await vpPage.close();
       }
-      await page.waitForSelector('[data-testid="section-customizer-studio"]');
-      await new Promise((r) => setTimeout(r, 600));
-
-      // Check horizontal overflow
-      const overflow = await page.evaluate(() => {
-        return {
-          scrollWidth: document.documentElement.scrollWidth,
-          clientWidth: document.documentElement.clientWidth,
-          hasOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
-        };
-      });
-
-      assert.ok(!overflow.hasOverflow, `Viewport ${vp.width}px must NOT have horizontal overflow. scrollWidth=${overflow.scrollWidth}, clientWidth=${overflow.clientWidth}`);
-      const ssVp = await saveScreenshot(page, vp.file);
-      recordTest("RESP-02", `Viewport ${vp.width}px`, `Studio renders perfectly at ${vp.width}px without horizontal overflow`, "PASS", 
-        `scrollWidth (${overflow.scrollWidth}) <= clientWidth (${overflow.clientWidth})`, ssVp);
     }
 
   } finally {
