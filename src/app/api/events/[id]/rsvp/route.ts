@@ -92,8 +92,23 @@ export async function POST(
       }
     }
 
-    // Atomic execution: Create RSVP and consume Targeted Invite token if present
+    // Atomic execution with race-condition guard: Create RSVP and consume Targeted Invite token
     const rsvp = await prisma.$transaction(async (tx) => {
+      if (targetedInvite) {
+        // Concurrency guard: updateMany with isUsed: false ensures atomic single-consumption
+        const consumed = await tx.guestInvite.updateMany({
+          where: { id: targetedInvite.id, isUsed: false },
+          data: {
+            isUsed: true,
+            usedAt: new Date(),
+          },
+        });
+
+        if (consumed.count === 0) {
+          throw new Error("TOKEN_ALREADY_USED_CONCURRENTLY");
+        }
+      }
+
       const newRsvp = await tx.rsvp.create({
         data: {
           eventId,
@@ -108,11 +123,7 @@ export async function POST(
       if (targetedInvite) {
         await tx.guestInvite.update({
           where: { id: targetedInvite.id },
-          data: {
-            isUsed: true,
-            usedAt: new Date(),
-            rsvpId: newRsvp.id,
-          },
+          data: { rsvpId: newRsvp.id },
         });
       }
 
