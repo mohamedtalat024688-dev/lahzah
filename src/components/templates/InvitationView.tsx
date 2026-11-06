@@ -24,6 +24,7 @@ import {
   MusicConfig,
   SectionConfigItem,
 } from "@/lib/validations/event";
+import { parseWelcomePhrasing } from "@/lib/culturalPhrasing";
 import RsvpModal from "../guest/RsvpModal";
 import { GalleryPhoto } from "../gallery/MemoryGallery";
 import OpeningEngine from "./openings/OpeningEngine";
@@ -230,11 +231,44 @@ export default function InvitationView({
           <span className="w-10 h-px opacity-30" style={{ backgroundColor: theme.accentColor }} />
         </div>
 
-        {event.welcomeMessage && (
-          <p className={`text-sm sm:text-base max-w-md mx-auto leading-relaxed pt-2 ${isLightPaper ? "text-[#4a4036]" : "text-[#c4bdaf]"}`}>
-            {event.welcomeMessage}
-          </p>
-        )}
+        {(() => {
+          const phrasing = parseWelcomePhrasing(event.welcomeMessage);
+          if (phrasing.type === "none" && !phrasing.customNote) return null;
+
+          return (
+            <div className="space-y-2 pt-2 max-w-lg mx-auto">
+              {phrasing.type === "quran" && (
+                <div className="text-xs sm:text-sm font-serif select-none opacity-85" style={{ color: theme.accentColor }}>
+                  ﷽
+                </div>
+              )}
+              {phrasing.text && (
+                <p
+                  className={`text-sm sm:text-base leading-relaxed ${
+                    phrasing.type === "quran" || phrasing.type === "duaa"
+                      ? "font-serif italic font-medium"
+                      : ""
+                  } ${isLightPaper ? "text-[#4a4036]" : "text-[#c4bdaf]"}`}
+                >
+                  «{phrasing.text}»
+                </p>
+              )}
+              {phrasing.sourceLabel && (
+                <span
+                  className="text-[11px] block opacity-75 font-sans"
+                  style={{ color: theme.accentColor }}
+                >
+                  — {phrasing.sourceLabel}
+                </span>
+              )}
+              {phrasing.customNote && (
+                <p className={`text-xs pt-1 font-sans ${isLightPaper ? "text-[#7a6d5f]" : "text-[#9d9486]"}`}>
+                  {phrasing.customNote}
+                </p>
+              )}
+            </div>
+          );
+        })()}
       </div>
 
       {/* Wedding Date Display */}
@@ -351,13 +385,34 @@ export default function InvitationView({
               }`}
             >
               <div
-                className="px-2.5 py-1 rounded-lg text-xs font-mono font-bold shrink-0"
+                className="px-2.5 py-1 rounded-lg text-xs font-mono font-bold shrink-0 flex items-center gap-1.5"
                 style={{
                   backgroundColor: `${theme.accentColor}25`,
                   color: theme.accentColor,
                 }}
               >
-                {item.time}
+                <span>
+                  {item.icon === "coffee"
+                    ? "☕"
+                    : item.icon === "sparkles"
+                    ? "✨"
+                    : item.icon === "utensils"
+                    ? "🍽️"
+                    : item.icon === "gift"
+                    ? "🎁"
+                    : item.icon === "camera"
+                    ? "📷"
+                    : item.icon === "music"
+                    ? "🎵"
+                    : item.icon === "heart"
+                    ? "💖"
+                    : item.icon === "gem"
+                    ? "💍"
+                    : item.icon === "map-pin"
+                    ? "📍"
+                    : "🕒"}
+                </span>
+                <span>{item.time}</span>
               </div>
               <div className="space-y-1">
                 <h4 className={`text-sm font-bold font-display ${textPrimary}`}>
@@ -404,18 +459,49 @@ export default function InvitationView({
         )}
         {event.dressCode.preferredColors && event.dressCode.preferredColors.length > 0 && (
           <div className="pt-2">
-            <span className={`text-[11px] block mb-1.5 ${textSecondary}`}>الألوان المفضلة:</span>
+            <span className={`text-[11px] block mb-1.5 ${textSecondary}`}>الألوان المفضلة والمقترحة:</span>
             <div className="flex flex-wrap items-center justify-center gap-1.5">
               {event.dressCode.preferredColors.map((color, idx) => (
                 <span
                   key={idx}
-                  className="px-2.5 py-0.5 rounded-full text-[11px] border"
+                  className="px-2.5 py-1 rounded-full text-[11px] border flex items-center gap-1.5 shadow-xs"
                   style={{
                     borderColor: `${theme.accentColor}40`,
                     color: theme.accentColor,
                   }}
                 >
-                  {color}
+                  <span
+                    className="w-2.5 h-2.5 rounded-full border border-black/10 shrink-0"
+                    style={{ backgroundColor: color }}
+                  />
+                  <span>{color}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+        {event.dressCode.prohibitedColors && event.dressCode.prohibitedColors.length > 0 && (
+          <div className="pt-2 border-t border-black/5 dark:border-white/5">
+            <span className="text-[11px] block mb-1.5 text-rose-500 font-medium">
+              الألوان المستثناة (تجنب ارتدائها):
+            </span>
+            <div className="flex flex-wrap items-center justify-center gap-1.5">
+              {event.dressCode.prohibitedColors.map((color, idx) => (
+                <span
+                  key={idx}
+                  className="px-2.5 py-1 rounded-full text-[11px] border border-rose-400/40 bg-rose-500/10 text-rose-500 flex items-center gap-1.5 shadow-xs"
+                >
+                  <span
+                    className="w-2.5 h-2.5 rounded-full border border-black/10 shrink-0"
+                    style={{ backgroundColor: color }}
+                  />
+                  <span>
+                    {color === "#FFFFFF"
+                      ? "أبيض (محجوز للعروس)"
+                      : color === "#FAF8F5"
+                      ? "عاجي (محجوز للعروس)"
+                      : color}
+                  </span>
                 </span>
               ))}
             </div>

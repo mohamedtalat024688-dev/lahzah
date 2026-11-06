@@ -29,7 +29,14 @@ import { PACKAGES } from "@/lib/packages";
 import { TEMPLATES } from "@/lib/templates";
 import RealisticInvitationCard from "@/components/templates/RealisticInvitationCard";
 import SectionCustomizer from "@/components/dashboard/SectionCustomizer";
-import { SectionConfigItem } from "@/lib/validations/event";
+import ContentStudiosHub from "@/components/dashboard/ContentStudiosHub";
+import {
+  SectionConfigItem,
+  ScheduleItem,
+  DressCode,
+  CouplePhoto,
+  MusicConfig,
+} from "@/lib/validations/event";
 
 interface EventDetails {
   id: string;
@@ -48,10 +55,10 @@ interface EventDetails {
   isPublished: boolean;
   isPaid: boolean;
   packageTier: string;
-  parsedCouplePhotos?: Array<{ id: string; url: string; caption?: string | null; order: number }>;
-  parsedMusicConfig?: { enabled: boolean; trackUrl?: string | null; title?: string | null; allowAutoplay: boolean } | null;
-  parsedScheduleItems?: Array<{ id: string; time: string; title: string; description?: string | null; location?: string | null }>;
-  parsedDressCode?: { title: string; description?: string | null; preferredColors?: string[] } | null;
+  parsedCouplePhotos?: CouplePhoto[];
+  parsedMusicConfig?: MusicConfig | null;
+  parsedScheduleItems?: ScheduleItem[];
+  parsedDressCode?: DressCode | null;
   parsedSectionsConfig?: SectionConfigItem[];
   rsvps: Array<{
     id: string;
@@ -77,12 +84,19 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
 
   const [event, setEvent] = useState<EventDetails | null>(null);
   const [urls, setUrls] = useState<{ invitation: string; upload: string; qr: string } | null>(null);
-  const [activeTab, setActiveTab] = useState<"overview" | "sections" | "photos" | "rsvps" | "qr" | "package">(
+  const [activeTab, setActiveTab] = useState<"overview" | "content" | "sections" | "photos" | "rsvps" | "qr" | "package">(
     () => {
       if (typeof window !== "undefined") {
         const tab = new URLSearchParams(window.location.search).get("tab");
-        if (tab === "sections" || tab === "photos" || tab === "rsvps" || tab === "qr" || tab === "package") {
-          return tab as "overview" | "sections" | "photos" | "rsvps" | "qr" | "package";
+        if (
+          tab === "content" ||
+          tab === "sections" ||
+          tab === "photos" ||
+          tab === "rsvps" ||
+          tab === "qr" ||
+          tab === "package"
+        ) {
+          return tab as "overview" | "content" | "sections" | "photos" | "rsvps" | "qr" | "package";
         }
       }
       return "overview";
@@ -412,6 +426,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
         <div className="flex items-center gap-2 border-b border-[#EFE4DC] pb-3 mb-8 overflow-x-auto text-xs">
           {[
             { id: "overview", label: "نظرة عامة والبيانات" },
+            { id: "content", label: "محتوى وتفاصيل الدعوة (Content Studios)" },
             { id: "sections", label: "تخصيص الأقسام (Section Studio)" },
             {
               id: "photos",
@@ -582,7 +597,16 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
           </div>
         )}
 
-        {/* TAB 2: SECTION CUSTOMIZER STUDIO */}
+        {/* TAB 2: CONTENT STUDIOS HUB (PHASE 4.1) */}
+        {activeTab === "content" && (
+          <ContentStudiosHub
+            key={event.id}
+            event={event}
+            onEventUpdated={fetchEventData}
+          />
+        )}
+
+        {/* TAB 3: SECTION CUSTOMIZER STUDIO */}
         {activeTab === "sections" && (
           <SectionCustomizer
             key={event.id}
