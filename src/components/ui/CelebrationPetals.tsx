@@ -11,97 +11,112 @@ type PetalShape = "shape1" | "shape2" | "shape3";
 
 const COLOR_MAP: Record<
   PetalVariant,
-  { light: string; mid: string; deep: string; opacity: number }
+  { light: string; mid: string; deep: string; defaultOpacity: number }
 > = {
   burgundy: {
     light: "#8E1026",
     mid: "#790D20",
     deep: "#5A0917",
-    opacity: 0.88,
+    defaultOpacity: 0.88,
   },
   wine: {
     light: "#790D20",
     mid: "#630A19",
     deep: "#390E19",
-    opacity: 0.82,
+    defaultOpacity: 0.84,
   },
   dustyRose: {
     light: "#D899A3",
     mid: "#C27A88",
     deep: "#9E4557",
-    opacity: 0.85,
+    defaultOpacity: 0.82,
   },
   mutedRose: {
     light: "#E8B8C0",
     mid: "#D899A3",
     deep: "#B86B7A",
-    opacity: 0.78,
+    defaultOpacity: 0.76,
   },
 };
 
 /**
  * Individual Detached Rose Petal Component
- * Pure 2D organic petal silhouette with subtle gradient shading.
+ * Authentic 2D organic petal silhouette with naturally wide rounded apex
+ * and tapered basal tip, enhanced with subtle contour shading.
  * Free from stems, leaves, complete flowers, sparkles, or icons.
  */
 function RosePetal({
   shape = "shape1",
   variant = "burgundy",
-  size = 22,
+  customColor,
+  size = 23,
   rotation = 0,
+  opacity,
   className = "",
   style = {},
 }: {
   shape?: PetalShape;
   variant?: PetalVariant;
+  customColor?: string;
   size?: number;
   rotation?: number;
+  opacity?: number;
   className?: string;
   style?: React.CSSProperties;
 }) {
   const rawId = useId();
   const gradId = `petal-grad-${rawId.replace(/[^a-zA-Z0-9_-]/g, "")}`;
-  const colors = COLOR_MAP[variant];
+  const baseColors = COLOR_MAP[variant];
+  const colors = customColor
+    ? {
+        light: "#F5D4DA",
+        mid: customColor,
+        deep: "#CF949F",
+        defaultOpacity: baseColors.defaultOpacity,
+      }
+    : baseColors;
+  const finalOpacity = opacity ?? colors.defaultOpacity;
+  const height = Math.round(size * 1.14);
 
   return (
     <div
       className={`absolute pointer-events-none select-none ${className}`}
       style={{
         width: size,
-        height: size,
+        height: height,
         transform: `rotate(${rotation}deg)`,
-        opacity: colors.opacity,
+        opacity: finalOpacity,
         ...style,
       }}
       aria-hidden="true"
     >
       <svg
-        viewBox="0 0 24 24"
+        viewBox="0 0 32 36"
         width={size}
-        height={size}
-        className="w-full h-full drop-shadow-[0_2px_4px_rgba(57,14,25,0.08)]"
+        height={height}
+        className="w-full h-full drop-shadow-[0_2px_4px_rgba(57,14,25,0.06)]"
       >
         <defs>
           <linearGradient id={gradId} x1="20%" y1="0%" x2="80%" y2="100%">
             <stop offset="0%" stopColor={colors.light} />
-            <stop offset="60%" stopColor={colors.mid} />
+            <stop offset="55%" stopColor={colors.mid} />
             <stop offset="100%" stopColor={colors.deep} />
           </linearGradient>
         </defs>
 
         {shape === "shape1" && (
           <>
-            {/* Classic curved cupped rose petal with wider rounded top & narrow basal tip */}
+            {/* Classic Broad Rose Petal: Wide rounded top with delicate cleft, tapering down to a narrow basal tip */}
             <path
-              d="M12 2.5C8.8 2.5 5 6.2 5.2 12C5.4 16.8 8.8 20.8 11.8 21.8C12.1 21.9 12.4 21.8 12.6 21.6C15.8 18.2 19 14.5 18.8 9.5C18.6 5.2 15.2 2.5 12 2.5Z"
+              d="M 16 5.5 C 13.5 3.5 8 3.5 5 7.5 C 2.5 11 2 16 4 21 C 6.5 26.5 11.5 31.5 15.5 33.8 C 15.8 34 16.2 34 16.5 33.8 C 20.5 31.5 25.5 26.5 28 21 C 30 16 29.5 11 27 7.5 C 24 3.5 18.5 3.5 16 5.5 Z"
               fill={`url(#${gradId})`}
             />
-            {/* Subtle natural interior petal fold line */}
+            {/* Natural interior petal contour/crease for subtle 2D depth */}
             <path
-              d="M12 5C11.3 8.5 11.1 13 12.2 18.5"
+              d="M 16 8 C 15.6 15 15.6 23 16 31"
               stroke={colors.deep}
-              strokeWidth="0.6"
-              strokeOpacity="0.25"
+              strokeWidth="0.75"
+              strokeOpacity="0.28"
               strokeLinecap="round"
               fill="none"
             />
@@ -110,17 +125,17 @@ function RosePetal({
 
         {shape === "shape2" && (
           <>
-            {/* Asymmetrical natural rose petal, gently curled on one side */}
+            {/* Asymmetrical Natural Rose Petal: Full rounded left shoulder with curled right flank, tapered tip */}
             <path
-              d="M14.5 2.2C10.5 1.8 6.2 5.5 5.5 11C4.8 16 8 20 11.5 21.6C12.2 21.9 13 21.5 13.5 20.8C16.8 16.5 19.2 10.5 17.5 5C16.8 3.5 15.8 2.3 14.5 2.2Z"
+              d="M 14 33.5 C 9 29 4 23 3 16 C 2 9.5 7 4 13 4 C 17.5 4 23.5 6 26.5 10 C 29.5 14.5 27.5 20 23.5 25 C 20 28.5 17 31.5 14 33.5 Z"
               fill={`url(#${gradId})`}
             />
-            {/* Gentle contour line for organic realism */}
+            {/* Organic contour line representing petal cupping */}
             <path
-              d="M13 4.5C12 9 11.5 14 12.5 19"
+              d="M 24 11 C 21 16 19 22 16.5 28"
               stroke={colors.deep}
-              strokeWidth="0.5"
-              strokeOpacity="0.22"
+              strokeWidth="0.65"
+              strokeOpacity="0.25"
               strokeLinecap="round"
               fill="none"
             />
@@ -129,17 +144,17 @@ function RosePetal({
 
         {shape === "shape3" && (
           <>
-            {/* Drifting romantic rose petal, slightly tilted profile */}
+            {/* Gracefully Tilted Romantic Petal: Sweeping curved apex tapering to a slender base */}
             <path
-              d="M7.5 3C5 5.5 4.5 10.5 7 15.5C9.5 20 14 21.2 17.5 19.5C19.8 18.2 20.5 14.5 19 10C17.2 4.8 12.5 2.2 8.5 2.8C8.1 2.9 7.8 2.9 7.5 3Z"
+              d="M 15 3.5 C 9.5 4 4.5 9 5 15.5 C 5.5 21 9 27 13.5 32.5 C 14.2 33.2 15 33 15.5 32.5 C 19.5 27.5 25 20.5 25.5 14.5 C 26 8.5 21 3.5 15 3.5 Z"
               fill={`url(#${gradId})`}
             />
-            {/* Subtle curve accent */}
+            {/* Slender curved vein */}
             <path
-              d="M9 5.5C10.5 9.5 13 14 16 17"
+              d="M 14.5 6.5 C 13.5 13 14 21 15 29"
               stroke={colors.deep}
-              strokeWidth="0.5"
-              strokeOpacity="0.22"
+              strokeWidth="0.65"
+              strokeOpacity="0.25"
               strokeLinecap="round"
               fill="none"
             />
@@ -151,9 +166,9 @@ function RosePetal({
 }
 
 /**
- * Full Hero Ambient Rose Petals Animation for LAHZAH
- * Covers the entire hero section with authentic drifting rose petals
- * in brand burgundy and dusty-rose tones.
+ * Restrained Full Hero Ambient Rose Petals Animation for LAHZAH
+ * 10 carefully positioned individual rose petals floating gently
+ * across the hero atmosphere in brand burgundy and dusty-rose tones.
  */
 export default function CelebrationPetals({
   isOpen = false,
@@ -175,15 +190,16 @@ export default function CelebrationPetals({
       <div className="absolute top-3/4 right-8 w-[480px] h-[480px] rounded-full bg-gradient-to-tl from-[#390E19]/5 via-[#F1DEDF]/10 to-transparent blur-3xl opacity-40" />
 
       {/* =================================================================== */}
-      {/* 1. AMBIENT CONTINUOUS FLOATING ROSE PETALS (Full Hero Coverage)    */}
+      {/* 1. RESTRAINED AMBIENT ROSE PETALS (10 Natural Elements Across Hero) */}
       {/* =================================================================== */}
 
-      {/* Zone A: Upper-Right Sky & Above Headline */}
+      {/* Petal 1: Upper-Right Sky (Medium size, burgundy) */}
       <RosePetal
         shape="shape1"
         variant="burgundy"
         size={23}
-        rotation={15}
+        rotation={18}
+        opacity={0.88}
         className="animate-petal-breeze-1"
         style={{
           top: "6%",
@@ -193,12 +209,13 @@ export default function CelebrationPetals({
         }}
       />
 
-      {/* Zone B: Headline Right Margin */}
+      {/* Petal 2: Right Margin beside Headline (Small size, distant soft dusty rose) */}
       <RosePetal
         shape="shape2"
         variant="dustyRose"
-        size={19}
-        rotation={-25}
+        size={16}
+        rotation={-24}
+        opacity={0.70}
         className="animate-petal-breeze-2"
         style={{
           top: "22%",
@@ -208,57 +225,46 @@ export default function CelebrationPetals({
         }}
       />
 
-      {/* Zone C: Headline Lower-Right near CTA */}
+      {/* Petal 3: Soft Dusty Pink Petal (#E8B5BE) near 'استثنائية' (Clearance trajectory preserves headline readability) */}
       <RosePetal
         shape="shape3"
-        variant="mutedRose"
-        size={20}
-        rotation={38}
-        className="animate-petal-breeze-3"
+        variant="dustyRose"
+        customColor="#E8B5BE"
+        size={26}
+        rotation={26}
+        opacity={0.86}
+        className="animate-petal-breeze-headline"
         style={{
-          top: "44%",
-          right: "16%",
-          animationDuration: "12s",
+          top: "45%",
+          right: "22%",
+          animationDuration: "13s",
           animationDelay: "3.5s",
         }}
       />
 
-      {/* Zone D: Below CTA / Near Feature Badges (Right side) */}
+      {/* Petal 4: Lower Right near stats (Small-Medium, muted rose) */}
       <RosePetal
         shape="shape1"
-        variant="wine"
-        size={22}
+        variant="mutedRose"
+        size={18}
         rotation={-14}
+        opacity={0.78}
         className="animate-petal-breeze-4"
         style={{
-          top: "72%",
+          top: "74%",
           right: "8%",
-          animationDuration: "18s",
+          animationDuration: "17s",
           animationDelay: "2.2s",
         }}
       />
 
-      {/* Zone E: Lower Right Margin */}
-      <RosePetal
-        shape="shape2"
-        variant="burgundy"
-        size={18}
-        rotation={28}
-        className="animate-petal-breeze-1"
-        style={{
-          top: "89%",
-          right: "18%",
-          animationDuration: "15s",
-          animationDelay: "4.8s",
-        }}
-      />
-
-      {/* Zone F: Upper Center (Open space between columns) */}
+      {/* Petal 5: Upper Center Open Luxury Space (Medium, wine red) */}
       <RosePetal
         shape="shape1"
         variant="wine"
         size={24}
-        rotation={-32}
+        rotation={-30}
+        opacity={0.85}
         className="animate-petal-breeze-2"
         style={{
           top: "10%",
@@ -268,113 +274,88 @@ export default function CelebrationPetals({
         }}
       />
 
-      {/* Zone G: Mid Center (Between headline and invitation card) */}
+      {/* Petal 6: Mid Center Floating between columns (Small, delicate dusty rose) */}
       <RosePetal
-        shape="shape3"
+        shape="shape2"
         variant="dustyRose"
-        size={21}
-        rotation={22}
+        size={17}
+        rotation={20}
+        opacity={0.68}
         className="animate-petal-breeze-3"
         style={{
-          top: "38%",
-          left: "44%",
-          animationDuration: "13s",
+          top: "39%",
+          left: "45%",
+          animationDuration: "13.5s",
           animationDelay: "2.6s",
         }}
       />
 
-      {/* Zone H: Mid-Lower Center */}
-      <RosePetal
-        shape="shape2"
-        variant="mutedRose"
-        size={19}
-        rotation={-18}
-        className="animate-petal-breeze-4"
-        style={{
-          top: "64%",
-          left: "46%",
-          animationDuration: "17s",
-          animationDelay: "5.1s",
-        }}
-      />
-
-      {/* Zone I: Bottom Center */}
-      <RosePetal
-        shape="shape1"
-        variant="burgundy"
-        size={20}
-        rotation={30}
-        className="animate-petal-breeze-1"
-        style={{
-          top: "85%",
-          left: "48%",
-          animationDuration: "14s",
-          animationDelay: "3.1s",
-        }}
-      />
-
-      {/* Zone J: Upper Left (Above invitation flatlay) */}
+      {/* Petal 7: Upper Left above Invitation Flatlay (Larger hero accent, dusty rose) */}
       <RosePetal
         shape="shape2"
         variant="dustyRose"
-        size={22}
-        rotation={-20}
-        className="animate-petal-breeze-2"
+        size={29}
+        rotation={-18}
+        opacity={0.90}
+        className="animate-petal-breeze-1"
         style={{
           top: "7%",
           left: "14%",
-          animationDuration: "16s",
+          animationDuration: "15s",
           animationDelay: "0.8s",
         }}
       />
 
-      {/* Zone K: Far Left Margin (Beside invitation) */}
+      {/* Petal 8: Far Left Margin beside Invitation (Small, muted rose) */}
       <RosePetal
         shape="shape3"
-        variant="wine"
-        size={19}
-        rotation={42}
+        variant="mutedRose"
+        size={17}
+        rotation={40}
+        opacity={0.72}
         className="animate-petal-breeze-3"
         style={{
-          top: "25%",
+          top: "26%",
           left: "3%",
           animationDuration: "12.5s",
           animationDelay: "2.1s",
         }}
       />
 
-      {/* Zone L: Lower Left Margin (Beside envelope) */}
+      {/* Petal 9: Lower Left beside Envelope (Medium, burgundy) */}
       <RosePetal
         shape="shape1"
         variant="burgundy"
-        size={23}
-        rotation={-28}
+        size={25}
+        rotation={-26}
+        opacity={0.88}
         className="animate-petal-breeze-4"
         style={{
           top: "68%",
           left: "7%",
-          animationDuration: "17.5s",
+          animationDuration: "16.5s",
           animationDelay: "4.2s",
         }}
       />
 
-      {/* Zone M: Bottom Left Base */}
+      {/* Petal 10: Bottom Left / Center Margin (Medium, wine red) */}
       <RosePetal
-        shape="shape2"
-        variant="mutedRose"
-        size={20}
-        rotation={16}
+        shape="shape3"
+        variant="wine"
+        size={22}
+        rotation={14}
+        opacity={0.82}
         className="animate-petal-breeze-2"
         style={{
-          top: "90%",
-          left: "19%",
+          top: "89%",
+          left: "22%",
           animationDuration: "15.5s",
           animationDelay: "1.5s",
         }}
       />
 
       {/* =================================================================== */}
-      {/* 2. REVEALED CELEBRATION PETALS (Drifts gently on envelope hover)    */}
+      {/* 2. REVEALED CELEBRATION PETALS (3 Petals Drift on Envelope Hover)   */}
       {/* =================================================================== */}
       <div
         className={`transition-opacity duration-1000 ease-out ${
@@ -385,28 +366,30 @@ export default function CelebrationPetals({
         <RosePetal
           shape="shape3"
           variant="burgundy"
-          size={22}
-          rotation={35}
+          size={24}
+          rotation={32}
+          opacity={0.88}
           className="animate-petal-breeze-1"
           style={{
-            top: "32%",
-            left: "38%",
+            top: "34%",
+            left: "40%",
             animationDuration: "11s",
             animationDelay: "0.3s",
           }}
         />
 
-        {/* Celebration Petal B: Floats above envelope opening */}
+        {/* Celebration Petal B: Floats above opened envelope flap */}
         <RosePetal
           shape="shape1"
           variant="dustyRose"
-          size={20}
-          rotation={-15}
+          size={19}
+          rotation={-16}
+          opacity={0.82}
           className="animate-petal-breeze-2"
           style={{
-            top: "18%",
-            left: "26%",
-            animationDuration: "10s",
+            top: "16%",
+            left: "28%",
+            animationDuration: "10.5s",
             animationDelay: "0.6s",
           }}
         />
@@ -415,29 +398,15 @@ export default function CelebrationPetals({
         <RosePetal
           shape="shape2"
           variant="wine"
-          size={21}
-          rotation={25}
+          size={22}
+          rotation={24}
+          opacity={0.85}
           className="animate-petal-breeze-3"
           style={{
-            top: "52%",
-            right: "32%",
-            animationDuration: "13s",
+            top: "56%",
+            right: "30%",
+            animationDuration: "12.5s",
             animationDelay: "0.9s",
-          }}
-        />
-
-        {/* Celebration Petal D: Soft Rose Petal lower center */}
-        <RosePetal
-          shape="shape1"
-          variant="dustyRose"
-          size={19}
-          rotation={-22}
-          className="animate-petal-breeze-4"
-          style={{
-            top: "76%",
-            left: "36%",
-            animationDuration: "12s",
-            animationDelay: "1.2s",
           }}
         />
       </div>

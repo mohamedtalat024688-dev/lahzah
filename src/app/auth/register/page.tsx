@@ -42,7 +42,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF9F5] text-[#493B3B] flex items-center justify-center p-4 relative overflow-hidden selection:bg-[#790D20]/15 selection:text-[#390E19]">
+    <div className="min-h-screen bg-[#FFF8F4] text-[#493B3B] flex items-center justify-center p-4 relative overflow-hidden selection:bg-[#790D20]/15 selection:text-[#390E19]">
       <CelebrationPetals />
 
       <div className="w-full max-w-md bg-[#FFFDFC] border border-[#EFE4DC] rounded-[2rem] p-8 sm:p-10 shadow-soft-lg relative z-10 text-right">

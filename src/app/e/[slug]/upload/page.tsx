@@ -40,7 +40,7 @@ export default async function GuestUploadPage({ params }: PageProps) {
   const coupleNames = `${event.groomName} و ${event.brideName}`;
 
   return (
-    <div className="min-h-screen bg-[#FFF9F5] text-[#493B3B] py-8 px-4 flex flex-col justify-between selection:bg-[#790D20]/15 selection:text-[#390E19] font-sans">
+    <div className="min-h-screen bg-[#FFF8F4] text-[#493B3B] py-8 px-4 flex flex-col justify-between selection:bg-[#790D20]/15 selection:text-[#390E19] font-sans">
       {/* Top Bar */}
       <div className="max-w-md mx-auto w-full flex items-center justify-between mb-6">
         <Link

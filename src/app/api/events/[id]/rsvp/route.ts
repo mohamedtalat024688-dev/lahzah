@@ -22,7 +22,7 @@ export async function POST(
     const { id: eventId } = await params;
     const body = await request.json();
 
-    const { guestName, phone, attendanceStatus, guestCount = 1, note } = body;
+    const { guestName, phone, attendanceStatus, guestCount = 1, note, inviteToken } = body;
 
     if (!guestName || typeof guestName !== "string" || !guestName.trim()) {
       return NextResponse.json({ error: "يرجى كتابة الاسم الكريم" }, { status: 400 });
@@ -41,17 +41,82 @@ export async function POST(
       return NextResponse.json({ error: "هذه الدعوة غير متاحة لتأكيد الحضور حالياً" }, { status: 403 });
     }
 
-    const parsedCount = attendanceStatus === "ATTENDING" ? Math.max(1, Math.min(20, parseInt(guestCount) || 1)) : 0;
+    const requestedSeats = attendanceStatus === "ATTENDING" ? Math.max(1, parseInt(guestCount, 10) || 1) : 0;
 
-    const rsvp = await prisma.rsvp.create({
-      data: {
-        eventId,
-        guestName: guestName.trim().slice(0, 100),
-        phone: phone ? String(phone).trim().slice(0, 30) : null,
-        attendanceStatus,
-        guestCount: parsedCount,
-        note: note ? String(note).trim().slice(0, 500) : null,
-      },
+    // Database-backed Targeted Invitation Validation
+    let targetedInvite: { id: string; maxSeats: number; isUsed: boolean } | null = null;
+    if (inviteToken) {
+      const cleanToken = String(inviteToken).trim();
+      const foundInvite = await prisma.guestInvite.findUnique({
+        where: { token: cleanToken },
+      });
+
+      if (!foundInvite || foundInvite.eventId !== eventId) {
+        return NextResponse.json(
+          { error: "رمز الدعوة المخصصة غير صالح أو غير مرتبط بهذه المناسبة" },
+          { status: 400 }
+        );
+      }
+
+      if (foundInvite.isUsed) {
+        return NextResponse.json(
+          { error: "تم استخدام رمز هذه الدعوة مسبقاً لتأكيد الحضور ولا يمكن إعادة استخدامه" },
+          { status: 400 }
+        );
+      }
+
+      if (attendanceStatus === "ATTENDING" && requestedSeats > foundInvite.maxSeats) {
+        return NextResponse.json(
+          {
+            error: `عدد المقاعد المطلوب (${requestedSeats}) يتجاوز الحد الأقصى المخصص لدعوتكم الكريمة (${foundInvite.maxSeats} مقاعد).`,
+            code: "SEAT_LIMIT_EXCEEDED",
+            maxAllowedSeats: foundInvite.maxSeats,
+          },
+          { status: 400 }
+        );
+      }
+
+      targetedInvite = foundInvite;
+    } else {
+      // General public open invitation link validation
+      const maxAllowed = event.defaultMaxSeats || 3;
+      if (attendanceStatus === "ATTENDING" && requestedSeats > maxAllowed) {
+        return NextResponse.json(
+          {
+            error: `الحد الأقصى للمقاعد المسموح به لكل رد هو ${maxAllowed} مقاعد.`,
+            code: "PUBLIC_SEAT_LIMIT_EXCEEDED",
+            maxAllowedSeats: maxAllowed,
+          },
+          { status: 400 }
+        );
+      }
+    }
+
+    // Atomic execution: Create RSVP and consume Targeted Invite token if present
+    const rsvp = await prisma.$transaction(async (tx) => {
+      const newRsvp = await tx.rsvp.create({
+        data: {
+          eventId,
+          guestName: guestName.trim().slice(0, 100),
+          phone: phone ? String(phone).trim().slice(0, 30) : null,
+          attendanceStatus,
+          guestCount: requestedSeats,
+          note: note ? String(note).trim().slice(0, 500) : null,
+        },
+      });
+
+      if (targetedInvite) {
+        await tx.guestInvite.update({
+          where: { id: targetedInvite.id },
+          data: {
+            isUsed: true,
+            usedAt: new Date(),
+            rsvpId: newRsvp.id,
+          },
+        });
+      }
+
+      return newRsvp;
     });
 
     return NextResponse.json({

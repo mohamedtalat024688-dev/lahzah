@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
-import { TEMPLATES, TemplateConfig } from "@/lib/templates";
+import { TEMPLATES, TemplateConfig, EVENT_TYPES, EventType } from "@/lib/templates";
 import { PACKAGES } from "@/lib/packages";
 import RealisticInvitationCard from "@/components/templates/RealisticInvitationCard";
 
@@ -34,12 +34,13 @@ function NewEventStudio() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const initialTemplate = searchParams.get("template") || "royal-gold";
+  const initialTemplate = searchParams.get("template") || "890434e0-e5a6-4bf5-a367-309aa074414d";
   const initialPackage = searchParams.get("package")?.toUpperCase() || "PREMIUM";
+  const initialEventType = searchParams.get("eventType") || (initialTemplate.startsWith("engagement-") ? "ENGAGEMENT" : "WEDDING");
 
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    eventType: "WEDDING",
+    eventType: initialEventType,
     groomName: "",
     brideName: "",
     eventDate: "",
@@ -49,7 +50,7 @@ function NewEventStudio() {
     mapUrl: "",
     welcomeMessage: "يسعدنا ويشرفنا حضوركم لمشاركتنا فرحة العمر وتوثيق أجمل اللحظات",
     description: "",
-    templateId: TEMPLATES[initialTemplate] ? initialTemplate : "royal-gold",
+    templateId: TEMPLATES[initialTemplate] ? initialTemplate : "890434e0-e5a6-4bf5-a367-309aa074414d",
     customSlug: "",
     packageTier: PACKAGES[initialPackage] ? initialPackage : "PREMIUM",
   });
@@ -58,8 +59,28 @@ function NewEventStudio() {
   const [errorMessage, setErrorMessage] = useState("");
   const [mobileView, setMobileView] = useState<"form" | "preview">("form");
 
+  const [hiddenIds, setHiddenIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch("/api/templates/hidden")
+      .then((r) => r.json())
+      .then((d) => {
+        if (Array.isArray(d?.hiddenIds)) setHiddenIds(d.hiddenIds);
+      })
+      .catch(() => {});
+  }, []);
+
+  const availableTemplates = useMemo(() => {
+    const seen = new Set<string>();
+    return Object.values(TEMPLATES).filter((tmpl) => {
+      if (seen.has(tmpl.id)) return false;
+      seen.add(tmpl.id);
+      return !hiddenIds.includes(tmpl.id);
+    });
+  }, [hiddenIds]);
+
   const selectedTemplate: TemplateConfig =
-    TEMPLATES[formData.templateId] || TEMPLATES["royal-gold"];
+    TEMPLATES[formData.templateId] || TEMPLATES["890434e0-e5a6-4bf5-a367-309aa074414d"];
 
   const handleSelectTemplate = (templateId: string) => {
     setFormData((prev) => ({ ...prev, templateId }));
@@ -152,7 +173,7 @@ function NewEventStudio() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FFF9F5] text-[#493B3B] flex flex-col justify-between selection:bg-[#790D20]/15 selection:text-[#390E19] font-sans">
+    <div className="min-h-screen bg-[#FFF8F4] text-[#493B3B] flex flex-col justify-between selection:bg-[#790D20]/15 selection:text-[#390E19] font-sans">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full flex-1">
@@ -314,23 +335,19 @@ function NewEventStudio() {
                   {/* Event Type */}
                   <div className="space-y-2.5">
                     <label className="text-xs font-semibold text-[#493B3B]">نوع المناسبة</label>
-                    <div className="grid grid-cols-3 gap-3">
-                      {[
-                        { id: "WEDDING", label: "حفل زفاف" },
-                        { id: "ENGAGEMENT", label: "حفل خطوبة" },
-                        { id: "CELEBRATION", label: "عقد قران" },
-                      ].map((t) => (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                      {EVENT_TYPES.filter((t) => t.id !== "ALL").map((t) => (
                         <button
                           key={t.id}
                           type="button"
                           onClick={() => setFormData({ ...formData, eventType: t.id })}
-                          className={`py-3.5 px-3 rounded-2xl border text-xs font-semibold transition-all min-h-[46px] ${
+                          className={`py-3 px-3 rounded-2xl border text-xs font-semibold transition-all min-h-[46px] flex items-center justify-center text-center ${
                             formData.eventType === t.id
-                              ? "border-[#790D20] bg-[#F1DEDF]/40 text-[#390E19] font-bold shadow-sm ring-1 ring-[#790D20]/30"
-                              : "border-[#EFE4DC] bg-[#FFF9F5] text-[#8B7778] hover:border-[#D6B77A] hover:text-[#390E19]"
+                              ? "border-[#790D20] bg-[#790D20] text-white font-bold shadow-soft-xs ring-1 ring-[#790D20]"
+                              : "border-[#EFE4DC] bg-[#FFFDFC] text-[#493B3B] hover:border-[#790D20] hover:text-[#790D20]"
                           }`}
                         >
-                          {t.label}
+                          {t.labelAr}
                         </button>
                       ))}
                     </div>
@@ -495,7 +512,18 @@ function NewEventStudio() {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {Object.values(TEMPLATES).map((tmpl) => {
+                    {availableTemplates.length === 0 ? (
+                      <div className="col-span-full py-12 px-6 text-center border-2 border-dashed border-[#EFE4DC] rounded-2xl bg-[#FFF9F5]/50 space-y-3">
+                        <div className="w-12 h-12 rounded-full bg-[#FAF4E8] text-[#9E7A36] flex items-center justify-center mx-auto">
+                          <Sparkles className="w-6 h-6" />
+                        </div>
+                        <h3 className="font-bold text-sm text-[#390E19]">لا توجد قوالب مسبقة حالياً</h3>
+                        <p className="text-xs text-[#8B7778] max-w-sm mx-auto">
+                          تم تصفير قائمة القوالب القديمة بالكامل، وجاهز للبدء في تصميم قوالب جديدة.
+                        </p>
+                      </div>
+                    ) : (
+                      availableTemplates.map((tmpl) => {
                       const isSelected = formData.templateId === tmpl.id;
                       const isLuxury = tmpl.tier === "LUXURY";
                       const isPremium = tmpl.tier === "PREMIUM";
@@ -526,6 +554,11 @@ function NewEventStudio() {
                                 <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#FFF9F5] text-[#8B7778] border border-[#EFE4DC]">
                                   {tmpl.styleTag}
                                 </span>
+                                {tmpl.eventTypes?.includes(formData.eventType as EventType) && (
+                                  <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-[#FAF2F3] text-[#790D20] border border-[#D8B8B8]">
+                                    {formData.eventType === "ENGAGEMENT" ? "💍 مخصص للخطوبة" : "✨ مخصص لمناسبتكم"}
+                                  </span>
+                                )}
                               </div>
                               <div
                                 className="w-4 h-4 rounded-full border border-black/10 shadow-sm shrink-0"
@@ -558,7 +591,7 @@ function NewEventStudio() {
                           </div>
                         </div>
                       );
-                    })}
+                    }))}
                   </div>
                 </div>
               )}

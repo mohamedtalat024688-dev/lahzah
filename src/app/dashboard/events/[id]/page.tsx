@@ -203,7 +203,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FFF9F5] flex items-center justify-center text-[#390E19]">
+      <div className="min-h-screen bg-[#FFF8F4] flex items-center justify-center text-[#390E19]">
         <Loader2 className="w-8 h-8 animate-spin text-[#790D20]" />
       </div>
     );
@@ -211,7 +211,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
 
   if (!event) {
     return (
-      <div className="min-h-screen bg-[#FFF9F5] text-[#493B3B] flex flex-col justify-between">
+      <div className="min-h-screen bg-[#FFF8F4] text-[#493B3B] flex flex-col justify-between">
         <Navbar />
         <div className="text-center py-24 space-y-3">
           <p className="text-base text-[#8B7778]">المناسبة غير موجودة أو تم حذفها</p>
@@ -234,7 +234,7 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
     .reduce((sum, r) => sum + r.guestCount, 0);
 
   return (
-    <div className="min-h-screen bg-[#FFF9F5] text-[#493B3B] flex flex-col justify-between selection:bg-[#790D20]/15 selection:text-[#390E19] font-sans">
+    <div className="min-h-screen bg-[#FFF8F4] text-[#493B3B] flex flex-col justify-between selection:bg-[#790D20]/15 selection:text-[#390E19] font-sans">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1">
@@ -411,8 +411,8 @@ export default function EventDetailPage({ params }: { params: Promise<{ id: stri
               onClick={() => setActiveTab(tab.id as typeof activeTab)}
               className={`px-4 py-2.5 rounded-full transition-all shrink-0 flex items-center gap-2 text-xs font-semibold min-h-[44px] ${
                 activeTab === tab.id
-                  ? "bg-[#390E19] text-white shadow-sm"
-                  : "bg-[#FFFDFC] text-[#8B7778] hover:text-[#390E19] hover:bg-white border border-[#EFE4DC]"
+                  ? "bg-[#790D20] text-white shadow-sm"
+                  : "bg-[#FFFDFC] text-[#8C7772] hover:text-[#390E19] hover:bg-white border border-[#EFE4DC]"
               }`}
             >
               <span>{tab.label}</span>

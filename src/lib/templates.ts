@@ -4,12 +4,45 @@
 export type TemplateTier = "BASIC" | "PREMIUM" | "LUXURY";
 export type TemplateStyle = "classic" | "botanical" | "romantic" | "minimal" | "heritage" | "couture" | "aristocratic" | "craft";
 
+export type EventType =
+  | "ALL"
+  | "ENGAGEMENT"
+  | "FATIHIA"
+  | "KATB_KITAB"
+  | "WEDDING"
+  | "BIRTHDAY"
+  | "GRADUATION"
+  | "SEBOU"
+  | "HENNA"
+  | "OTHER";
+
+export interface EventTypeConfig {
+  id: EventType;
+  labelAr: string;
+  labelEn: string;
+  badgeLabelAr: string;
+}
+
+export const EVENT_TYPES: EventTypeConfig[] = [
+  { id: "ALL", labelAr: "جميع المناسبات", labelEn: "All Events", badgeLabelAr: "جميع المناسبات" },
+  { id: "ENGAGEMENT", labelAr: "خطوبة", labelEn: "Engagement", badgeLabelAr: "حفل خطوبة مبارك" },
+  { id: "FATIHIA", labelAr: "قراءة فاتحة", labelEn: "Fatiha", badgeLabelAr: "مراسم قراءة الفاتحة" },
+  { id: "KATB_KITAB", labelAr: "كتب كتاب", labelEn: "Katb Kitab", badgeLabelAr: "مراسم عقد القران وكتب الكتاب" },
+  { id: "WEDDING", labelAr: "زفاف / فرح", labelEn: "Wedding", badgeLabelAr: "حفل زفاف مبارك" },
+  { id: "BIRTHDAY", labelAr: "عيد ميلاد", labelEn: "Birthday", badgeLabelAr: "احتفال عيد ميلاد سعيد" },
+  { id: "GRADUATION", labelAr: "تخرج", labelEn: "Graduation", badgeLabelAr: "حفل تخرج ومسيرة نجاح" },
+  { id: "SEBOU", labelAr: "سبوع واستقبال مولود", labelEn: "Sebou / Newborn", badgeLabelAr: "احتفال سبوع واستقبال مولود" },
+  { id: "HENNA", labelAr: "حنة", labelEn: "Henna Night", badgeLabelAr: "ليلة الحنة المباركة" },
+  { id: "OTHER", labelAr: "مناسبات أخرى", labelEn: "Other Events", badgeLabelAr: "دعوة خاصة لمناسبة مميزة" },
+];
+
+
 export interface TemplateOrnamentConfig {
   type: "royal" | "botanical" | "floral" | "minimal" | "vintage" | "heritage" | "couture" | "arch" | "embossed" | "art-line";
   symbol: string;
   divider: string;
-  cornerStyle: "ornate" | "botanical-corner" | "soft-curve" | "hairline-bracket" | "regal-crown" | "geometric-star" | "couture-cross" | "arch-header" | "embossed-crest";
-  monogramStyle: "circle-seal" | "flourish-crest" | "oval-cameo" | "minimal-clean" | "vintage-shield" | "octagon-star" | "couture-serif" | "arch-keystone" | "embossed-wax";
+  cornerStyle: "lotus-corner" | "ornate" | "botanical-corner" | "soft-curve" | "hairline-bracket" | "regal-crown" | "geometric-star" | "couture-cross" | "arch-header" | "embossed-crest";
+  monogramStyle: "lotus-crest" | "circle-seal" | "flourish-crest" | "oval-cameo" | "minimal-clean" | "vintage-shield" | "octagon-star" | "couture-serif" | "arch-keystone" | "embossed-wax";
 }
 
 export interface TemplateTypographyConfig {
@@ -39,6 +72,8 @@ export interface TemplateConfig {
   styleTag: string;
   tier: TemplateTier;
   style: TemplateStyle;
+  eventTypes: EventType[];
+  htmlFile?: string;
   featured?: boolean;
   theme: {
     background: string;
@@ -72,6 +107,7 @@ export const TEMPLATES: Record<string, TemplateConfig> = {
     styleTag: "ملوكي كلاسيكي",
     tier: "PREMIUM",
     style: "classic",
+    eventTypes: ["WEDDING", "KATB_KITAB", "ENGAGEMENT", "FATIHIA", "OTHER"],
     featured: true,
     theme: {
       background: "bg-[#0c0b0a]",
@@ -123,6 +159,7 @@ export const TEMPLATES: Record<string, TemplateConfig> = {
     styleTag: "أناقة ملكية",
     tier: "PREMIUM",
     style: "botanical",
+    eventTypes: ["WEDDING", "KATB_KITAB", "ENGAGEMENT", "FATIHIA", "OTHER"],
     theme: {
       background: "bg-[#06120d]",
       cardBackground: "bg-[#091a13]",
@@ -173,6 +210,7 @@ export const TEMPLATES: Record<string, TemplateConfig> = {
     styleTag: "رومانسي ناعم",
     tier: "PREMIUM",
     style: "romantic",
+    eventTypes: ["WEDDING", "KATB_KITAB", "ENGAGEMENT", "FATIHIA", "OTHER"],
     theme: {
       background: "bg-[#140b10]",
       cardBackground: "bg-[#1a0e15]",
@@ -223,6 +261,7 @@ export const TEMPLATES: Record<string, TemplateConfig> = {
     styleTag: "عاجي تحريري",
     tier: "BASIC",
     style: "minimal",
+    eventTypes: ["WEDDING", "KATB_KITAB", "ENGAGEMENT", "FATIHIA", "OTHER"],
     theme: {
       background: "bg-[#141311]",
       cardBackground: "bg-[#fbf9f4]",
@@ -273,6 +312,7 @@ export const TEMPLATES: Record<string, TemplateConfig> = {
     styleTag: "فخامة عريقة",
     tier: "PREMIUM",
     style: "classic",
+    eventTypes: ["WEDDING", "KATB_KITAB", "ENGAGEMENT", "FATIHIA", "OTHER"],
     theme: {
       background: "bg-[#14070a]",
       cardBackground: "bg-[#1c080d]",
@@ -323,6 +363,7 @@ export const TEMPLATES: Record<string, TemplateConfig> = {
     styleTag: "مودرن معاصر",
     tier: "BASIC",
     style: "minimal",
+    eventTypes: ["WEDDING", "KATB_KITAB", "ENGAGEMENT", "FATIHIA", "OTHER"],
     theme: {
       background: "bg-[#08080a]",
       cardBackground: "bg-[#101014]",
@@ -373,6 +414,7 @@ export const TEMPLATES: Record<string, TemplateConfig> = {
     styleTag: "تراثي أصيل",
     tier: "PREMIUM",
     style: "heritage",
+    eventTypes: ["WEDDING", "KATB_KITAB", "ENGAGEMENT", "FATIHIA", "OTHER"],
     theme: {
       background: "bg-[#140e08]",
       cardBackground: "bg-[#1a110a]",
@@ -423,6 +465,7 @@ export const TEMPLATES: Record<string, TemplateConfig> = {
     styleTag: "كوتور فاخر",
     tier: "LUXURY",
     style: "couture",
+    eventTypes: ["WEDDING", "KATB_KITAB", "ENGAGEMENT", "FATIHIA", "OTHER"],
     featured: true,
     theme: {
       background: "bg-[#09090b]",
@@ -474,6 +517,7 @@ export const TEMPLATES: Record<string, TemplateConfig> = {
     styleTag: "أرستقراطي فاخر",
     tier: "LUXURY",
     style: "aristocratic",
+    eventTypes: ["WEDDING", "KATB_KITAB", "ENGAGEMENT", "FATIHIA", "OTHER"],
     featured: true,
     theme: {
       background: "bg-[#0d0c0a]",
@@ -525,6 +569,7 @@ export const TEMPLATES: Record<string, TemplateConfig> = {
     styleTag: "حرفي مخصص",
     tier: "LUXURY",
     style: "craft",
+    eventTypes: ["WEDDING", "KATB_KITAB", "ENGAGEMENT", "FATIHIA", "OTHER"],
     featured: true,
     theme: {
       background: "bg-[#121110]",
@@ -604,4 +649,108 @@ export function isTemplateAllowedForPackage(templateId: string, packageCode?: st
   if (!tmpl) return false;
   const allowedTiers = getAllowedTemplateTiers(packageCode);
   return allowedTiers.includes(tmpl.tier);
+}
+
+
+export const FALLBACK_BLANK_TEMPLATE: TemplateConfig = {
+  id: "default",
+  nameAr: "قالب افتراضي",
+  nameEn: "Default Template",
+  taglineAr: "قالب أساسي",
+  descriptionAr: "قالب أساسي هادئ",
+  styleTag: "افتراضي",
+  tier: "BASIC",
+  style: "classic",
+    eventTypes: ["WEDDING", "KATB_KITAB", "ENGAGEMENT", "FATIHIA", "OTHER"],
+  featured: false,
+  theme: {
+    background: "bg-[#14120f]",
+    cardBackground: "bg-[#FFFDFC]",
+    accentColor: "#790D20",
+    accentGradient: "from-[#f5e7c8] via-[#c5a880] to-[#9e7d53]",
+    textColor: "text-[#390E19]",
+    subtitleColor: "text-[#8B7778]",
+    borderColor: "border-[#EFE4DC]",
+    ornamentColor: "#790D20",
+    buttonClass: "bg-[#790D20] text-white hover:bg-[#5e0a19] shadow-md",
+    paperClass: "bg-[#FFFDFC] text-[#390E19] border border-[#EFE4DC] shadow-xl",
+    isLight: true,
+  },
+  typography: {
+    coupleFont: "font-serif font-bold text-3xl sm:text-4xl",
+    headerStyle: "font-serif text-sm text-[#790D20]",
+    bodyStyle: "font-sans text-xs sm:text-sm text-[#390E19]",
+    monogramText: "font-serif font-bold text-base",
+    dateStyle: "font-serif font-bold text-sm",
+  },
+  ornaments: {
+    type: "minimal",
+    symbol: "✦",
+    divider: "✦ ──── ✦",
+    cornerStyle: "soft-curve",
+    monogramStyle: "minimal-clean",
+  },
+  layout: {
+    alignment: "center",
+    frameStyle: "hairline-single",
+    aspectRatio: "3/4",
+    innerPadding: "p-6 sm:p-8",
+    paperTexture: "shadow-sm",
+    headerTreatment: "bismillah-minimal",
+  },
+};
+
+TEMPLATES["default"] = FALLBACK_BLANK_TEMPLATE;
+
+export function getUniqueTemplates(): TemplateConfig[] {
+  const seen = new Set<string>();
+  return Object.values(TEMPLATES).filter((tmpl) => {
+    if (seen.has(tmpl.id)) return false;
+    seen.add(tmpl.id);
+    return true;
+  });
+}
+
+export function getEventTypeLabel(eventType?: string): string {
+  switch (eventType) {
+    case "ENGAGEMENT":
+      return "حفل خطوبة مبارك";
+    case "FATIHIA":
+      return "مراسم قراءة الفاتحة المباركة";
+    case "KATB_KITAB":
+      return "مراسم عقد القران وكتب الكتاب";
+    case "WEDDING":
+      return "حفل زفاف مبارك";
+    case "BIRTHDAY":
+      return "احتفال عيد ميلاد سعيد";
+    case "GRADUATION":
+      return "حفل تخرج ومسيرة نجاح";
+    case "SEBOU":
+      return "احتفال سبوع واستقبال مولود مبارك";
+    case "HENNA":
+      return "ليلة الحنة المباركة";
+    case "OTHER":
+      return "دعوة خاصة لمناسبة مميزة";
+    default:
+      return "حفل زفاف مبارك";
+  }
+}
+
+export function getTemplatesByEventType(eventType: EventType | string): TemplateConfig[] {
+  const templates = getUniqueTemplates();
+  if (!eventType || eventType === "ALL") return templates;
+  return templates.filter((tmpl) => tmpl.eventTypes && tmpl.eventTypes.includes(eventType as EventType));
+}
+
+export function getTemplateCountsByEventType(): Record<string, number> {
+  const templates = getUniqueTemplates();
+  const counts: Record<string, number> = {
+    ALL: templates.length,
+  };
+  EVENT_TYPES.forEach((evt) => {
+    if (evt.id !== "ALL") {
+      counts[evt.id] = templates.filter((tmpl) => tmpl.eventTypes && tmpl.eventTypes.includes(evt.id)).length;
+    }
+  });
+  return counts;
 }

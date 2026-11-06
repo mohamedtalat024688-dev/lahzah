@@ -23,6 +23,7 @@ import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import RealisticInvitationCard from "@/components/templates/RealisticInvitationCard";
 import CelebrationPetals from "@/components/ui/CelebrationPetals";
+import { getEventTypeLabel } from "@/lib/templates";
 
 interface EventItem {
   id: string;
@@ -91,7 +92,7 @@ export default function DashboardPage() {
   const otherEvents = events.slice(1);
 
   return (
-    <div className="min-h-screen bg-[#FFF9F5] text-[#493B3B] flex flex-col justify-between selection:bg-[#790D20]/15 selection:text-[#390E19] font-body relative overflow-x-hidden">
+    <div className="min-h-screen bg-[#FFF8F4] text-[#493B3B] flex flex-col justify-between selection:bg-[#790D20]/15 selection:text-[#390E19] font-body relative overflow-x-hidden">
       <CelebrationPetals />
       <Navbar />
 
@@ -214,11 +215,7 @@ export default function DashboardPage() {
                       {/* Couple Names & Event Details */}
                       <div className="space-y-3">
                         <p className="text-xs uppercase tracking-wider font-semibold text-[#790D20]">
-                          {primaryEvent.eventType === "WEDDING"
-                            ? "حفل زفاف مبارك"
-                            : primaryEvent.eventType === "ENGAGEMENT"
-                            ? "حفل خطوبة مبارك"
-                            : "مناسبة خاصة"}
+                          {getEventTypeLabel(primaryEvent.eventType)}
                         </p>
                         <h2 className="text-3xl sm:text-4xl font-bold font-serif text-[#390E19] tracking-wide leading-tight">
                           {primaryEvent.groomName}

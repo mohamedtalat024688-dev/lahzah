@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { TemplateConfig, getTemplate } from "@/lib/templates";
+import { TemplateConfig, getTemplate, getEventTypeLabel } from "@/lib/templates";
 import { Sparkles, Calendar, MapPin, Heart, Clock } from "lucide-react";
 
 // =========================================================================
@@ -92,6 +92,15 @@ export function InvitationFrame({
             <div className="absolute bottom-4 left-4 text-xs font-serif opacity-85 pointer-events-none" style={{ color: accent }}>✦ ⚜</div>
           </>
         );
+      case "lotus-corner":
+        return (
+          <>
+            <div className="absolute top-4 right-4 text-xs font-serif opacity-80 pointer-events-none" style={{ color: accent }}>🪷 🌿</div>
+            <div className="absolute top-4 left-4 text-xs font-serif opacity-80 pointer-events-none" style={{ color: accent }}>🌿 🪷</div>
+            <div className="absolute bottom-4 right-4 text-xs font-serif opacity-80 pointer-events-none" style={{ color: accent }}>🪷 🌿</div>
+            <div className="absolute bottom-4 left-4 text-xs font-serif opacity-80 pointer-events-none" style={{ color: accent }}>🌿 🪷</div>
+          </>
+        );
       case "botanical-corner":
         return (
           <>
@@ -146,7 +155,7 @@ export function InvitationFrame({
       className={`relative w-full max-w-[420px] mx-auto text-center transition-all duration-500 overflow-hidden select-none ${
         template.layout.innerPadding
       } ${template.theme.paperClass} ${layout.paperTexture} ${
-        layout.frameStyle === "couture-border" ? "rounded-none" : "rounded-[2.6rem]"
+        layout.frameStyle === "couture-border" ? "rounded-none" : layout.frameStyle === "arch-dome" ? "rounded-t-[5rem] rounded-b-2xl" : "rounded-[2.6rem]"
       } ${className}`}
     >
       {/* Subtle Studio Lighting Vignette */}
@@ -191,6 +200,29 @@ export function InvitationMonogram({
   const accent = template.theme.accentColor;
   const isLight = template.theme.isLight;
   const style = template.ornaments.monogramStyle;
+
+  if (style === "lotus-crest") {
+    return (
+      <div className="flex flex-col items-center justify-center space-y-1.5 py-1">
+        <div
+          className="w-16 h-16 rounded-full border-2 mx-auto flex items-center justify-center shadow-md transition-transform duration-300 hover:scale-105"
+          style={{
+            borderColor: accent,
+            background: "linear-gradient(135deg, #E7EFE6 0%, #CFDEC8 100%)",
+          }}
+        >
+          <svg className="w-9 h-9" viewBox="0 0 24 24" fill="none" stroke={accent} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 2C9.5 7 4 9 4 14a8 8 0 0 0 16 0c0-5-5.5-7-8-12Z" fill="#F8DFE6" fillOpacity="0.85" />
+            <path d="M12 22s-4-4.5-4-8c0-3 2-5 4-7 2 2 4 4 4 7 0 3.5-4 8-4 8Z" fill="#E68AA4" fillOpacity="0.9" />
+            <path d="M12 14v8" stroke={accent} />
+          </svg>
+        </div>
+        <span className="text-xs font-serif font-bold tracking-widest text-[#4E6E49]">
+          {groomInitial} 🪷 {brideInitial}
+        </span>
+      </div>
+    );
+  }
 
   if (style === "couture-serif") {
     return (
@@ -279,12 +311,7 @@ export function InvitationHeader({
   const textMuted = isLight ? "text-[#786c5e]" : "text-[#8e877c]";
   const textBody = isLight ? "text-[#4a4036]" : "text-[#c4bdaf]";
 
-  const eventLabel =
-    eventType === "ENGAGEMENT"
-      ? "حفل خطوبة مبارك"
-      : eventType === "CELEBRATION"
-      ? "عقد قران مبارك"
-      : "حفل زفاف مبارك";
+  const eventLabel = getEventTypeLabel(eventType);
 
   return (
     <div className="space-y-2 text-center">
@@ -495,7 +522,7 @@ interface RealisticInvitationCardProps {
 
 export default function RealisticInvitationCard({
   template: propTemplate,
-  templateId = "royal-gold",
+  templateId = "890434e0-e5a6-4bf5-a367-309aa074414d",
   groomName = "أحمد منصور",
   brideName = "سارة الجوهري",
   eventDate,

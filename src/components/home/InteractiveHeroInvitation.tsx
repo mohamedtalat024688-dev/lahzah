@@ -367,7 +367,7 @@ export default function InteractiveHeroInvitation({ onOpenChange }: InteractiveH
               </span>
 
               <Link
-                href="/preview?template=royal-gold"
+                href="/preview"
                 target="_blank"
                 className="hover:text-white hover:underline flex items-center gap-1 text-[#D6B77A] py-0.5 px-1 rounded focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#D6B77A]"
               >
@@ -479,7 +479,7 @@ export default function InteractiveHeroInvitation({ onOpenChange }: InteractiveH
           </div>
         </div>
 
-        {/* Dedicated Replay Action when opened (Ensures clear mobile/touch reversibility) */}
+        {/* Discreet Secondary Replay Action when opened (Only appears when invitation is open) */}
         {isOpen && (
           <div className="mt-4 flex items-center justify-center animate-fade-in z-40">
             <button
@@ -490,10 +490,11 @@ export default function InteractiveHeroInvitation({ onOpenChange }: InteractiveH
                 setHasRsvpd(false);
                 onOpenChange?.(false);
               }}
-              className="text-xs font-serif font-semibold text-[#790D20] hover:text-[#5F0A18] bg-[#FFFDFC]/95 px-4 py-1.5 rounded-full border border-[#D8B8B8] shadow-xs flex items-center gap-1.5 transition-all hover:scale-102 active:scale-98 cursor-pointer"
+              className="text-[11px] font-medium text-[#8B7778] hover:text-[#790D20] bg-[#FFFDFC]/80 hover:bg-[#FFFDFC] px-3.5 py-1.5 rounded-full border border-[#EFE4DC] hover:border-[#D8B8B8] shadow-xs flex items-center gap-1.5 transition-all opacity-85 hover:opacity-100 cursor-pointer"
+              aria-label="إعادة إغلاق المظروف"
             >
-              <RotateCcw className="w-3.5 h-3.5 text-[#790D20]" />
-              <span>إعادة إغلاق المظروف ↺</span>
+              <RotateCcw className="w-3 h-3 text-[#8B7778]" />
+              <span>إعادة إغلاق المظروف</span>
             </button>
           </div>
         )}

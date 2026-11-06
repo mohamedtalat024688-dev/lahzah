@@ -175,7 +175,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#FFF9F5] flex items-center justify-center text-[#390E19]">
+      <div className="min-h-screen bg-[#FFF8F4] flex items-center justify-center text-[#390E19]">
         <Loader2 className="w-8 h-8 animate-spin text-[#790D20]" />
       </div>
     );
@@ -183,7 +183,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
 
   if (!event) {
     return (
-      <div className="min-h-screen bg-[#FFF9F5] text-[#493B3B] flex flex-col justify-between">
+      <div className="min-h-screen bg-[#FFF8F4] text-[#493B3B] flex flex-col justify-between">
         <Navbar />
         <div className="text-center py-24 space-y-3">
           <p className="text-base text-[#8B7778]">المناسبة غير موجودة</p>
@@ -197,7 +197,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
   }
 
   return (
-    <div className="min-h-screen bg-[#FFF9F5] text-[#493B3B] flex flex-col justify-between selection:bg-[#790D20]/15 selection:text-[#390E19] font-sans">
+    <div className="min-h-screen bg-[#FFF8F4] text-[#493B3B] flex flex-col justify-between selection:bg-[#790D20]/15 selection:text-[#390E19] font-sans">
       <Navbar />
 
       <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex-1">
@@ -424,7 +424,7 @@ export default function CheckoutPage({ params }: { params: Promise<{ id: string 
 
                 <div className="sticky top-6">
                   <RealisticInvitationCard
-                    templateId={event.templateId || "royal-gold"}
+                    templateId={event.templateId || "890434e0-e5a6-4bf5-a367-309aa074414d"}
                     groomName={event.groomName}
                     brideName={event.brideName}
                     eventDate={event.eventDate}

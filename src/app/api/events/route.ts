@@ -2,6 +2,13 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
 import { TEMPLATES, isTemplateAllowedForPackage } from "@/lib/templates";
+import {
+  ScheduleItemsArraySchema,
+  DressCodeSchema,
+  CouplePhotosArraySchema,
+  MusicConfigSchema,
+  SectionsConfigArraySchema,
+} from "@/lib/validations/event";
 
 export async function GET() {
   try {
@@ -142,9 +149,69 @@ export async function POST(request: Request) {
       if (selectedPackageTier === "BASIC") {
         selectedTemplateId = "ivory-minimal";
       } else {
-        selectedTemplateId = "royal-gold";
+        selectedTemplateId = "890434e0-e5a6-4bf5-a367-309aa074414d";
         selectedPackageTier = selectedPackageTier || "PREMIUM";
       }
+    }
+
+    // Phase 1 Schema Validations (Zod)
+    let validatedScheduleItems: string | null = null;
+    if (body.scheduleItems) {
+      const parsed = typeof body.scheduleItems === "string" ? JSON.parse(body.scheduleItems) : body.scheduleItems;
+      const res = ScheduleItemsArraySchema.safeParse(parsed);
+      if (!res.success) {
+        return NextResponse.json({ error: "بيانات جدول الحفل غير صالحة", details: res.error.format() }, { status: 400 });
+      }
+      validatedScheduleItems = JSON.stringify(res.data);
+    }
+
+    let validatedDressCode: string | null = null;
+    if (body.dressCode) {
+      const parsed = typeof body.dressCode === "string" ? JSON.parse(body.dressCode) : body.dressCode;
+      const res = DressCodeSchema.safeParse(parsed);
+      if (!res.success) {
+        return NextResponse.json({ error: "بيانات كود الملابس غير صالحة", details: res.error.format() }, { status: 400 });
+      }
+      validatedDressCode = JSON.stringify(res.data);
+    }
+
+    let validatedCouplePhotos: string | null = null;
+    if (body.couplePhotos) {
+      const parsed = typeof body.couplePhotos === "string" ? JSON.parse(body.couplePhotos) : body.couplePhotos;
+      const res = CouplePhotosArraySchema.safeParse(parsed);
+      if (!res.success) {
+        return NextResponse.json({ error: "بيانات صور العروسين غير صالحة", details: res.error.format() }, { status: 400 });
+      }
+      validatedCouplePhotos = JSON.stringify(res.data);
+    }
+
+    let validatedMusicConfig: string | null = null;
+    if (body.musicConfig) {
+      const parsed = typeof body.musicConfig === "string" ? JSON.parse(body.musicConfig) : body.musicConfig;
+      const res = MusicConfigSchema.safeParse(parsed);
+      if (!res.success) {
+        return NextResponse.json({ error: "إعدادات الموسيقى غير صالحة", details: res.error.format() }, { status: 400 });
+      }
+      validatedMusicConfig = JSON.stringify(res.data);
+    }
+
+    let validatedSectionsConfig: string | null = null;
+    if (body.sectionsConfig) {
+      const parsed = typeof body.sectionsConfig === "string" ? JSON.parse(body.sectionsConfig) : body.sectionsConfig;
+      const res = SectionsConfigArraySchema.safeParse(parsed);
+      if (!res.success) {
+        return NextResponse.json({ error: "تنسيق ترتيب الأقسام غير صالح", details: res.error.format() }, { status: 400 });
+      }
+      validatedSectionsConfig = JSON.stringify(res.data);
+    }
+
+    let validatedDefaultMaxSeats = 3;
+    if (body.defaultMaxSeats !== undefined) {
+      const parsed = parseInt(body.defaultMaxSeats, 10);
+      if (isNaN(parsed) || parsed < 1 || parsed > 20) {
+        return NextResponse.json({ error: "الحد الأقصى للمقاعد الافتراضية يجب أن يكون بين 1 و 20" }, { status: 400 });
+      }
+      validatedDefaultMaxSeats = parsed;
     }
 
     const newEvent = await prisma.event.create({
@@ -165,6 +232,12 @@ export async function POST(request: Request) {
         isPublished: false,
         isPaid: false,
         packageTier: selectedPackageTier,
+        scheduleItems: validatedScheduleItems,
+        dressCode: validatedDressCode,
+        couplePhotos: validatedCouplePhotos,
+        musicConfig: validatedMusicConfig,
+        sectionsConfig: validatedSectionsConfig,
+        defaultMaxSeats: validatedDefaultMaxSeats,
       },
     });
 

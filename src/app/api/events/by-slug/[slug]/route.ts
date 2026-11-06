@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getTemplate } from "@/lib/templates";
+import {
+  parseScheduleItems,
+  parseDressCode,
+  parseCouplePhotos,
+  parseMusicConfig,
+  parseSectionsConfig,
+} from "@/lib/validations/event";
 
 export async function GET(
   request: Request,
@@ -55,8 +62,14 @@ export async function GET(
         coverImage: event.coverImage,
         templateId: event.templateId,
         isPublished: event.isPublished,
+        defaultMaxSeats: event.defaultMaxSeats,
         templateConfig,
         approvedPhotos: event.photos,
+        parsedScheduleItems: parseScheduleItems(event.scheduleItems),
+        parsedDressCode: parseDressCode(event.dressCode),
+        parsedCouplePhotos: parseCouplePhotos(event.couplePhotos),
+        parsedMusicConfig: parseMusicConfig(event.musicConfig),
+        parsedSectionsConfig: parseSectionsConfig(event.sectionsConfig),
         stats: {
           approvedPhotosCount: event._count.photos,
           totalRsvps: event._count.rsvps,

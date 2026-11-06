@@ -44,7 +44,7 @@ export default function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-md bg-[#FFF9F5]/92 border-b border-[#EFE4DC] transition-all">
+    <header className="sticky top-0 z-50 backdrop-blur-md bg-[#FFF8F4]/95 border-b border-[#EFE4DC] transition-all">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
         {/* Brand Logo & Wordmark */}
         <Link href="/" className="flex items-center group">
@@ -52,7 +52,7 @@ export default function Navbar() {
         </Link>
 
         {/* Public Visitor Navigation Links (Desktop) */}
-        <nav className="hidden md:flex items-center gap-9 text-[13px] font-semibold text-[#493B3B]">
+        <nav className="hidden md:flex items-center gap-9 text-[13.5px] font-medium text-[#493B3B]">
           <Link
             href="/#experience"
             className="hover:text-[#790D20] transition-colors py-1 relative after:content-[''] after:absolute after:bottom-0 after:right-0 after:w-0 after:h-[2px] after:bg-[#790D20] hover:after:w-full after:transition-all"

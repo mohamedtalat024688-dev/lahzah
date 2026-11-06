@@ -82,6 +82,10 @@
     - `npx eslint src/` passing with 0 errors and 0 warnings.
     - `npm run build` compiling cleanly with 0 TypeScript errors across all 17 routes.
     - `scripts/verify-pages.ts` and `scripts/test-templates-and-mobile.ts` passing 100%.
+- [x] **Phase 27:** Master Template System Specification & Permanent Standard
+  - Formalized permanent design, interaction, mobile-first, and guest experience standard in [`docs/TEMPLATE_SYSTEM_STANDARD.md`](file:///c:/Users/Souq%20al%20computer/Desktop/New%20folder/docs/TEMPLATE_SYSTEM_STANDARD.md).
+  - Every template represents a complete event lifecycle: unique opening animation, flexible customizable content, optional photos & schedule & dress code, ambient music controls, smooth auto-scroll, RSVP engine with quotas, QR code & frictionless guest photo uploads, owner moderation desk, and bespoke template-specific post-event memory gallery.
+  - Section reordering and toggleability decoupled from visual template presentation.
 
 ## 5. Security & Isolation Matrix
 - Strict owner data isolation: User A cannot view, modify, delete, or upgrade User B's events (enforced at API and middleware levels).

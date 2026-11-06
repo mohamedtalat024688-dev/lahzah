@@ -4,6 +4,18 @@ import { getCurrentUser } from "@/lib/auth";
 import { generateQrDataUrl } from "@/lib/qr";
 import { deleteUploadedFile } from "@/lib/storage";
 import { TEMPLATES, isTemplateAllowedForPackage } from "@/lib/templates";
+import {
+  ScheduleItemsArraySchema,
+  DressCodeSchema,
+  CouplePhotosArraySchema,
+  MusicConfigSchema,
+  SectionsConfigArraySchema,
+  parseScheduleItems,
+  parseDressCode,
+  parseCouplePhotos,
+  parseMusicConfig,
+  parseSectionsConfig,
+} from "@/lib/validations/event";
 
 export async function GET(
   request: Request,
@@ -26,6 +38,9 @@ export async function GET(
         photos: {
           orderBy: { createdAt: "desc" },
         },
+        guestInvites: {
+          orderBy: { createdAt: "desc" },
+        },
       },
     });
 
@@ -43,7 +58,14 @@ export async function GET(
     const qrDataUrl = await generateQrDataUrl(uploadUrl);
 
     return NextResponse.json({
-      event,
+      event: {
+        ...event,
+        parsedScheduleItems: parseScheduleItems(event.scheduleItems),
+        parsedDressCode: parseDressCode(event.dressCode),
+        parsedCouplePhotos: parseCouplePhotos(event.couplePhotos),
+        parsedMusicConfig: parseMusicConfig(event.musicConfig),
+        parsedSectionsConfig: parseSectionsConfig(event.sectionsConfig),
+      },
       urls: {
         invitation: invitationUrl,
         upload: uploadUrl,
@@ -106,6 +128,104 @@ export async function PUT(
       }
     }
 
+    // Phase 1 Schema Validations (Zod)
+    let validatedScheduleItems = existing.scheduleItems;
+    if (body.scheduleItems !== undefined) {
+      if (body.scheduleItems === null) {
+        validatedScheduleItems = null;
+      } else {
+        const parsed = typeof body.scheduleItems === "string" ? JSON.parse(body.scheduleItems) : body.scheduleItems;
+        const result = ScheduleItemsArraySchema.safeParse(parsed);
+        if (!result.success) {
+          return NextResponse.json(
+            { error: "بيانات جدول الحفل غير صالحة", details: result.error.format() },
+            { status: 400 }
+          );
+        }
+        validatedScheduleItems = JSON.stringify(result.data);
+      }
+    }
+
+    let validatedDressCode = existing.dressCode;
+    if (body.dressCode !== undefined) {
+      if (body.dressCode === null) {
+        validatedDressCode = null;
+      } else {
+        const parsed = typeof body.dressCode === "string" ? JSON.parse(body.dressCode) : body.dressCode;
+        const result = DressCodeSchema.safeParse(parsed);
+        if (!result.success) {
+          return NextResponse.json(
+            { error: "بيانات كود الملابس غير صالحة", details: result.error.format() },
+            { status: 400 }
+          );
+        }
+        validatedDressCode = JSON.stringify(result.data);
+      }
+    }
+
+    let validatedCouplePhotos = existing.couplePhotos;
+    if (body.couplePhotos !== undefined) {
+      if (body.couplePhotos === null) {
+        validatedCouplePhotos = null;
+      } else {
+        const parsed = typeof body.couplePhotos === "string" ? JSON.parse(body.couplePhotos) : body.couplePhotos;
+        const result = CouplePhotosArraySchema.safeParse(parsed);
+        if (!result.success) {
+          return NextResponse.json(
+            { error: "بيانات صور العروسين غير صالحة", details: result.error.format() },
+            { status: 400 }
+          );
+        }
+        validatedCouplePhotos = JSON.stringify(result.data);
+      }
+    }
+
+    let validatedMusicConfig = existing.musicConfig;
+    if (body.musicConfig !== undefined) {
+      if (body.musicConfig === null) {
+        validatedMusicConfig = null;
+      } else {
+        const parsed = typeof body.musicConfig === "string" ? JSON.parse(body.musicConfig) : body.musicConfig;
+        const result = MusicConfigSchema.safeParse(parsed);
+        if (!result.success) {
+          return NextResponse.json(
+            { error: "إعدادات الموسيقى غير صالحة", details: result.error.format() },
+            { status: 400 }
+          );
+        }
+        validatedMusicConfig = JSON.stringify(result.data);
+      }
+    }
+
+    let validatedSectionsConfig = existing.sectionsConfig;
+    if (body.sectionsConfig !== undefined) {
+      if (body.sectionsConfig === null) {
+        validatedSectionsConfig = null;
+      } else {
+        const parsed = typeof body.sectionsConfig === "string" ? JSON.parse(body.sectionsConfig) : body.sectionsConfig;
+        const result = SectionsConfigArraySchema.safeParse(parsed);
+        if (!result.success) {
+          return NextResponse.json(
+            { error: "تنسيق ترتيب الأقسام غير صالح", details: result.error.format() },
+            { status: 400 }
+          );
+        }
+        validatedSectionsConfig = JSON.stringify(result.data);
+      }
+    }
+
+    let validatedDefaultMaxSeats = existing.defaultMaxSeats;
+    if (body.defaultMaxSeats !== undefined) {
+      const parsed = parseInt(body.defaultMaxSeats, 10);
+      if (isNaN(parsed) || parsed < 1 || parsed > 20) {
+        return NextResponse.json(
+          { error: "الحد الأقصى للمقاعد الافتراضية يجب أن يكون بين 1 و 20" },
+          { status: 400 }
+        );
+      }
+      validatedDefaultMaxSeats = parsed;
+    }
+
     const updated = await prisma.event.update({
       where: { id },
       data: {
@@ -121,10 +241,26 @@ export async function PUT(
         description: body.description !== undefined ? body.description : existing.description,
         templateId: body.templateId ?? existing.templateId,
         isPublished: body.isPublished !== undefined ? body.isPublished : existing.isPublished,
+        scheduleItems: validatedScheduleItems,
+        dressCode: validatedDressCode,
+        couplePhotos: validatedCouplePhotos,
+        musicConfig: validatedMusicConfig,
+        sectionsConfig: validatedSectionsConfig,
+        defaultMaxSeats: validatedDefaultMaxSeats,
       },
     });
 
-    return NextResponse.json({ success: true, event: updated });
+    return NextResponse.json({
+      success: true,
+      event: {
+        ...updated,
+        parsedScheduleItems: parseScheduleItems(updated.scheduleItems),
+        parsedDressCode: parseDressCode(updated.dressCode),
+        parsedCouplePhotos: parseCouplePhotos(updated.couplePhotos),
+        parsedMusicConfig: parseMusicConfig(updated.musicConfig),
+        parsedSectionsConfig: parseSectionsConfig(updated.sectionsConfig),
+      },
+    });
   } catch (error) {
     console.error("Update event error:", error);
     return NextResponse.json({ error: "فشل تحديث بيانات المناسبة" }, { status: 500 });

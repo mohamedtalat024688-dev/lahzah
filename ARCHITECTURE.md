@@ -1,5 +1,7 @@
 # ARCHITECTURE.md - Lahzah (لحظة) Platform
 
+> **Master Template System Standard:** All templates and interactive invitation experiences strictly adhere to the permanent standard defined in [`docs/TEMPLATE_SYSTEM_STANDARD.md`](file:///c:/Users/Souq%20al%20computer/Desktop/New%20folder/docs/TEMPLATE_SYSTEM_STANDARD.md).
+
 ## System Architecture
 
 ```mermaid

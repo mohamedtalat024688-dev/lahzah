@@ -13,7 +13,7 @@ import {
   Volume2,
   VolumeX,
 } from "lucide-react";
-import { TemplateConfig } from "@/lib/templates";
+import { TemplateConfig, getEventTypeLabel } from "@/lib/templates";
 import RsvpModal from "../guest/RsvpModal";
 import MemoryGallery, { GalleryPhoto } from "../gallery/MemoryGallery";
 
@@ -198,11 +198,7 @@ export default function InvitationView({ event }: { event: EventData }) {
           {/* Invitation Badge */}
           <div className="space-y-1">
             <p className={`text-xs uppercase tracking-widest ${textSecondary}`}>
-              {event.eventType === "WEDDING"
-                ? "دعوة لحضور حفل زفاف مبارك"
-                : event.eventType === "ENGAGEMENT"
-                ? "دعوة لحضور حفل خطوبة مبارك"
-                : "دعوة لحضور عقد قران مبارك"}
+              {getEventTypeLabel(event.eventType)}
             </p>
           </div>
 
