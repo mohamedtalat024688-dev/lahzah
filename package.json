@@ -12,7 +12,8 @@
     "test:templates": "tsx scripts/test-templates-and-mobile.ts",
     "test:entitlements": "tsx scripts/test-phase4-security-and-entitlements.ts",
     "test:phase1": "tsx scripts/test-phase1-foundation.ts",
-    "test": "tsx scripts/test-security.ts && tsx scripts/test-payments.ts && tsx scripts/test-commercial-flow.ts && tsx scripts/test-e2e.ts && tsx scripts/test-templates-and-mobile.ts && tsx scripts/test-phase4-security-and-entitlements.ts && tsx scripts/test-phase1-foundation.ts"
+    "test:phase2": "tsx scripts/test-phase2-experience.ts",
+    "test": "tsx scripts/test-security.ts && tsx scripts/test-payments.ts && tsx scripts/test-commercial-flow.ts && tsx scripts/test-e2e.ts && tsx scripts/test-templates-and-mobile.ts && tsx scripts/test-phase4-security-and-entitlements.ts && tsx scripts/test-phase1-foundation.ts && tsx scripts/test-phase2-experience.ts"
   },
   "dependencies": {
     "@prisma/client": "6.4.1",

@@ -2,6 +2,13 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getTemplate } from "@/lib/templates";
+import {
+  parseCouplePhotos,
+  parseMusicConfig,
+  parseScheduleItems,
+  parseDressCode,
+  parseSectionsConfig,
+} from "@/lib/validations/event";
 import InvitationView from "@/components/templates/InvitationView";
 
 interface PageProps {
@@ -102,6 +109,11 @@ export default async function InvitationPage({ params }: PageProps) {
     coverImage: event.coverImage,
     templateConfig,
     approvedPhotos: event.photos,
+    couplePhotos: parseCouplePhotos(event.couplePhotos),
+    musicConfig: parseMusicConfig(event.musicConfig),
+    scheduleItems: parseScheduleItems(event.scheduleItems),
+    dressCode: parseDressCode(event.dressCode),
+    sectionsConfig: parseSectionsConfig(event.sectionsConfig),
     stats: {
       approvedPhotosCount: event._count.photos,
       totalRsvps: event._count.rsvps,

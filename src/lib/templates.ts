@@ -63,6 +63,9 @@ export interface TemplateLayoutConfig {
   headerTreatment: "bismillah-calligraphy" | "bismillah-minimal" | "bismillah-regal" | "bismillah-couture";
 }
 
+export type OpeningAnimationArchetype = "wax-seal" | "sliding-sleeve" | "gatefold-doors";
+export type GalleryArchetype = "editorial" | "polaroid";
+
 export interface TemplateConfig {
   id: string;
   nameAr: string;
@@ -75,6 +78,8 @@ export interface TemplateConfig {
   eventTypes: EventType[];
   htmlFile?: string;
   featured?: boolean;
+  openingAnimation?: OpeningAnimationArchetype;
+  galleryStyle?: GalleryArchetype;
   theme: {
     background: string;
     cardBackground: string;
@@ -754,3 +759,23 @@ export function getTemplateCountsByEventType(): Record<string, number> {
   });
   return counts;
 }
+
+export function getTemplateOpeningAnimation(template: TemplateConfig): OpeningAnimationArchetype {
+  if (template.openingAnimation) return template.openingAnimation;
+  if (template.style === "botanical" || template.style === "romantic" || template.style === "craft") {
+    return "gatefold-doors";
+  }
+  if (template.style === "minimal" || template.style === "couture") {
+    return "sliding-sleeve";
+  }
+  return "wax-seal";
+}
+
+export function getTemplateGalleryStyle(template: TemplateConfig): GalleryArchetype {
+  if (template.galleryStyle) return template.galleryStyle;
+  if (template.style === "romantic" || template.style === "craft" || template.style === "botanical") {
+    return "polaroid";
+  }
+  return "editorial";
+}
+
