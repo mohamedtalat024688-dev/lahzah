@@ -2,9 +2,10 @@
  * LAHZAH Platform - Commercially Verified Royalty-Free Music Catalog
  * 
  * CRITICAL COMPLIANCE NOTICE:
- * All tracks listed below are sourced from royalty-free libraries under confirmed
- * free commercial licensing terms (Mixkit Stock Music License / CC0), granting rights
- * to embed and playback in commercial digital wedding invitations without attribution requirements.
+ * All tracks listed below are verified Public Domain (CC0) compositions and recordings,
+ * self-hosted directly within the LAHZAH application under `/audio/` to guarantee
+ * zero external CDN dependencies, zero hotlinking restrictions, zero CORS issues,
+ * and 100% compliant commercial playback rights for digital wedding invitations.
  */
 
 export interface MusicTrack {
@@ -20,43 +21,33 @@ export interface MusicTrack {
 
 export const VERIFIED_ROYALTY_FREE_TRACKS: MusicTrack[] = [
   {
-    id: "romantic-moment",
-    title: "لحظات رومانسية هادئة (Romantic Moment)",
-    artist: "Mixkit Stock Music",
-    url: "https://assets.mixkit.co/music/preview/mixkit-romantic-moment-1110.mp3",
-    license: "Mixkit Free Commercial License (Permitted for commercial web projects, no royalties)",
-    source: "https://mixkit.co/free-stock-music/",
-    description: "مقطوعة بيانو هادئة وأوتار رومانسية ناعمة مناسبة لمراسم الزفاف والدعوات الرقمية الفاخرة.",
-    tags: ["بيانو", "رومانسي", "هادئ"],
+    id: "mendelssohn-wedding-march",
+    title: "مارش الزفاف الملكي (Mendelssohn Wedding March)",
+    artist: "Felix Mendelssohn / European Archive",
+    url: "/audio/wedding-march-mendelssohn.mp3",
+    license: "Public Domain / Creative Commons CC0 (Unrestricted commercial use)",
+    source: "https://commons.wikimedia.org/wiki/File:A_Midsummer_Night%27s_Dream_Op._61_Wedding_March_(Mendelssohn)_European_Archive.ogg",
+    description: "المارش الأوركسترالي الكلاسيكي الأشهر لزفة ومراسم دخول العروسين، يضفي هيبة وفخامة ملكية متكاملة.",
+    tags: ["أوركسترا", "كلاسيكي", "مارش الزفاف", "ملكي"],
   },
   {
-    id: "serene-strings",
-    title: "أوتار كلاسيكية حالمة (Dreamy Strings)",
-    artist: "Mixkit Stock Music",
-    url: "https://assets.mixkit.co/music/preview/mixkit-serene-view-443.mp3",
-    license: "Mixkit Free Commercial License (Permitted for commercial web projects, no royalties)",
-    source: "https://mixkit.co/free-stock-music/",
-    description: "أنغام وترية كلاسيكية تضفي طابعاً ملكياً ودفئاً على تصفح الدعوة وتوثيق اللحظات.",
-    tags: ["أوتار", "كلاسيكي", "ملكي"],
+    id: "canon-in-d",
+    title: "كانون في سلم ري الكبير (Pachelbel's Canon in D)",
+    artist: "Johann Pachelbel / European Archive",
+    url: "/audio/canon-in-d-pachelbel.mp3",
+    license: "Public Domain / Creative Commons CC0 (Unrestricted commercial use)",
+    source: "https://commons.wikimedia.org/wiki/File:Pachelbel%27s_Canon.ogg",
+    description: "أشهر مقطوعة وترية رومانسية هادئة تعزف في مطلع الأعراس الكلاسيكية، وتمنح تصفح الدعوة جواً شاعرياً دافئاً.",
+    tags: ["أوتار", "شاعري", "بيانو", "رومانسي"],
   },
   {
-    id: "arabic-oud",
-    title: "أنغام العود الشرقي الأصيل (Warm Arabic Oud)",
-    artist: "Mixkit Stock Music",
-    url: "https://assets.mixkit.co/music/preview/mixkit-delicate-touch-576.mp3",
-    license: "Mixkit Free Commercial License (Permitted for commercial web projects, no royalties)",
-    source: "https://mixkit.co/free-stock-music/",
-    description: "مقطوعة عود دافئة ولمسات وترية شرقية تناسب طابع الأعراس العربية والتراثية الفاخرة.",
-    tags: ["عود", "شرقي", "تراثي"],
-  },
-  {
-    id: "gentle-piano",
-    title: "بيانو وتشيلو رقيق (Gentle Seraph)",
-    artist: "Mixkit Stock Music",
-    url: "https://assets.mixkit.co/music/preview/mixkit-spirit-of-the-seraph-1090.mp3",
-    license: "Mixkit Free Commercial License (Permitted for commercial web projects, no royalties)",
-    source: "https://mixkit.co/free-stock-music/",
-    description: "لحن انسيابي رقيق يمنح تجربة تصفح هادئة وخالدة تناسب مختلف تصميمات القوالب.",
-    tags: ["بيانو", "تشيلو", "ناعم"],
+    id: "bridal-chorus-wagner",
+    title: "كورال العروس المباركة (Wagner Bridal Chorus)",
+    artist: "Richard Wagner / European Archive",
+    url: "/audio/bridal-chorus-wagner.mp3",
+    license: "Public Domain / Creative Commons CC0 (Unrestricted commercial use)",
+    source: "https://commons.wikimedia.org/wiki/File:Wagner_Bridal_Chorus.ogg",
+    description: "اللحن التراثي العالمي الشهير لطلة العروسين وبداية حفل الزفاف، يجمع بين الوقار والأناقة العريقة.",
+    tags: ["كلاسيكي", "زفة", "تراثي", "طلة العروس"],
   },
 ];

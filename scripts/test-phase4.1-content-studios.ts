@@ -1,10 +1,9 @@
-import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
 import puppeteer, { Browser, Page } from "puppeteer-core";
 import { prisma } from "../src/lib/prisma";
 import { hashPassword, createSessionToken } from "../src/lib/auth";
-import { VERIFIED_QURANIC_VERSES, PROPHETIC_DUAAS, CELEBRATION_PHRASES } from "../src/lib/culturalPhrasing";
+import { VERIFIED_QURANIC_VERSES } from "../src/lib/culturalPhrasing";
 import { VERIFIED_ROYALTY_FREE_TRACKS } from "../src/lib/musicCatalog";
 
 const CHROME_PATH = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
@@ -331,7 +330,7 @@ async function runPhase41TestSuite() {
   // --- 6. BACKWARD COMPATIBILITY WITH LEGACY EVENTS (NULL FIELDS) ---
   console.log("\n--- 6. BACKWARD COMPATIBILITY WITH LEGACY EVENTS ---");
   const legacySlug = `legacy-event-${Date.now()}`;
-  const legacyEvent = await prisma.event.create({
+  await prisma.event.create({
     data: {
       userId: hostUser.id,
       title: "مناسبة قديمة تجريبية",

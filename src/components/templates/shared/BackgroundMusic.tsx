@@ -24,8 +24,8 @@ export default function BackgroundMusic({
 
   // If music is not enabled in config, don't render audio
   const isEnabled = musicConfig?.enabled !== false;
-  // If trackUrl is provided, use it; otherwise use a gentle ambient fallback
-  const trackUrl = musicConfig?.trackUrl || "https://assets.mixkit.co/music/preview/mixkit-romantic-moment-1110.mp3";
+  // If trackUrl is provided, use it; otherwise use a verified local fallback
+  const trackUrl = musicConfig?.trackUrl || "/audio/canon-in-d-pachelbel.mp3";
 
   // Initialize Audio element
   useEffect(() => {
@@ -99,7 +99,7 @@ export default function BackgroundMusic({
   if (!isEnabled || audioError) return null;
 
   return (
-    <div className="fixed top-5 left-5 z-40">
+    <div className="fixed top-5 left-5 z-40" data-testid="music-floating-bar">
       <div
         className={`flex items-center gap-2 p-1.5 pr-3 rounded-full backdrop-blur-md border shadow-md transition-all ${
           isLight

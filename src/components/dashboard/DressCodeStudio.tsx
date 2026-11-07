@@ -355,20 +355,21 @@ export default function DressCodeStudio({
                 <span
                   key={idx}
                   data-testid={`preferred-chip-${idx}`}
-                  className="px-2.5 py-1 min-h-[36px] rounded-full text-xs font-mono font-semibold border flex items-center gap-1.5 shadow-xs"
+                  className="px-3 py-1.5 min-h-[44px] rounded-full text-xs font-mono font-semibold border flex items-center gap-2 shadow-xs"
                   style={{ backgroundColor: `${col}15`, borderColor: col, color: col }}
                 >
                   <span
-                    className="w-3.5 h-3.5 rounded-full border border-black/20 shrink-0"
+                    className="w-4 h-4 rounded-full border border-black/20 shrink-0"
                     style={{ backgroundColor: col }}
                   />
                   <span>{col}</span>
                   <button
                     type="button"
+                    aria-label={`إزالة اللون ${col}`}
                     onClick={() => handleRemovePreferred(col)}
-                    className="hover:opacity-75 cursor-pointer"
+                    className="w-8 h-8 -mr-1.5 rounded-full hover:bg-black/10 flex items-center justify-center cursor-pointer transition-colors shrink-0"
                   >
-                    <X className="w-3 h-3" />
+                    <X className="w-3.5 h-3.5" />
                   </button>
                 </span>
               ))}
@@ -417,19 +418,20 @@ export default function DressCodeStudio({
                   <span
                     key={idx}
                     data-testid={`prohibited-chip-${idx}`}
-                    className="px-2.5 py-1 min-h-[36px] rounded-full text-xs font-mono font-semibold border border-[#F8B4B4] bg-[#FDF2F2] text-[#9E1C1C] flex items-center gap-1.5 shadow-xs"
+                    className="px-3 py-1.5 min-h-[44px] rounded-full text-xs font-mono font-semibold border border-[#F8B4B4] bg-[#FDF2F2] text-[#9E1C1C] flex items-center gap-2 shadow-xs"
                   >
                     <span
-                      className="w-3.5 h-3.5 rounded-full border border-black/20 shrink-0"
+                      className="w-4 h-4 rounded-full border border-black/20 shrink-0"
                       style={{ backgroundColor: col }}
                     />
                     <span>{col === "#FFFFFF" ? "أبيض (العروس)" : col === "#FAF8F5" ? "عاجي (العروس)" : col}</span>
                     <button
                       type="button"
+                      aria-label={`إزالة اللون المستثنى ${col}`}
                       onClick={() => handleRemoveProhibited(col)}
-                      className="hover:opacity-75 cursor-pointer text-[#9E1C1C]"
+                      className="w-8 h-8 -mr-1.5 rounded-full hover:bg-red-100 flex items-center justify-center cursor-pointer transition-colors text-[#9E1C1C] shrink-0"
                     >
-                      <X className="w-3 h-3" />
+                      <X className="w-3.5 h-3.5" />
                     </button>
                   </span>
                 ))
